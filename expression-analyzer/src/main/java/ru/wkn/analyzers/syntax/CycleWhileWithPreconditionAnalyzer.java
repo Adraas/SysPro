@@ -25,6 +25,7 @@ public class CycleWhileWithPreconditionAnalyzer extends IExpressionAnalyzer {
     public CycleWhileWithPreconditionAnalyzer(ISemanticsAnalyzer iSemanticsAnalyzer,
                                               boolean isSemanticsAnalyzerActivated) {
         super(iSemanticsAnalyzer, isSemanticsAnalyzerActivated);
+        this.iSemanticsAnalyzer = iSemanticsAnalyzer;
         this.isSemanticsAnalyzerActivated = isSemanticsAnalyzerActivated;
     }
 
