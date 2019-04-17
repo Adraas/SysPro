@@ -37,11 +37,11 @@
     </properties>
 
     <modules>
+        <module>sys-pro-launcher</module>
         <module>file-worker</module>
         <module>expression-analyzer</module>
-        <module>sys-pro-launcher</module>
         <module>assembler-worker</module>
-        <module>assembler-worker-native</module>
+        <module>cpp-native</module>
     </modules>
 
     <build>
