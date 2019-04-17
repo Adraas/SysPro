@@ -2,13 +2,21 @@ package ru.wkn.analyzers.syntax.semantics;
 
 public interface ISemanticsAnalyzer {
 
+    boolean isNumberByteCorrect(String numberByteAsString);
+
+    boolean isNumberShortCorrect(String numberShortAsString);
+
+    boolean isNumberIntCorrect(String numberIntAsString);
+
     boolean isNumberLongCorrect(String numberLongAsString);
 
-    boolean isNumberDoubleCorrect(String numberDoubleAsString);
+    boolean isNumberFloatCorrect(String numberFloatAsString);
 
-    boolean isVariableNameCorrect(String variableAsString);
+    boolean isNumberDoubleCorrect(String numberDoubleAsString);
 
     boolean isCharValueCorrect(String charValueAsString);
 
     boolean isBooleanValueCorrect(String booleanValueAsString);
+
+    boolean isVariableNameCorrect(String variableAsString);
 }
