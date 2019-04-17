@@ -1,36 +1,17 @@
 package ru.wkn;
 
-import ru.wkn.assembler.AssemblerFunctionFactory;
-import ru.wkn.assembler.IAssemblerFunctionFactory;
-import ru.wkn.assembler.functions.IAssemblerFunction;
-import ru.wkn.assembler.functions.TypeAssemblerFunction;
+import ru.wkn.assembler.AssemblerFunctions;
+import ru.wkn.assembler.IAssemblerFunctions;
 
 public class AssemblerWorkerFacade {
 
-    private final IAssemblerFunctionFactory iAssemblerFunctionFactory = new AssemblerFunctionFactory();
-    private TypeAssemblerFunction typeAssemblerFunction;
-    private IAssemblerFunction iAssemblerFunction;
+    private IAssemblerFunctions iAssemblerFunctions;
 
-    public AssemblerWorkerFacade(TypeAssemblerFunction typeAssemblerFunction, IAssemblerFunction iAssemblerFunction) {
-        this.typeAssemblerFunction = typeAssemblerFunction;
-        this.iAssemblerFunction = iAssemblerFunction;
-        assemblerFunctionInit();
+    public AssemblerWorkerFacade() {
+        this.iAssemblerFunctions = new AssemblerFunctions();
     }
 
-    private void assemblerFunctionInit() {
-        iAssemblerFunction = iAssemblerFunctionFactory.createAssemblerFunction(typeAssemblerFunction);
-    }
-
-    public TypeAssemblerFunction getTypeAssemblerFunction() {
-        return typeAssemblerFunction;
-    }
-
-    public void setTypeAssemblerFunction(TypeAssemblerFunction typeAssemblerFunction) {
-        this.typeAssemblerFunction = typeAssemblerFunction;
-        assemblerFunctionInit();
-    }
-
-    public IAssemblerFunction getiAssemblerFunction() {
-        return iAssemblerFunction;
+    public IAssemblerFunctions getiAssemblerFunctions() {
+        return iAssemblerFunctions;
     }
 }
