@@ -4,5 +4,6 @@ import ru.wkn.analyzers.syntax.IExpressionAnalyzer;
 
 public interface IExpressionAnalyzerFactory {
 
-    IExpressionAnalyzer createExpressionAnalyzer(TypeExpressionAnalyzer typeExpressionAnalyzer, Launguage launguage);
+    IExpressionAnalyzer createExpressionAnalyzer(TypeExpressionAnalyzer typeExpressionAnalyzer, Launguage launguage,
+                                                 boolean isSemanticsActivated);
 }

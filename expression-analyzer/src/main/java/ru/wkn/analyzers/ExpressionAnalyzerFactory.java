@@ -9,9 +9,9 @@ public class ExpressionAnalyzerFactory implements IExpressionAnalyzerFactory {
 
     @Override
     public IExpressionAnalyzer createExpressionAnalyzer(TypeExpressionAnalyzer typeExpressionAnalyzer,
-                                                        Launguage launguage) {
+                                                        Launguage launguage, boolean isSemanticsAnalyzerActivated) {
         return typeExpressionAnalyzer.equals(TypeExpressionAnalyzer.CYCLE_WHILE_WITH_PRECONDITION)
-                ? new CycleWhileWithPreconditionAnalyzer(createSemanticsAnalyzer(launguage))
+                ? new CycleWhileWithPreconditionAnalyzer(createSemanticsAnalyzer(launguage), isSemanticsAnalyzerActivated)
                 : null;
     }
 

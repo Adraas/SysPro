@@ -3,42 +3,47 @@ package ru.wkn.analyzers.syntax.semantics;
 public class CSharpeSemanticsAnalyzer implements ISemanticsAnalyzer {
 
     @Override
-    public boolean isNumberByteCorrect(String numberByteAsString) {
+    public boolean isByteValueCorrect(String byteValueAsString) {
         return false;
     }
 
     @Override
-    public boolean isNumberShortCorrect(String numberShortAsString) {
+    public boolean isShortValueCorrect(String shortValueAsString) {
         return false;
     }
 
     @Override
-    public boolean isNumberIntCorrect(String numberIntAsString) {
+    public boolean isIntegerValueCorrect(String integerValueAsString) {
         return false;
     }
 
     @Override
-    public boolean isNumberLongCorrect(String numberLongAsString) {
+    public boolean isLongValueCorrect(String longValueAsString) {
         return false;
     }
 
     @Override
-    public boolean isNumberFloatCorrect(String numberFloatAsString) {
+    public boolean isFloatValueCorrect(String floatValueAsString) {
         return false;
     }
 
     @Override
-    public boolean isNumberDoubleCorrect(String numberDoubleAsString) {
+    public boolean isDoubleValueCorrect(String doubleValueAsString) {
         return false;
     }
 
     @Override
-    public boolean isCharValueCorrect(String charValueAsString) {
+    public boolean isCharacterValueCorrect(String characterValueAsString) {
         return false;
     }
 
     @Override
     public boolean isBooleanValueCorrect(String booleanValueAsString) {
+        return false;
+    }
+
+    @Override
+    public boolean isStringValueCorrect(String stringValueAsString) {
         return false;
     }
 
