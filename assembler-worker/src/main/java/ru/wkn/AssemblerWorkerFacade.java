@@ -1,7 +1,7 @@
 package ru.wkn;
 
-import ru.wkn.assembler.AssemblerFunctions;
-import ru.wkn.assembler.IAssemblerFunctions;
+import ru.wkn.javasm.AssemblerFunctions;
+import ru.wkn.javasm.IAssemblerFunctions;
 
 public class AssemblerWorkerFacade {
 

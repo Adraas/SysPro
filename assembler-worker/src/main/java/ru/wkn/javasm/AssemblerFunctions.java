@@ -1,4 +1,4 @@
-package ru.wkn.assembler;
+package ru.wkn.javasm;
 
 public class AssemblerFunctions implements IAssemblerFunctions {
 
