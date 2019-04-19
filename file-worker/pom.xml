@@ -16,4 +16,12 @@
     <name>File worker</name>
     <description>File worker plugin</description>
 
+    <dependencies>
+        <dependency>
+            <groupId>ru.wkn</groupId>
+            <artifactId>fdb-entries</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+
 </project>

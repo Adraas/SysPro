@@ -38,11 +38,22 @@
 
     <modules>
         <module>sys-pro-launcher</module>
+        <module>fdb-entries</module>
         <module>file-worker</module>
         <module>expression-analyzer</module>
         <module>assembler-worker</module>
         <module>cpp-native</module>
     </modules>
+
+    <dependencies>
+        <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.6</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
 
     <build>
         <plugins>
