@@ -22,17 +22,17 @@ public class FileWriter<T extends IEntry> extends EFileWriter<T> {
     }
 
     @Override
-    public boolean write(IEntry entry) {
+    public boolean append(T entry) {
         return false;
     }
 
     @Override
-    public boolean write(List entry) {
+    public boolean append(List<T> entry) {
         return false;
     }
 
     @Override
-    public boolean delete(IEntry entry) {
+    public boolean delete(T entry) {
         return false;
     }
 
@@ -42,7 +42,7 @@ public class FileWriter<T extends IEntry> extends EFileWriter<T> {
     }
 
     @Override
-    public boolean deleteSome(List entries) {
+    public boolean deleteSome(List<T> entries) {
         return false;
     }
 

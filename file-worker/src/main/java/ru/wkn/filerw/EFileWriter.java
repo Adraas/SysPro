@@ -20,9 +20,9 @@ public abstract class EFileWriter<T extends IEntry> {
         this.charsetName = charsetName;
     }
 
-    public abstract boolean write(T entry);
+    public abstract boolean append(T entry);
 
-    public abstract boolean write(List<T> entry);
+    public abstract boolean append(List<T> entry);
 
     public abstract boolean delete(T entry);
 
