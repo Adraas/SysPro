@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import ru.wkn.entries.types.IPlainTextEntry;
+import ru.wkn.entries.IPlainTextEntry;
 
 @NoArgsConstructor
 @Getter

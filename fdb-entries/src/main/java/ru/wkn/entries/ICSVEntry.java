@@ -1,4 +1,4 @@
-package ru.wkn.entries.types;
+package ru.wkn.entries;
 
 public interface ICSVEntry extends IEntry {
 }

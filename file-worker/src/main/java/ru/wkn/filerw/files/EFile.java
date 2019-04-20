@@ -3,7 +3,7 @@ package ru.wkn.filerw.files;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import ru.wkn.entries.types.IEntry;
+import ru.wkn.entries.IEntry;
 
 import java.util.List;
 

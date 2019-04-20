@@ -2,7 +2,7 @@ package ru.wkn.filerw;
 
 import lombok.Getter;
 import lombok.Setter;
-import ru.wkn.entries.types.IEntry;
+import ru.wkn.entries.IEntry;
 import ru.wkn.filerw.files.EFile;
 
 import java.io.BufferedReader;

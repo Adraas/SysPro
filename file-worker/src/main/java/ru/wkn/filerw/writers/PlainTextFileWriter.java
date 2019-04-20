@@ -1,7 +1,7 @@
 package ru.wkn.filerw.writers;
 
-import ru.wkn.entries.types.IEntry;
-import ru.wkn.entries.types.IPlainTextEntry;
+import ru.wkn.entries.IEntry;
+import ru.wkn.entries.IPlainTextEntry;
 import ru.wkn.filerw.EFileWriter;
 import ru.wkn.filerw.files.EFile;
 

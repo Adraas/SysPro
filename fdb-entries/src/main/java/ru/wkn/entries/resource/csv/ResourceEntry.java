@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import ru.wkn.entries.types.ICSVEntry;
+import ru.wkn.entries.ICSVEntry;
 
 import java.sql.Date;
 

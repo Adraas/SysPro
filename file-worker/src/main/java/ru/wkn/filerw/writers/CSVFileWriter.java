@@ -1,7 +1,7 @@
 package ru.wkn.filerw.writers;
 
-import ru.wkn.entries.types.ICSVEntry;
-import ru.wkn.entries.types.IEntry;
+import ru.wkn.entries.ICSVEntry;
+import ru.wkn.entries.IEntry;
 import ru.wkn.filerw.EFileWriter;
 import ru.wkn.filerw.files.EFile;
 
