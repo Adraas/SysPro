@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import ru.wkn.entries.ICSVEntry;
+import ru.wkn.entries.ParametersDelimiter;
 
 import java.sql.Date;
 
@@ -27,5 +28,13 @@ public class ResourceEntry implements ICSVEntry {
         this.url = url;
         this.accessMode = accessMode;
         this.date = date;
+    }
+
+    @Override
+    public String singleLineRecording() {
+        return url.concat(ParametersDelimiter.RESOURCE_CSV_DELIMITER.getParametersDelimiter())
+                .concat(accessMode.getAccessMode()).concat(ParametersDelimiter
+                        .RESOURCE_CSV_DELIMITER.getParametersDelimiter())
+                .concat(date.toString());
     }
 }

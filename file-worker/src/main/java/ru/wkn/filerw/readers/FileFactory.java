@@ -1,4 +1,4 @@
-package ru.wkn.filerw;
+package ru.wkn.filerw.readers;
 
 import ru.wkn.entries.IEntry;
 import ru.wkn.entries.IEntryFactory;
@@ -44,6 +44,7 @@ public class FileFactory<T extends IEntry> implements IFileFactory<T> {
                 }
                 entries.add((T) entryFactory.createEntry(parametersLine, parametersDelimiter));
             }
+            bufferedReader.close();
         } else {
             Files.createFile(aPath);
         }

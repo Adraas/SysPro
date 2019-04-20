@@ -1,4 +1,4 @@
-package ru.wkn.filerw;
+package ru.wkn.filerw.readers;
 
 import ru.wkn.entries.IEntry;
 import ru.wkn.entries.IEntryFactory;

@@ -1,4 +1,4 @@
-package ru.wkn.filerw;
+package ru.wkn.filerw.readers;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

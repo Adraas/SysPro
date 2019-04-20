@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import ru.wkn.entries.IPlainTextEntry;
+import ru.wkn.entries.ParametersDelimiter;
 
 @NoArgsConstructor
 @Getter
@@ -25,5 +26,13 @@ public class ServerEntry implements IPlainTextEntry {
         this.url = url;
         this.port = port;
         this.protocolType = protocolType;
+    }
+
+    @Override
+    public String singleLineRecording() {
+        return url.concat(ParametersDelimiter.SERVER_PLAIN_TEXT_DELIMITER.getParametersDelimiter())
+                .concat(String.valueOf(port)).concat(ParametersDelimiter
+                        .SERVER_PLAIN_TEXT_DELIMITER.getParametersDelimiter())
+                .concat(protocolType.getProtocolType());
     }
 }
