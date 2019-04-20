@@ -5,14 +5,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import ru.wkn.entries.IPlainTextEntry;
+import ru.wkn.entries.IEntry;
 import ru.wkn.entries.ParametersDelimiter;
 
 @NoArgsConstructor
 @Getter
 @ToString(exclude = "id")
 @EqualsAndHashCode(exclude = "id")
-public class ServerEntry implements IPlainTextEntry {
+public class ServerEntry implements IEntry {
 
     private Long id;
     @Setter

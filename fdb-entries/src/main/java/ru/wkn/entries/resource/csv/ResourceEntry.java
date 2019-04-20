@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import ru.wkn.entries.ICSVEntry;
+import ru.wkn.entries.IEntry;
 import ru.wkn.entries.ParametersDelimiter;
 
 import java.sql.Date;
@@ -14,7 +14,7 @@ import java.sql.Date;
 @Getter
 @ToString(exclude = "id")
 @EqualsAndHashCode(exclude = "id")
-public class ResourceEntry implements ICSVEntry {
+public class ResourceEntry implements IEntry {
 
     private Long id;
     @Setter

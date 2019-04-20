@@ -23,32 +23,41 @@ public class FileWriter<T extends IEntry> extends EFileWriter<T> {
 
     @Override
     public boolean append(T entry) {
-        return false;
+        return getEFile().getEntries().add(entry);
     }
 
     @Override
-    public boolean append(List<T> entry) {
-        return false;
+    public boolean append(List<T> entries) {
+        return getEFile().getEntries().addAll(entries);
     }
 
     @Override
     public boolean delete(T entry) {
-        return false;
+        return getEFile().getEntries().remove(entry);
     }
 
     @Override
-    public boolean delete(Long entryNumber) {
-        return false;
+    public boolean delete(int entryNumber) {
+        return delete(getEFile().getEntries().get(entryNumber));
     }
 
     @Override
     public boolean deleteSome(List<T> entries) {
-        return false;
+        boolean isDeleted = true;
+        int i = 0;
+        while (i < entries.size() && isDeleted) {
+            isDeleted = delete(i);
+        }
+        return isDeleted;
     }
 
     @Override
-    public boolean deleteSome(Long startEntry, Long endEntry) {
-        return false;
+    public boolean deleteSome(int startEntry, int endEntry) {
+        boolean isDeleted = true;
+        for (int i = startEntry; i <= endEntry && isDeleted; i++) {
+            isDeleted = delete(i);
+        }
+        return isDeleted;
     }
 
     @Override

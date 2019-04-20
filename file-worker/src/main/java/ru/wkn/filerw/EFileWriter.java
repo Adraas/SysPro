@@ -22,15 +22,15 @@ public abstract class EFileWriter<T extends IEntry> {
 
     public abstract boolean append(T entry);
 
-    public abstract boolean append(List<T> entry);
+    public abstract boolean append(List<T> entries);
 
     public abstract boolean delete(T entry);
 
-    public abstract boolean delete(Long entryNumber);
+    public abstract boolean delete(int entryNumber);
 
     public abstract boolean deleteSome(List<T> entries);
 
-    public abstract boolean deleteSome(Long startEntry, Long endEntry);
+    public abstract boolean deleteSome(int startEntry, int endEntry);
 
     public abstract boolean saveFile() throws IOException;
 }

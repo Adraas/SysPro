@@ -17,9 +17,11 @@ public abstract class EFileReader<T extends IEntry> {
         this.eFile = eFile;
     }
 
-    public abstract IEntry read(Long entryNumber);
+    public abstract IEntry read(int entryNumber);
 
-    public abstract List<IEntry> readSome(Long startEntry, Long endEntry);
+    public abstract List<T> readSome(int startEntry, int endEntry);
 
-    public abstract Long readFileSize();
+    public abstract int readFileSize();
+
+    public abstract boolean contains(T entry);
 }
