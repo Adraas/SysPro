@@ -1,0 +1,30 @@
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence
+             http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd"
+             version="2.1">
+
+    <persistence-unit name="h2_entity_manager" transaction-type="RESOURCE_LOCAL">
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+
+        <shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>
+
+        <properties>
+            <!-- SQL dialect -->
+            <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>
+
+            <!-- DB Schema -->
+            <property name="hibernate.default_schema" value="system_program"/>
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
+
+            <!-- Hikari connection pool configuration -->
+            <property name="hibernate.connection.provider_class"
+                      value="org.hibernate.hikaricp.internal.HikariCPConnectionProvider"/>
+            <property name="hibernate.hikari.maximumPoolSize" value="20"/>
+
+            <!-- Echo all executed SQL to stdout -->
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.format_sql" value="true"/>
+        </properties>
+    </persistence-unit>
+</persistence>

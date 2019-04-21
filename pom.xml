@@ -43,6 +43,7 @@
         <module>expression-analyzer</module>
         <module>assembler-worker</module>
         <module>cpp-native</module>
+        <module>repository</module>
     </modules>
 
     <dependencies>
