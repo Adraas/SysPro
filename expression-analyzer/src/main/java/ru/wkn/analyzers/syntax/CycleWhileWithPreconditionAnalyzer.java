@@ -9,16 +9,95 @@ import java.util.regex.Pattern;
 
 public class CycleWhileWithPreconditionAnalyzer extends IExpressionAnalyzer {
 
-    private final String cycleConditionRegex = "";
-    private final String cycleSingleLineBodyRegex = "";
-    private final String cycleMultipleBodyRegex = "(".concat(cycleSingleLineBodyRegex).concat(")*");
-    private final String regex = "\\s*\\n*\\r*\\t*(while)\\s*\\n*\\r*\\t*\\("
+    private final String allSpacesRegex = "(\\s*\\n*\\r*\\t*)";
+    private final String variableDeclarationRegex = "([A-Za-z]*"
+            .concat(allSpacesRegex)
+            .concat("[A-Za-z]*)");
+    private final String numberRegex = "((([1-9][0-9]*)|(0))(\\.[0-9]+)?)";
+    private final String singleMethodInvocationRegex = "([A-Za-z]*\\.)?[A-Za-z]*("
+            .concat(allSpacesRegex)
+            .concat("\\(([A-Za-z]")
+            .concat(allSpacesRegex)
+            .concat(")(,")
+            .concat(allSpacesRegex)
+            .concat("[A-Za-z])*\\))");
+    private final String streamMethodInvocationsRegex = "(("
+            .concat(singleMethodInvocationRegex)
+            .concat(")(")
+            .concat(allSpacesRegex)
+            .concat("\\.")
+            .concat(singleMethodInvocationRegex)
+            .concat(")*)");
+    private final String variableAssignmentRegex = "(="
+            .concat(allSpacesRegex)
+            .concat("((")
+            .concat(numberRegex)
+            .concat(")|(")
+            .concat(streamMethodInvocationsRegex)
+            .concat(")|([A-Za-z]*))")
+            .concat(allSpacesRegex)
+            .concat(")");
+    private final String variableDeclarationAndAssignmentRegex = "("
+            .concat(variableDeclarationRegex)
+            .concat(allSpacesRegex)
+            .concat(variableAssignmentRegex)
+            .concat(allSpacesRegex)
+            .concat(")");
+    private final String cycleSingleLineBodyRegex = "(("
+            .concat(variableDeclarationAndAssignmentRegex)
+            .concat(")|(")
+            .concat(variableAssignmentRegex)
+            .concat(")|(")
+            .concat(variableDeclarationRegex)
+            .concat(")|(")
+            .concat(streamMethodInvocationsRegex)
+            .concat(")")
+            .concat(allSpacesRegex)
+            .concat(";)");
+    private final String cycleMultipleBodyRegex = "(("
+            .concat(cycleSingleLineBodyRegex)
+            .concat(")*)");
+    private final String comparisonOperationRegex = "((([A-Za-z]+)|("
+            .concat(numberRegex)
+            .concat("))")
+            .concat(allSpacesRegex)
+            .concat("(")
+            .concat(">|<|(>=)|(<=)|(==)")
+            .concat(")")
+            .concat(allSpacesRegex)
+            .concat("(([A-Za-z]+)|(")
+            .concat(numberRegex)
+            .concat(")))");
+    private final String singleBooleanExpressionRegex = "(([A-Za-z]+)|("
+            .concat(variableDeclarationAndAssignmentRegex)
+            .concat(")|(")
+            .concat(comparisonOperationRegex)
+            .concat(")|(")
+            .concat(streamMethodInvocationsRegex)
+            .concat("))");
+    private final String cycleConditionRegex = "("
+            .concat(singleBooleanExpressionRegex)
+            .concat("(")
+            .concat(allSpacesRegex)
+            .concat("((&&)|(\\|\\|)|([&|]))")
+            .concat(singleBooleanExpressionRegex)
+            .concat(")*)");
+    private final String cycleWhileWithPreconditionRegex = "("
+            .concat(allSpacesRegex)
+            .concat("(while)")
+            .concat(allSpacesRegex)
+            .concat("\\(")
+            .concat(allSpacesRegex)
             .concat(cycleConditionRegex)
-            .concat("\\)\\s*\\n*\\r*\\t*((\\{")
+            .concat("\\)")
+            .concat(allSpacesRegex)
+            .concat("((\\{")
             .concat(cycleMultipleBodyRegex)
-            .concat("\\})|(").concat(cycleSingleLineBodyRegex).concat("))");
+            .concat("\\})|(")
+            .concat(cycleSingleLineBodyRegex)
+            .concat(")))");
 
-    private Pattern pattern = Pattern.compile(regex);
+    private Pattern pattern = Pattern.compile(cycleWhileWithPreconditionRegex);
     private ISemanticsAnalyzer iSemanticsAnalyzer;
     private boolean isSemanticsAnalyzerActivated;
 
@@ -90,16 +169,16 @@ public class CycleWhileWithPreconditionAnalyzer extends IExpressionAnalyzer {
     }
 
     private boolean isDeclarationCorrect(String cycleBodyLine) {
-        pattern = Pattern.compile("(.*?)\\s*\\n*\\r*\\t*=");
+        pattern = Pattern.compile("(.*?)".concat(allSpacesRegex).concat("="));
         String variableName = pattern.matcher(cycleBodyLine).group().split("=")[0];
-        pattern = Pattern.compile("\\s*\\n*\\r*\\t*[A-Za-z]*");
+        pattern = Pattern.compile(allSpacesRegex.concat("[A-Za-z]*"));
         variableName = pattern.matcher(variableName).group(1).trim();
         return iSemanticsAnalyzer.isVariableNameCorrect(variableName);
     }
 
     private boolean isInitializationCorrect(String cycleBodyLine, DataType dataType) {
         boolean isInitializationCorrect;
-        pattern = Pattern.compile("=\\s*\\n*\\r*\\t*(.*?)\\s*\\n*\\r*\\t*;");
+        pattern = Pattern.compile("=".concat(allSpacesRegex).concat("(.*?)").concat(allSpacesRegex).concat(";"));
         String valueAsString = pattern.matcher(cycleBodyLine).group().split("=")[1].split(";")[0].trim();
         switch (dataType) {
             case BYTE:
