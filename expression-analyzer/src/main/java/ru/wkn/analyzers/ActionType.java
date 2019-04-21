@@ -1,6 +1,6 @@
 package ru.wkn.analyzers;
 
-public enum TypeAction {
+public enum ActionType {
 
     DECLARATION, INITIALIZATION, INVOCATION
 }

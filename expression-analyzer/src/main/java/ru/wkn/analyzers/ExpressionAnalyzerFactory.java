@@ -8,9 +8,9 @@ import ru.wkn.analyzers.syntax.semantics.ISemanticsAnalyzer;
 public class ExpressionAnalyzerFactory implements IExpressionAnalyzerFactory {
 
     @Override
-    public IExpressionAnalyzer createExpressionAnalyzer(TypeExpressionAnalyzer typeExpressionAnalyzer,
+    public IExpressionAnalyzer createExpressionAnalyzer(ExpressionAnalyzerType expressionAnalyzerType,
                                                         Launguage launguage, boolean isSemanticsAnalyzerActivated) {
-        return typeExpressionAnalyzer.equals(TypeExpressionAnalyzer.CYCLE_WHILE_WITH_PRECONDITION)
+        return expressionAnalyzerType.equals(ExpressionAnalyzerType.CYCLE_WHILE_WITH_PRECONDITION)
                 ? new CycleWhileWithPreconditionAnalyzer(createSemanticsAnalyzer(launguage), isSemanticsAnalyzerActivated)
                 : null;
     }

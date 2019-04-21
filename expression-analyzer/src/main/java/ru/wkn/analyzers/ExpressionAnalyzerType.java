@@ -1,6 +1,6 @@
 package ru.wkn.analyzers;
 
-public enum TypeExpressionAnalyzer {
+public enum ExpressionAnalyzerType {
 
     CYCLE_WHILE_WITH_PRECONDITION
 }

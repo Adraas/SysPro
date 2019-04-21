@@ -1,7 +1,7 @@
 package ru.wkn.analyzers.syntax;
 
 import ru.wkn.analyzers.DataType;
-import ru.wkn.analyzers.TypeAction;
+import ru.wkn.analyzers.ActionType;
 import ru.wkn.analyzers.syntax.semantics.ISemanticsAnalyzer;
 
 import java.util.regex.Matcher;
@@ -69,8 +69,8 @@ public class CycleWhileWithPreconditionAnalyzer extends IExpressionAnalyzer {
     }
 
     private boolean isLineCorrect(String cycleBodyLine) {
-        TypeAction typeAction = getLineTypeAction(cycleBodyLine);
-        switch (typeAction) {
+        ActionType actionType = getLineTypeAction(cycleBodyLine);
+        switch (actionType) {
             case INVOCATION:
                 return true;
             case DECLARATION:
@@ -81,7 +81,7 @@ public class CycleWhileWithPreconditionAnalyzer extends IExpressionAnalyzer {
         return false;
     }
 
-    private TypeAction getLineTypeAction(String cycleBodyLine) {
+    private ActionType getLineTypeAction(String cycleBodyLine) {
         return null;
     }
 
