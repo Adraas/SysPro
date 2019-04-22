@@ -1,0 +1,58 @@
+<entity-mappings xmlns="http://java.sun.com/xml/ns/persistence/orm"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm
+                 http://java.sun.com/xml/ns/persistence/orm_2_0.xsd"
+                 version="2.0">
+
+    <entity class="ru.wkn.entries.resource.csv.ResourceEntry">
+        <table name="network_resource"/>
+        <attributes>
+            <id name="id">
+                <column name="id" insertable="false" unique="true" nullable="false" updatable="false"/>
+                <generated-value strategy="IDENTITY"/>
+            </id>
+            <basic name="url">
+                <column name="url" nullable="false"/>
+            </basic>
+            <basic name="accessDate">
+                <column name="access_date" nullable="false"/>
+                <temporal>DATE</temporal>
+            </basic>
+            <embedded name="accessMode"/>
+        </attributes>
+    </entity>
+
+    <entity class="ru.wkn.entries.server.plaintext.ServerEntry">
+        <table name="network_server"/>
+        <attributes>
+            <id name="id">
+                <column name="id" insertable="false" unique="true" nullable="false" updatable="false"/>
+                <generated-value strategy="IDENTITY"/>
+            </id>
+            <basic name="url">
+                <column name="url" nullable="false"/>
+            </basic>
+            <basic name="port">
+                <column name="port" nullable="false"/>
+            </basic>
+            <embedded name="protocolType"/>
+        </attributes>
+    </entity>
+
+    <embeddable class="ru.wkn.entries.resource.csv.AccessMode">
+        <attributes>
+            <basic name="accessMode">
+                <column name="access_mode" nullable="false"/>
+            </basic>
+        </attributes>
+    </embeddable>
+
+    <embeddable class="ru.wkn.entries.server.plaintext.ProtocolType">
+        <attributes>
+            <basic name="protocolType">
+                <column name="protocol_type" nullable="false"/>
+            </basic>
+        </attributes>
+    </embeddable>
+
+</entity-mappings>

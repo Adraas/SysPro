@@ -7,7 +7,7 @@
     <persistence-unit name="h2_entity_manager" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
-        <shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>
+        <mapping-file>jpa/file-entries-mapping.xml</mapping-file>
 
         <properties>
             <!-- SQL dialect -->
