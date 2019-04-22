@@ -22,12 +22,12 @@ public class ResourceEntry implements IEntry {
     @Setter
     private AccessMode accessMode;
     @Setter
-    private Date date;
+    private Date accessDate;
 
-    public ResourceEntry(String url, AccessMode accessMode, Date date) {
+    public ResourceEntry(String url, AccessMode accessMode, Date accessDate) {
         this.url = url;
         this.accessMode = accessMode;
-        this.date = date;
+        this.accessDate = accessDate;
     }
 
     @Override
@@ -35,6 +35,6 @@ public class ResourceEntry implements IEntry {
         return url.concat(ParametersDelimiter.RESOURCE_CSV_DELIMITER.getParametersDelimiter())
                 .concat(accessMode.getAccessMode()).concat(ParametersDelimiter
                         .RESOURCE_CSV_DELIMITER.getParametersDelimiter())
-                .concat(date.toString());
+                .concat(accessDate.toString());
     }
 }
