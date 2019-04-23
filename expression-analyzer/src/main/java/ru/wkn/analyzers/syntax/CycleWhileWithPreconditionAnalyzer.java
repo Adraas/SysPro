@@ -4,6 +4,7 @@ import ru.wkn.analyzers.DataType;
 import ru.wkn.analyzers.ActionType;
 import ru.wkn.analyzers.syntax.semantics.ISemanticsAnalyzer;
 
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -129,6 +130,7 @@ public class CycleWhileWithPreconditionAnalyzer extends IExpressionAnalyzer {
 
                 return isConditionCorrect(cycleCondition) && isBodyCorrect(cycleBody);
             }
+            return true;
         }
         return false;
     }
@@ -149,27 +151,56 @@ public class CycleWhileWithPreconditionAnalyzer extends IExpressionAnalyzer {
 
     private boolean isLineCorrect(String cycleBodyLine) {
         ActionType actionType = getLineTypeAction(cycleBodyLine);
-        switch (actionType) {
+        switch (Objects.requireNonNull(actionType)) {
             case INVOCATION:
                 return true;
             case DECLARATION:
                 return isDeclarationCorrect(cycleBodyLine);
             case INITIALIZATION:
                 return isInitializationCorrect(cycleBodyLine, getDeclarationDataType(cycleBodyLine));
+            case DECLARATION_WITH_INITIALIZATION:
+                return isDeclarationWithInitializationCorrect(cycleBodyLine, getDeclarationDataType(cycleBodyLine));
         }
         return false;
     }
 
     private ActionType getLineTypeAction(String cycleBodyLine) {
+        pattern = Pattern.compile(streamMethodInvocationsRegex);
+        if (pattern.matcher(cycleBodyLine).lookingAt()) {
+            return ActionType.INVOCATION;
+        }
+
+        pattern = Pattern.compile(variableDeclarationRegex);
+        if (pattern.matcher(cycleBodyLine).lookingAt()) {
+            return ActionType.DECLARATION;
+        }
+
+        pattern = Pattern.compile(variableAssignmentRegex);
+        if (pattern.matcher(cycleBodyLine).lookingAt()) {
+            return ActionType.INITIALIZATION;
+        }
+
+        pattern = Pattern.compile(variableDeclarationAndAssignmentRegex);
+        if (pattern.matcher(cycleBodyLine).lookingAt()) {
+            return ActionType.DECLARATION_WITH_INITIALIZATION;
+        }
         return null;
     }
 
     private DataType getDeclarationDataType(String cycleBodyLine) {
-        return null;
+        pattern = Pattern.compile(allSpacesRegex.concat("(\\S+)"));
+        String dataType = pattern.matcher(cycleBodyLine).group().toLowerCase();
+        DataType[] dataTypes = DataType.values();
+        for (DataType currentDataType : dataTypes) {
+            if (currentDataType.getDataType().equals(dataType)) {
+                return currentDataType;
+            }
+        }
+        return DataType.COMPOSITE_DATA_TYPE;
     }
 
     private boolean isDeclarationCorrect(String cycleBodyLine) {
-        pattern = Pattern.compile("(.*?)".concat(allSpacesRegex).concat("="));
+        pattern = Pattern.compile(allSpacesRegex.concat("(.+^=)").concat(allSpacesRegex).concat("="));
         String variableName = pattern.matcher(cycleBodyLine).group().split("=")[0];
         pattern = Pattern.compile(allSpacesRegex.concat("[A-Za-z]*"));
         variableName = pattern.matcher(variableName).group(1).trim();
@@ -178,8 +209,8 @@ public class CycleWhileWithPreconditionAnalyzer extends IExpressionAnalyzer {
 
     private boolean isInitializationCorrect(String cycleBodyLine, DataType dataType) {
         boolean isInitializationCorrect;
-        pattern = Pattern.compile("=".concat(allSpacesRegex).concat("(.*?)").concat(allSpacesRegex).concat(";"));
-        String valueAsString = pattern.matcher(cycleBodyLine).group().split("=")[1].split(";")[0].trim();
+        pattern = Pattern.compile("=".concat(allSpacesRegex).concat("(.+^;)").concat(allSpacesRegex).concat(";"));
+        String valueAsString = pattern.matcher(cycleBodyLine).group().trim().split("=")[1].split(";")[0];
         switch (dataType) {
             case BYTE:
                 isInitializationCorrect = iSemanticsAnalyzer.isByteValueCorrect(valueAsString);
@@ -215,10 +246,10 @@ public class CycleWhileWithPreconditionAnalyzer extends IExpressionAnalyzer {
                 isInitializationCorrect = false;
                 break;
         }
-        return isDeclarationCorrect(cycleBodyLine) && isInitializationCorrect;
+        return isInitializationCorrect;
     }
 
-    private boolean isVariableDeclared(String variableName) {
-        return false;
+    private boolean isDeclarationWithInitializationCorrect(String cycleBodyLine, DataType dataType) {
+        return isDeclarationCorrect(cycleBodyLine) && isInitializationCorrect(cycleBodyLine, dataType);
     }
 }
