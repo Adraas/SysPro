@@ -50,7 +50,7 @@ public class CycleWhileWithPreconditionAnalyzer extends IExpressionAnalyzer {
             .concat(streamMethodInvocationsRegex)
             .concat(")|(")
             .concat(anyNameCharSequenceRegex)
-            .concat("))")
+            .concat(")|(\".*\"))")
             .concat(allSpacesRegex)
             .concat(")");
     private final String variableDeclarationAndAssignmentRegex = "("
