@@ -18,7 +18,10 @@
                 <column name="access_date" nullable="false"/>
                 <temporal>DATE</temporal>
             </basic>
-            <embedded name="accessMode"/>
+            <basic name="accessMode">
+                <column name="access_mode" nullable="false"/>
+                <enumerated>STRING</enumerated>
+            </basic>
         </attributes>
     </entity>
 
@@ -35,24 +38,11 @@
             <basic name="port">
                 <column name="port" nullable="false"/>
             </basic>
-            <embedded name="protocolType"/>
-        </attributes>
-    </entity>
-
-    <embeddable class="ru.wkn.entries.resource.csv.AccessMode">
-        <attributes>
-            <basic name="accessMode">
-                <column name="access_mode" nullable="false"/>
-            </basic>
-        </attributes>
-    </embeddable>
-
-    <embeddable class="ru.wkn.entries.server.plaintext.ProtocolType">
-        <attributes>
             <basic name="protocolType">
                 <column name="protocol_type" nullable="false"/>
+                <enumerated>STRING</enumerated>
             </basic>
         </attributes>
-    </embeddable>
+    </entity>
 
 </entity-mappings>
