@@ -42,7 +42,7 @@
         <module>file-worker</module>
         <module>expression-analyzer</module>
         <module>assembler-worker</module>
-        <module>cpp-native</module>
+        <module>c-native</module>
         <module>repository</module>
     </modules>
 
@@ -68,6 +68,14 @@
             <version>1.3.0-alpha4</version>
             <scope>runtime</scope>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.5.0-M1</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -81,6 +89,21 @@
                     <source>${maven.compile.source}</source>
                     <target>${maven.compile.target}</target>
                     <encoding>${project.build.sourceEncoding}</encoding>
+                </configuration>
+            </plugin>
+
+            <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-surefire-plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0-M3</version>
+                <configuration>
+                    <additionalClasspathElements>
+                        <additionalClasspathElement>expression-analyzer</additionalClasspathElement>
+                    </additionalClasspathElements>
+                    <includes>
+                        <include>**/Test*.java</include>
+                    </includes>
                 </configuration>
             </plugin>
         </plugins>
