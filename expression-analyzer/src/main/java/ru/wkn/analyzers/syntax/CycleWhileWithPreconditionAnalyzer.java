@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
 
     private final String allSpacesRegex = "[\\s\\n\\r\\t]*";
-    private final String serviceCharactersRegex = "\\(\\)\\{\\{\\+=-\\[\\]\\|\\\\/&\\?\\^%#@\\$\\*:;\"\'!\\.";
+    private final String serviceCharactersRegex = "\\(\\)\\{\\}\\+=-\\[\\]\\|\\\\/&\\?\\^%#@\\$\\*:;\"\'!\\.";
     private final String anyNameCharSequenceRegex = "(_*[A-Za-z]+.*(^"
             .concat(allSpacesRegex)
             .concat(")([^")
