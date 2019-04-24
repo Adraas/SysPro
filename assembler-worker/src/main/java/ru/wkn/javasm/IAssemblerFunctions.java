@@ -2,7 +2,6 @@ package ru.wkn.javasm;
 
 /**
  * Interface {@code IAssemblerFunctions} represent invocation for assembler functions.
- * Methods receive parameters at the single line of {@code String} with separator into first position of this line.
  *
  * @author Alexey Konev
  */
@@ -11,16 +10,18 @@ public interface IAssemblerFunctions {
     /**
      * Method for the dividing.
      *
-     * @param commandLine - line with separator into first position and following values
-     * @return result {@code double} of this operation at the {@code String}
+     * @param dividend - dividend for dividing function
+     * @param divisor - divisor for dividing function
+     * @return result {@code double} of this operation
      */
-    String dividingFunction(String commandLine);
+    double dividingFunction(double dividend, double divisor);
 
     /**
      * Method for the XOR operation.
      *
-     * @param commandLine - line with separator into first position and following values
-     * @return result {@code double} of this operation at the {@code String}
+     * @param a - first value for XOR operation
+     * @param b - second value for XOR operation
+     * @return result {@code double} of this operation
      */
-    String xorFunction(String commandLine);
+    double xorFunction(double a, double b);
 }
