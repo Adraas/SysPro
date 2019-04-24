@@ -8,9 +8,9 @@ package ru.wkn.entries;
 public interface IEntry {
 
     /**
-     * Method for the representation {@code this} entry as single {@code String} line.
+     * Method for the representation this entry as single {@code String} line.
      *
-     * @return {@code String} line with main information
+     * @return {@code String} line with main entry information
      */
     String singleLineRecording();
 }
