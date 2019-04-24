@@ -3,11 +3,27 @@ package ru.wkn.entries.resource.csv;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+/**
+ * Enum with access mode types for network resource.
+ *
+ * @author Artem Pikalov
+ */
 @AllArgsConstructor
 public enum AccessMode {
 
-    PUBLIC("public"), PRIVATE("private");
+    /**
+     * Public access mode.
+     */
+    PUBLIC("public"),
 
+    /**
+     * Private access mode.
+     */
+    PRIVATE("private");
+
+    /**
+     * Access mode as {@code String} line.
+     */
     @Getter
     private String accessMode;
 }

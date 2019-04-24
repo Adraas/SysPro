@@ -7,8 +7,19 @@ import ru.wkn.entries.server.plaintext.ServerEntry;
 
 import java.sql.Date;
 
+/**
+ * Class {@code EntryFactory} represent realisation of the factory for {@link IEntry} entities.
+ *
+ * @see IEntry
+ * @author Artem Pikalov
+ */
 public class EntryFactory implements IEntryFactory {
 
+    /**
+     * Method for the creating {@link IEntry} object.
+     *
+     * @see IEntryFactory#createEntry(String, ParametersDelimiter)
+     */
     @Override
     public IEntry createEntry(String parametersLine, ParametersDelimiter parametersDelimiter) {
         String[] parameters = parametersLine.split(parametersDelimiter.getParametersDelimiter());
