@@ -1,4 +1,4 @@
-package ru.wkn.analyzers;
+package ru.wkn.analyzers.syntax;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -2,12 +2,12 @@ package ru.wkn.analyzers.syntax;
 
 import ru.wkn.analyzers.syntax.semantics.ISemanticsAnalyzer;
 
-public abstract class IExpressionAnalyzer {
+public abstract class ExpressionAnalyzer {
 
     private ISemanticsAnalyzer iSemanticsAnalyzer;
     private boolean isSemanticsAnalyzerActivated;
 
-    public IExpressionAnalyzer(ISemanticsAnalyzer iSemanticsAnalyzer, boolean isSemanticsAnalyzerActivated) {
+    public ExpressionAnalyzer(ISemanticsAnalyzer iSemanticsAnalyzer, boolean isSemanticsAnalyzerActivated) {
         this.iSemanticsAnalyzer = iSemanticsAnalyzer;
         this.isSemanticsAnalyzerActivated = isSemanticsAnalyzerActivated;
     }

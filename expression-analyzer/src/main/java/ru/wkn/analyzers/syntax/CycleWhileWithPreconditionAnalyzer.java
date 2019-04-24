@@ -1,14 +1,12 @@
 package ru.wkn.analyzers.syntax;
 
-import ru.wkn.analyzers.ActionType;
-import ru.wkn.analyzers.DataType;
 import ru.wkn.analyzers.syntax.semantics.ISemanticsAnalyzer;
 
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class CycleWhileWithPreconditionAnalyzer extends IExpressionAnalyzer {
+public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
 
     private final String allSpacesRegex = "[\\s\\n\\r\\t]*";
     private final String serviceCharactersRegex = "\\(\\)\\{\\{\\+=-\\[\\]\\|\\\\/&\\?\\^%#@\\$\\*:;\"\'!\\.";

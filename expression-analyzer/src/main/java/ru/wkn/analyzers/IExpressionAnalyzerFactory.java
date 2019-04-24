@@ -1,9 +1,10 @@
 package ru.wkn.analyzers;
 
-import ru.wkn.analyzers.syntax.IExpressionAnalyzer;
+import ru.wkn.analyzers.syntax.ExpressionAnalyzer;
+import ru.wkn.analyzers.syntax.Launguage;
 
 public interface IExpressionAnalyzerFactory {
 
-    IExpressionAnalyzer createExpressionAnalyzer(ExpressionAnalyzerType expressionAnalyzerType, Launguage launguage,
-                                                 boolean isSemanticsActivated);
+    ExpressionAnalyzer createExpressionAnalyzer(ExpressionAnalyzerType expressionAnalyzerType, Launguage launguage,
+                                                boolean isSemanticsActivated);
 }
