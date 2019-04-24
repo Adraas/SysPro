@@ -7,7 +7,7 @@
  * Signature: (DD)D
  */
 JNIEXPORT jdouble JNICALL Java_ru_wkn_javasm_AssemblerFunctions_dividingFunction
-  (JNIEnv *, jobject, jdouble, jdouble)
+  (JNIEnv * jenv, jobject jobj, jdouble dividend, jdouble divisor)
 {
 }
 
@@ -17,6 +17,6 @@ JNIEXPORT jdouble JNICALL Java_ru_wkn_javasm_AssemblerFunctions_dividingFunction
  * Signature: (DD)D
  */
 JNIEXPORT jdouble JNICALL Java_ru_wkn_javasm_AssemblerFunctions_xorFunction
-  (JNIEnv *, jobject, jdouble, jdouble)
+  (JNIEnv * jenv, jobject jobj, jdouble a, jdouble b)
 {
 }
