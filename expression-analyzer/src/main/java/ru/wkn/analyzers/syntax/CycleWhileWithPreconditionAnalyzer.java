@@ -14,7 +14,7 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
             .concat(allSpacesRegex)
             .concat(")([^")
             .concat(serviceCharactersRegex)
-            .concat("])");
+            .concat("]))");
     private final String variableDeclarationRegex = "([A-Za-z]+"
             .concat(allSpacesRegex)
             .concat("[A-Za-z]+)");
@@ -78,8 +78,7 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
             .concat("))")
             .concat(allSpacesRegex)
             .concat("(")
-            .concat(">|<|(>=)|(<=)|(==)")
-            .concat(")")
+            .concat(">|<|(>=)|(<=)|(==))")
             .concat(allSpacesRegex)
             .concat("((")
             .concat(anyNameCharSequenceRegex)
@@ -97,7 +96,7 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
             .concat(singleBooleanExpressionRegex)
             .concat("(")
             .concat(allSpacesRegex)
-            .concat("((&&)|(\\|\\|)|([&|]))")
+            .concat("((&&)|(\\|\\|)|([&\\|]))")
             .concat(singleBooleanExpressionRegex)
             .concat(")*)");
     private final String cycleWhileWithPreconditionRegex = "("
