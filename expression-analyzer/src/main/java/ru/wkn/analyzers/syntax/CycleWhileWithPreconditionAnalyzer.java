@@ -1,11 +1,13 @@
 package ru.wkn.analyzers.syntax;
 
+import lombok.Getter;
 import ru.wkn.analyzers.syntax.semantics.ISemanticsAnalyzer;
 
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@Getter
 public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
 
     private final String allSpacesRegex = "\\s\\n\\r\\t\\f";
