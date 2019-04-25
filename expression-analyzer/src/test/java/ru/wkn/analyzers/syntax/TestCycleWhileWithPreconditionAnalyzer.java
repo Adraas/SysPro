@@ -2,14 +2,19 @@ package ru.wkn.analyzers.syntax;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvFileSource;
 import ru.wkn.analyzers.syntax.semantics.CSharpeSemanticsAnalyzer;
 
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Iterator;
 import java.util.Objects;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -23,24 +28,51 @@ class TestCycleWhileWithPreconditionAnalyzer {
 
     @BeforeAll
     static void initFields() throws URISyntaxException, IOException {
+        ClassLoader classLoader = TestCycleWhileWithPreconditionAnalyzer.class.getClassLoader();
         CSharpeSemanticsAnalyzer cSharpeSemanticsAnalyzer = new CSharpeSemanticsAnalyzer();
         cycleWhileWithPreconditionAnalyzer = new CycleWhileWithPreconditionAnalyzer(cSharpeSemanticsAnalyzer, false);
         if (correctExpressionForAnalysis.trim().isEmpty()) {
-            initExpressionForAnalysis(correctExpressionForAnalysis, "expressions/correct_while_expression.txt");
+            initExpressionForAnalysis(correctExpressionForAnalysis, "expressions/correct_while_expression.txt",
+                    classLoader);
         }
         if (incorrectExpressionForAnalysis.trim().isEmpty()) {
-            initExpressionForAnalysis(incorrectExpressionForAnalysis, "expressions/incorrect_while_expression.txt");
+            initExpressionForAnalysis(incorrectExpressionForAnalysis, "expressions/incorrect_while_expression.txt",
+                    classLoader);
         }
+        setParametersIntoCSVFile(classLoader);
     }
 
-    static void initExpressionForAnalysis(String expressionForAnalysis, String path) throws URISyntaxException,
-            IOException {
-        Stream<String> stream = Files.lines(Paths.get(Objects.requireNonNull(TestCycleWhileWithPreconditionAnalyzer
-                .class.getClassLoader().getResource(path)).toURI()));
+    static void initExpressionForAnalysis(String expressionForAnalysis, String path, ClassLoader classLoader)
+            throws URISyntaxException, IOException {
+        Stream<String> stream = Files.lines(Paths.get(Objects.requireNonNull(classLoader
+                .getResource(path)).toURI()));
         Iterator<String> iterator = stream.iterator();
         while (iterator.hasNext()) {
             expressionForAnalysis = expressionForAnalysis.concat(iterator.next());
         }
+    }
+
+    static void setParametersIntoCSVFile(ClassLoader classLoader) throws URISyntaxException, IOException {
+        Path path = Paths.get(Objects.requireNonNull(classLoader
+                .getResource("expressions/elements.csv")).toURI());
+        if (Files.exists(path)) {
+            Files.delete(path);
+        }
+        Files.createFile(path);
+
+        BufferedWriter bufferedWriter = Files.newBufferedWriter(path);
+        bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getAnyNameCharSequenceRegex()
+                .concat("`").concat("_say4Me_Hello").concat("\n"));
+        bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getVariableDeclarationRegex()
+                .concat("`").concat("HelloType     _say4Me_Hello").concat("\n"));
+        bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getNumberRegex()
+                .concat("`").concat("2344.235").concat("\n"));
+        bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getSingleMethodInvocationRegex()
+                .concat("`").concat("_say4Me_Hello(say, me ,hello)").concat("\n"));
+        bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getSingleMethodInvocationRegex()
+                .concat("`").concat("_hello2me.sayMe2(asd, df,fsd    )").concat(""));
+
+        bufferedWriter.close();
     }
 
     @Test
@@ -61,5 +93,12 @@ class TestCycleWhileWithPreconditionAnalyzer {
     @Test
     void checkSyntaxToIncorrectWithSemanticsTest() {
         assertFalse(cycleWhileWithPreconditionAnalyzer.isSyntaxCorrect(incorrectExpressionForAnalysis, true));
+    }
+
+    @ParameterizedTest
+    @CsvFileSource(resources = {"/expressions/elements.csv"}, delimiter = '`')
+    void checkElementsSyntaxToCorrectWithoutSemanticsTest(String elementRegex, String element) {
+        Pattern pattern = Pattern.compile(elementRegex);
+        assertTrue(pattern.matcher(element).lookingAt());
     }
 }
