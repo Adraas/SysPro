@@ -11,11 +11,7 @@ import java.util.regex.Pattern;
 public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
 
     private final String allSpacesRegex = "\\s\\n\\r\\t\\f";
-    private final String serviceCharactersRegex = "\\(\\)\\{\\}\\+=-\\[\\]\\|\\\\/&\\?\\^%#@\\$\\*:;\"\'!\\.";
-    private final String anyNameCharSequenceRegex = "((_*[A-z])+[^"
-            .concat(allSpacesRegex)
-            .concat(serviceCharactersRegex)
-            .concat("]*)");
+    private final String anyNameCharSequenceRegex = "(((_*[A-z])+[0-9]*)+)";
     private final String variableDeclarationRegex = "([A-z]+["
             .concat(allSpacesRegex)
             .concat("]*[A-z]+)");
@@ -46,7 +42,9 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
             .concat(anyNameCharSequenceRegex)
             .concat("[")
             .concat(allSpacesRegex)
-            .concat("]*)*)?\\))");
+            .concat("]*)*)?[")
+            .concat(allSpacesRegex)
+            .concat("]*\\))");
     private final String streamMethodInvocationsRegex = "(("
             .concat(singleMethodInvocationRegex)
             .concat(")([")
