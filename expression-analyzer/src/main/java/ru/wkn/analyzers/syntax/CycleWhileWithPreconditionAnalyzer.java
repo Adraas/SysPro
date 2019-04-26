@@ -12,9 +12,13 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
 
     private final String allSpacesRegex = "\\s\\n\\r\\t\\f";
     private final String anyNameCharSequenceRegex = "(((_*[A-z])+[0-9]*)+)";
-    private final String variableDeclarationRegex = "([A-z]+["
+    private final String variableDeclarationRegex = "("
+            .concat(anyNameCharSequenceRegex)
+            .concat("[")
             .concat(allSpacesRegex)
-            .concat("]*[A-z]+)");
+            .concat("]*")
+            .concat(anyNameCharSequenceRegex)
+            .concat(")");
     private final String numberRegex = "((([1-9][0-9]*)|(0))(\\.[0-9]+)?)";
     private final String singleMethodInvocationRegex = "("
             .concat(anyNameCharSequenceRegex)
@@ -32,7 +36,7 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
             .concat(anyNameCharSequenceRegex)
             .concat("[")
             .concat(allSpacesRegex)
-            .concat("]*)|(")
+            .concat("]*)|((")
             .concat(anyNameCharSequenceRegex)
             .concat("[")
             .concat(allSpacesRegex)
@@ -42,7 +46,7 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
             .concat(anyNameCharSequenceRegex)
             .concat("[")
             .concat(allSpacesRegex)
-            .concat("]*)*)?[")
+            .concat("]*)*))?[")
             .concat(allSpacesRegex)
             .concat("]*\\))");
     private final String streamMethodInvocationsRegex = "(("
