@@ -70,7 +70,9 @@ class TestCycleWhileWithPreconditionAnalyzer {
         bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getSingleMethodInvocationRegex()
                 .concat("`").concat("_say4Me_Hello(say, me ,hello)").concat("\n"));
         bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getSingleMethodInvocationRegex()
-                .concat("`").concat("_hello2me.sayMe2(asd, df,fsd    )").concat(""));
+                .concat("`").concat("_hello2me.sayMe2(asd, df,fsd    )").concat("\n"));
+        bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getSingleMethodInvocationRegex()
+                .concat("`").concat("_hello2me(asd, df,fsd    )").concat(""));
 
         bufferedWriter.close();
     }
