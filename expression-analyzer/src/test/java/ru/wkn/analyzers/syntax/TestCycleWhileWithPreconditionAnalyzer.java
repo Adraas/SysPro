@@ -14,11 +14,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Iterator;
 import java.util.Objects;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -76,7 +74,19 @@ class TestCycleWhileWithPreconditionAnalyzer {
         bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getSingleMethodInvocationRegex()
                 .concat("`hello2me(        )").concat("\n"));
         bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getStreamMethodInvocationsRegex()
-                .concat("`_hello2me.sayMe2(asd, df,fsd    ).sayMe2(asd, df,fsd    )").concat(""));
+                .concat("`_hello2me.sayMe2(asd, df,fsd    ).sayMe2(asd, df,fsd    )").concat("\n"));
+        bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getVariableAssignmentRegex()
+                .concat("`hello2me =    yes").concat("\n"));
+        bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getVariableAssignmentRegex()
+                .concat("`hello2me    =    2344.235").concat("\n"));
+        bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getVariableAssignmentRegex()
+                .concat("`hello2me =    sayMe2(asd, df,fsd    )").concat("\n"));
+        bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getVariableDeclarationAndAssignmentRegex()
+                .concat("`HelloType hello2me   =  sayMe2(asd, df,fsd    )").concat("\n"));
+        bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getVariableDeclarationAndAssignmentRegex()
+                .concat("`HelloType hello2me   =  sayMe2").concat("\n"));
+        bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getVariableDeclarationAndAssignmentRegex()
+                .concat("`HelloType hello2me   = 2344.235 ").concat("\n"));
 
         bufferedWriter.close();
     }
@@ -104,12 +114,7 @@ class TestCycleWhileWithPreconditionAnalyzer {
     @ParameterizedTest
     @CsvFileSource(resources = {"/expressions/elements.csv"}, delimiter = '`')
     void checkElementsSyntaxToCorrectWithoutSemanticsTest(String elementRegex, String element) {
-        int count = 0;
         Pattern pattern = Pattern.compile(elementRegex);
-        Matcher matcher = pattern.matcher(element);
-        while (matcher.find()) {
-            count++;
-        }
-        assertEquals(1, count);
+        assertTrue(pattern.matcher(element).matches());
     }
 }
