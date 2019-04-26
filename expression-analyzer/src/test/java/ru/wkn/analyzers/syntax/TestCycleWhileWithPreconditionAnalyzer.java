@@ -87,6 +87,11 @@ class TestCycleWhileWithPreconditionAnalyzer {
                 .concat("`HelloType hello2me   =  sayMe2").concat("\n"));
         bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getVariableDeclarationAndAssignmentRegex()
                 .concat("`HelloType hello2me   = 2344.235 ").concat("\n"));
+        bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getCycleSingleLineBodyRegex()
+                .concat("`HelloType hello2me   = 2344.235 ;").concat("\n"));
+        bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getCycleMultipleBodyRegex()
+                .concat("`HelloType hello2me   = 2344.235 ;sayMe2(asd, df,fsd    );hello2me =  sayMe2(asd, df,fsd  );")
+                .concat("\n"));
 
         bufferedWriter.close();
     }
