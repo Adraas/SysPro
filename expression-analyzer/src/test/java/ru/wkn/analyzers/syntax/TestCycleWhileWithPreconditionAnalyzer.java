@@ -14,9 +14,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Iterator;
 import java.util.Objects;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -62,17 +64,19 @@ class TestCycleWhileWithPreconditionAnalyzer {
 
         BufferedWriter bufferedWriter = Files.newBufferedWriter(path);
         bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getAnyNameCharSequenceRegex()
-                .concat("`").concat("_say4Me_Hello").concat("\n"));
+                .concat("`_say4Me_Hello").concat("\n"));
         bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getVariableDeclarationRegex()
-                .concat("`").concat("HelloType     _say4Me_Hello").concat("\n"));
+                .concat("`HelloType     _say4Me_Hello").concat("\n"));
         bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getNumberRegex()
-                .concat("`").concat("2344.235").concat("\n"));
+                .concat("`2344.235").concat("\n"));
         bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getSingleMethodInvocationRegex()
-                .concat("`").concat("_say4Me_Hello(say, me ,hello)").concat("\n"));
+                .concat("`_say4Me_Hello(say, me ,hello)").concat("\n"));
         bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getSingleMethodInvocationRegex()
-                .concat("`").concat("_hello2me.sayMe2(asd, df,fsd    )").concat("\n"));
+                .concat("`_hello2me.sayMe2(asd, df,fsd    )").concat("\n"));
         bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getSingleMethodInvocationRegex()
-                .concat("`").concat("hello2me(        )").concat(""));
+                .concat("`hello2me(        )").concat("\n"));
+        bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getStreamMethodInvocationsRegex()
+                .concat("`_hello2me.sayMe2(asd, df,fsd    ).sayMe2(asd, df,fsd    )").concat(""));
 
         bufferedWriter.close();
     }
@@ -100,7 +104,12 @@ class TestCycleWhileWithPreconditionAnalyzer {
     @ParameterizedTest
     @CsvFileSource(resources = {"/expressions/elements.csv"}, delimiter = '`')
     void checkElementsSyntaxToCorrectWithoutSemanticsTest(String elementRegex, String element) {
+        int count = 0;
         Pattern pattern = Pattern.compile(elementRegex);
-        assertTrue(pattern.matcher(element).lookingAt());
+        Matcher matcher = pattern.matcher(element);
+        while (matcher.find()) {
+            count++;
+        }
+        assertEquals(1, count);
     }
 }
