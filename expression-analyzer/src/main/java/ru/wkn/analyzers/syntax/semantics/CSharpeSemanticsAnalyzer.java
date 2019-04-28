@@ -58,13 +58,14 @@ public class CSharpeSemanticsAnalyzer implements ISemanticsAnalyzer {
 
     @Override
     public boolean isVariableNameCorrect(String variableAsString) {
-        String allSpacesRegex = "[\\s\\n\\r\\t]*";
-        String serviceCharactersRegex = "\\(\\)\\{\\{\\+=-\\[\\]\\|\\\\/&\\?\\^%#@\\$\\*:;\"\'!\\.";
-        String anyNameCharSequenceRegex = "(_*[A-Za-z]+.*(^"
-                .concat(allSpacesRegex)
-                .concat(")([^")
-                .concat(serviceCharactersRegex)
-                .concat("])");
-        return Pattern.compile(anyNameCharSequenceRegex).matcher(variableAsString).lookingAt();
+        Pattern pattern = Pattern.compile("(abstract)|(as)|(base)|(bool)|(break)|(byte)|(case)|(catch)|(char)|(checked)"
+                .concat("|(class)|(const)|(continue)|(decimal)|(default)|(delegate)|(do)|(double)|(else)|(enum)")
+                .concat("|(event)|(explicit)|(extern)|(false)|(finally)|(fixed)|(float)|(for)|(foreach)|(goto)")
+                .concat("|(if)|(implicit)|(in)|(int)|(interface)|(internal)|(is)|(lock)|(long)|(namespace)|(new)")
+                .concat("|(null)|(object)|(operator)|(out)|(override)|(params)|(private)|(protected)|(public)")
+                .concat("|(readonly)|(ref)|(return)|(sbyte)|(sealed)|(short)|(sizeof)|(stackalloc)|(static)")
+                .concat("|(string)|(struct)|(switch)|(this)|(throw)|(true)|(try)|(typeof)|(uint)|(ulong)")
+                .concat("|(unchecked)|(unsafe)|(ushort)|(using)|(virtual)|(void)|(volatile)|(while)"));
+        return !pattern.matcher(variableAsString).matches();
     }
 }
