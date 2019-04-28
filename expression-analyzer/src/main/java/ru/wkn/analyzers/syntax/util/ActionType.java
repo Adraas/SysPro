@@ -1,4 +1,4 @@
-package ru.wkn.analyzers.syntax;
+package ru.wkn.analyzers.syntax.util;
 
 public enum ActionType {
 

@@ -2,6 +2,8 @@ package ru.wkn.analyzers.syntax;
 
 import lombok.Getter;
 import ru.wkn.analyzers.syntax.semantics.ISemanticsAnalyzer;
+import ru.wkn.analyzers.syntax.util.ActionType;
+import ru.wkn.analyzers.syntax.util.CSharpeDataType;
 
 import java.util.Objects;
 import java.util.regex.Matcher;
