@@ -213,7 +213,7 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
             i++;
         }
 
-        pattern = Pattern.compile(".+(^".concat(allSpacesRegex).concat(")"));
+        pattern = Pattern.compile(anyNameCharSequenceRegex);
         matcher = pattern.matcher(cycleCondition);
         i = 0;
         while (matcher.find()) {
@@ -274,16 +274,16 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
         return null;
     }
 
-    private DataType getDeclarationDataType(String cycleBodyLine) {
+    private CSharpeDataType getDeclarationDataType(String cycleBodyLine) {
         pattern = Pattern.compile(allSpacesRegex.concat("(\\S+)"));
         String dataType = pattern.matcher(cycleBodyLine).group().toLowerCase();
-        DataType[] dataTypes = DataType.values();
-        for (DataType currentDataType : dataTypes) {
-            if (currentDataType.getDataType().equals(dataType)) {
-                return currentDataType;
+        CSharpeDataType[] CSharpeDataTypes = CSharpeDataType.values();
+        for (CSharpeDataType currentCSharpeDataType : CSharpeDataTypes) {
+            if (currentCSharpeDataType.getDataType().equals(dataType)) {
+                return currentCSharpeDataType;
             }
         }
-        return DataType.COMPOSITE_DATA_TYPE;
+        return CSharpeDataType.COMPOSITE_DATA_TYPE;
     }
 
     private boolean isDeclarationCorrect(String cycleBodyLine) {
@@ -294,11 +294,11 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
         return iSemanticsAnalyzer.isVariableNameCorrect(variableName);
     }
 
-    private boolean isInitializationCorrect(String cycleBodyLine, DataType dataType) {
+    private boolean isInitializationCorrect(String cycleBodyLine, CSharpeDataType CSharpeDataType) {
         boolean isInitializationCorrect;
         pattern = Pattern.compile("=".concat(allSpacesRegex).concat("(.+^;)").concat(allSpacesRegex).concat(";"));
         String valueAsString = pattern.matcher(cycleBodyLine).group().trim().split("=")[1].split(";")[0];
-        switch (dataType) {
+        switch (CSharpeDataType) {
             case BYTE:
                 isInitializationCorrect = iSemanticsAnalyzer.isByteValueCorrect(valueAsString);
                 break;
@@ -336,7 +336,7 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
         return isInitializationCorrect;
     }
 
-    private boolean isDeclarationWithInitializationCorrect(String cycleBodyLine, DataType dataType) {
-        return isDeclarationCorrect(cycleBodyLine) && isInitializationCorrect(cycleBodyLine, dataType);
+    private boolean isDeclarationWithInitializationCorrect(String cycleBodyLine, CSharpeDataType CSharpeDataType) {
+        return isDeclarationCorrect(cycleBodyLine) && isInitializationCorrect(cycleBodyLine, CSharpeDataType);
     }
 }
