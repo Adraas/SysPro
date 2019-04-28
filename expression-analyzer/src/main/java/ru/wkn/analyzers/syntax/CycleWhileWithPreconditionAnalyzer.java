@@ -70,14 +70,12 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
             .concat(streamMethodInvocationsRegex)
             .concat(")|(")
             .concat(anyNameCharSequenceRegex)
-            .concat(")|(\".*\"))[")
-            .concat(allSpacesRegex)
-            .concat("]*)");
+            .concat(")|(\".*\")))");
     private final String variableDeclarationAndAssignmentRegex = "("
             .concat(variableDeclarationRegex)
             .concat("[")
             .concat(allSpacesRegex)
-            .concat("]*(=[")
+            .concat("]*=[")
             .concat(allSpacesRegex)
             .concat("]*((")
             .concat(numberRegex)
@@ -85,9 +83,7 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
             .concat(streamMethodInvocationsRegex)
             .concat(")|(")
             .concat(anyNameCharSequenceRegex)
-            .concat(")|(\".*\"))[")
-            .concat(allSpacesRegex)
-            .concat("]*))");
+            .concat(")|(\".*\")))");
     private final String cycleSingleLineBodyRegex = "((("
             .concat(variableDeclarationAndAssignmentRegex)
             .concat(")|(")
@@ -106,6 +102,8 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
             .concat(anyNameCharSequenceRegex)
             .concat(")|(")
             .concat(numberRegex)
+            .concat(")|(")
+            .concat(streamMethodInvocationsRegex)
             .concat("))[")
             .concat(allSpacesRegex)
             .concat("]*(")
@@ -115,19 +113,23 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
             .concat(anyNameCharSequenceRegex)
             .concat(")|(")
             .concat(numberRegex)
+            .concat(")|(")
+            .concat(streamMethodInvocationsRegex)
             .concat(")))");
     private final String singleBooleanExpressionRegex = "((true)|(false)|("
-            .concat(variableDeclarationAndAssignmentRegex)
-            .concat(")|(")
             .concat(comparisonOperationRegex)
             .concat(")|(")
             .concat(streamMethodInvocationsRegex)
+            .concat(")|(")
+            .concat(anyNameCharSequenceRegex)
             .concat("))");
     private final String cycleConditionRegex = "("
             .concat(singleBooleanExpressionRegex)
             .concat("([")
             .concat(allSpacesRegex)
-            .concat("]*((&&)|(\\|\\|)|([&\\|]))")
+            .concat("]*((&&)|(\\|\\|))[")
+            .concat(allSpacesRegex)
+            .concat("]*")
             .concat(singleBooleanExpressionRegex)
             .concat(")*)");
     private final String cycleWhileWithPreconditionRegex = "(["
@@ -138,13 +140,23 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
             .concat(allSpacesRegex)
             .concat("]*")
             .concat(cycleConditionRegex)
-            .concat("\\)[")
+            .concat("[")
             .concat(allSpacesRegex)
-            .concat("]*((\\{")
+            .concat("]*\\)[")
+            .concat(allSpacesRegex)
+            .concat("]*((\\{[")
+            .concat(allSpacesRegex)
+            .concat("]*")
             .concat(cycleMultipleBodyRegex)
-            .concat("\\})|(")
+            .concat("[")
+            .concat(allSpacesRegex)
+            .concat("]*\\})|([")
+            .concat(allSpacesRegex)
+            .concat("]*")
             .concat(cycleSingleLineBodyRegex)
-            .concat(")))");
+            .concat("))[")
+            .concat(allSpacesRegex)
+            .concat("]*)");
 
     private Pattern pattern = Pattern.compile(cycleWhileWithPreconditionRegex);
     private ISemanticsAnalyzer iSemanticsAnalyzer;
@@ -165,7 +177,7 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
     @Override
     public boolean isSyntaxCorrect(String expression, boolean isSemanticsAnalyzerActivated) {
         Matcher matcher = pattern.matcher(expression);
-        if (matcher.lookingAt()) {
+        if (matcher.matches()) {
             if (isSemanticsAnalyzerActivated) {
                 String cycleCondition;
                 String cycleBody;
@@ -241,22 +253,22 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
 
     private ActionType getLineTypeAction(String cycleBodyLine) {
         pattern = Pattern.compile(streamMethodInvocationsRegex);
-        if (pattern.matcher(cycleBodyLine).lookingAt()) {
+        if (pattern.matcher(cycleBodyLine).matches()) {
             return ActionType.INVOCATION;
         }
 
         pattern = Pattern.compile(variableDeclarationRegex);
-        if (pattern.matcher(cycleBodyLine).lookingAt()) {
+        if (pattern.matcher(cycleBodyLine).matches()) {
             return ActionType.DECLARATION;
         }
 
         pattern = Pattern.compile(variableAssignmentRegex);
-        if (pattern.matcher(cycleBodyLine).lookingAt()) {
+        if (pattern.matcher(cycleBodyLine).matches()) {
             return ActionType.INITIALIZATION;
         }
 
         pattern = Pattern.compile(variableDeclarationAndAssignmentRegex);
-        if (pattern.matcher(cycleBodyLine).lookingAt()) {
+        if (pattern.matcher(cycleBodyLine).matches()) {
             return ActionType.DECLARATION_WITH_INITIALIZATION;
         }
         return null;
