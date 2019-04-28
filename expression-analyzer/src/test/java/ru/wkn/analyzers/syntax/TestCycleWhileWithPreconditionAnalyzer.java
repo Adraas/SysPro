@@ -62,36 +62,36 @@ class TestCycleWhileWithPreconditionAnalyzer {
 
         BufferedWriter bufferedWriter = Files.newBufferedWriter(path);
         bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getAnyNameCharSequenceRegex()
-                .concat("`_say4Me_Hello").concat("\n"));
+                .concat("`_say4Me_Hello\n"));
         bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getVariableDeclarationRegex()
-                .concat("`HelloType     _say4Me_Hello").concat("\n"));
+                .concat("`HelloType     _say4Me_Hello\n"));
         bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getNumberRegex()
-                .concat("`2344.235").concat("\n"));
+                .concat("`2344.235\n"));
         bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getSingleMethodInvocationRegex()
-                .concat("`_say4Me_Hello(say, me ,hello)").concat("\n"));
+                .concat("`_say4Me_Hello(say, me ,hello)\n"));
         bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getSingleMethodInvocationRegex()
-                .concat("`_hello2me.sayMe2(asd, df,fsd    )").concat("\n"));
+                .concat("`_hello2me.sayMe2(asd, df,fsd    )\n"));
         bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getSingleMethodInvocationRegex()
-                .concat("`hello2me(        )").concat("\n"));
+                .concat("`hello2me(        )\n"));
         bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getStreamMethodInvocationsRegex()
-                .concat("`_hello2me.sayMe2(asd, df,fsd    ).sayMe2(asd, df,fsd    )").concat("\n"));
+                .concat("`_hello2me.sayMe2(asd, df,fsd    ).sayMe2(asd, df,fsd    )\n"));
         bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getVariableAssignmentRegex()
-                .concat("`hello2me =    yes").concat("\n"));
+                .concat("`hello2me =    yes\n"));
         bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getVariableAssignmentRegex()
-                .concat("`hello2me    =    2344.235").concat("\n"));
+                .concat("`hello2me    =    2344.235\n"));
         bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getVariableAssignmentRegex()
-                .concat("`hello2me =    sayMe2(asd, df,fsd    )").concat("\n"));
+                .concat("`hello2me =    sayMe2(asd, df,fsd    )\n"));
         bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getVariableDeclarationAndAssignmentRegex()
-                .concat("`HelloType hello2me   =  sayMe2(asd, df,fsd    )").concat("\n"));
+                .concat("`HelloType hello2me   =  sayMe2(asd, df,fsd    )\n"));
         bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getVariableDeclarationAndAssignmentRegex()
-                .concat("`HelloType hello2me   =  sayMe2").concat("\n"));
+                .concat("`HelloType hello2me   =  sayMe2\n"));
         bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getVariableDeclarationAndAssignmentRegex()
-                .concat("`HelloType hello2me   = 2344.235 ").concat("\n"));
+                .concat("`HelloType hello2me   = 2344.235 \n"));
         bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getCycleSingleLineBodyRegex()
-                .concat("`HelloType hello2me   = 2344.235 ;").concat("\n"));
+                .concat("`HelloType hello2me   = 2344.235 ;\n"));
         bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getCycleMultipleBodyRegex()
-                .concat("`HelloType hello2me   = 2344.235 ;sayMe2(asd, df,fsd    );hello2me =  sayMe2(asd, df,fsd  );")
-                .concat("\n"));
+                .concat("`HelloType hello2me   = 2344.235 ;sayMe2(asd, df,fsd    );hello2me =  sayMe2(asd, df,fsd  );"
+                        .concat("\n")));
 
         bufferedWriter.close();
     }
