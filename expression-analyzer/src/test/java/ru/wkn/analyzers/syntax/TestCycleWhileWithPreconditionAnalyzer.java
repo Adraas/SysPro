@@ -95,11 +95,11 @@ class TestCycleWhileWithPreconditionAnalyzer {
         bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getComparisonOperationRegex()
                 .concat("`hello2me   == 2344.235 \n"));
         bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getComparisonOperationRegex()
-                .concat("`hello2me   >= _hello2me.sayMe2(asd, df,fsd    ).sayMe2(asd, df,fsd    ) \n"));
+                .concat("`hello2me   >= _hello2me.sayMe2(asd, df,fsd    ).sayMe2(asd, df,fsd    )\n"));
         bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getCycleConditionRegex()
                 .concat("`hello2me   == 2344.235\n"));
         bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getCycleConditionRegex()
-                .concat("`hello2me   == 2344.235 && isCorrectSyntax \n"));
+                .concat("`hello2me   == 2344.235 && isCorrectSyntax\n"));
 
         bufferedWriter.close();
     }
