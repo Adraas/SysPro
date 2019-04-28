@@ -5,17 +5,22 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public enum DataType {
+public enum CSharpeDataType {
 
     BYTE("byte"),
     SHORT("short"),
-    INTEGER("integer"),
+    INTEGER("int"),
     LONG("long"),
     FLOAT("float"),
     DOUBLE("double"),
-    CHARACTER("character"),
+    DECIMAL("decimal"),
+    CHARACTER("char"),
     BOOLEAN("boolean"),
     STRING("string"),
+    SBYTE("sbyte"),
+    USHORT("ushort"),
+    UINTEGER("uint"),
+    ULONG("ulong"),
     COMPOSITE_DATA_TYPE("composite_data_type");
 
     private String dataType;
