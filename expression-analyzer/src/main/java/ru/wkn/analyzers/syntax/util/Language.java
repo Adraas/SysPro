@@ -1,6 +1,6 @@
 package ru.wkn.analyzers.syntax.util;
 
-public enum  Launguage {
+public enum Language {
 
     C_SHARPE
 }
