@@ -86,12 +86,20 @@ class TestCycleWhileWithPreconditionAnalyzer {
         bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getVariableDeclarationAndAssignmentRegex()
                 .concat("`HelloType hello2me   =  sayMe2\n"));
         bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getVariableDeclarationAndAssignmentRegex()
-                .concat("`HelloType hello2me   = 2344.235 \n"));
+                .concat("`HelloType hello2me   = 2344.235\n"));
         bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getCycleSingleLineBodyRegex()
                 .concat("`HelloType hello2me   = 2344.235 ;\n"));
         bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getCycleMultipleBodyRegex()
                 .concat("`HelloType hello2me   = 2344.235 ;sayMe2(asd, df,fsd    );hello2me =  sayMe2(asd, df,fsd  );"
                         .concat("\n")));
+        bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getComparisonOperationRegex()
+                .concat("`hello2me   == 2344.235 \n"));
+        bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getComparisonOperationRegex()
+                .concat("`hello2me   >= _hello2me.sayMe2(asd, df,fsd    ).sayMe2(asd, df,fsd    ) \n"));
+        bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getCycleConditionRegex()
+                .concat("`hello2me   == 2344.235\n"));
+        bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getCycleConditionRegex()
+                .concat("`hello2me   == 2344.235 && isCorrectSyntax \n"));
 
         bufferedWriter.close();
     }
