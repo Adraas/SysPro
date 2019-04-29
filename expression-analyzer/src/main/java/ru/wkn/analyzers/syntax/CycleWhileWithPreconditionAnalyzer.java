@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 @Getter
 public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
 
-    private final String allSpacesRegex = "\\s\\n\\r\\t\\f";
+    private final String allSpacesRegex = "\\s";
     private final String anyNameCharSequenceRegex = "(((_*[A-z])+[0-9]*)+)";
     private final String variableDeclarationRegex = "("
             .concat(anyNameCharSequenceRegex)
@@ -152,9 +152,7 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
             .concat(cycleMultipleBodyRegex)
             .concat("[")
             .concat(allSpacesRegex)
-            .concat("]*\\})|([")
-            .concat(allSpacesRegex)
-            .concat("]*")
+            .concat("]*\\})|(")
             .concat(cycleSingleLineBodyRegex)
             .concat("))[")
             .concat(allSpacesRegex)
