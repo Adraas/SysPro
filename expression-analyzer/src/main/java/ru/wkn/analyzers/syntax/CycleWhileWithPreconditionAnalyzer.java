@@ -16,57 +16,29 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
     private final String anyNameCharSequenceRegex = "(((_*[A-z])+[0-9]*)+)";
     private final String variableDeclarationRegex = "("
             .concat(anyNameCharSequenceRegex)
-            .concat("[")
-            .concat(allSpacesRegex)
-            .concat("]*")
+            .concat("\\s*")
             .concat(anyNameCharSequenceRegex)
             .concat(")");
     private final String numberRegex = "((([1-9][0-9]*)|(0))(\\.[0-9]+)?)";
     private final String singleMethodInvocationRegex = "("
             .concat(anyNameCharSequenceRegex)
-            .concat("[")
-            .concat(allSpacesRegex)
-            .concat("]*\\.[")
-            .concat(allSpacesRegex)
-            .concat("]*)?")
+            .concat("\\s*\\.\\s*)?")
             .concat(anyNameCharSequenceRegex)
-            .concat("([")
-            .concat(allSpacesRegex)
-            .concat("]*\\(([")
-            .concat(allSpacesRegex)
-            .concat("]*(")
+            .concat("(\\s*\\((\\s*(")
             .concat(anyNameCharSequenceRegex)
-            .concat("[")
-            .concat(allSpacesRegex)
-            .concat("]*)|((")
+            .concat("\\s*)|((")
             .concat(anyNameCharSequenceRegex)
-            .concat("[")
-            .concat(allSpacesRegex)
-            .concat("]*)(,[")
-            .concat(allSpacesRegex)
-            .concat("]*")
+            .concat("\\s*)(,\\s*")
             .concat(anyNameCharSequenceRegex)
-            .concat("[")
-            .concat(allSpacesRegex)
-            .concat("]*)*))?[")
-            .concat(allSpacesRegex)
-            .concat("]*\\))");
+            .concat("\\s*)*))?\\s*\\))");
     private final String streamMethodInvocationsRegex = "(("
             .concat(singleMethodInvocationRegex)
-            .concat(")([")
-            .concat(allSpacesRegex)
-            .concat("]*\\.[")
-            .concat(allSpacesRegex)
-            .concat("]*")
+            .concat(")(\\s*\\.\\s*")
             .concat(singleMethodInvocationRegex)
             .concat(")*)");
     private final String variableAssignmentRegex = "("
             .concat(anyNameCharSequenceRegex)
-            .concat("[")
-            .concat(allSpacesRegex)
-            .concat("]*=[")
-            .concat(allSpacesRegex)
-            .concat("]*((")
+            .concat("\\s*=\\s*((")
             .concat(numberRegex)
             .concat(")|(")
             .concat(streamMethodInvocationsRegex)
@@ -75,11 +47,7 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
             .concat(")|(\".*\")))");
     private final String variableDeclarationAndAssignmentRegex = "("
             .concat(variableDeclarationRegex)
-            .concat("[")
-            .concat(allSpacesRegex)
-            .concat("]*=[")
-            .concat(allSpacesRegex)
-            .concat("]*((")
+            .concat("\\s*=\\s*((")
             .concat(numberRegex)
             .concat(")|(")
             .concat(streamMethodInvocationsRegex)
@@ -94,9 +62,7 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
             .concat(variableDeclarationRegex)
             .concat(")|(")
             .concat(streamMethodInvocationsRegex)
-            .concat("))[")
-            .concat(allSpacesRegex)
-            .concat("]*;)");
+            .concat("))\\s*;)");
     private final String cycleMultipleBodyRegex = "(("
             .concat(cycleSingleLineBodyRegex)
             .concat(")*)");
@@ -106,12 +72,7 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
             .concat(numberRegex)
             .concat(")|(")
             .concat(streamMethodInvocationsRegex)
-            .concat("))[")
-            .concat(allSpacesRegex)
-            .concat("]*(")
-            .concat(">|<|(>=)|(<=)|(==))[")
-            .concat(allSpacesRegex)
-            .concat("]*((")
+            .concat("))\\s*(>|<|(>=)|(<=)|(==))\\s*((")
             .concat(anyNameCharSequenceRegex)
             .concat(")|(")
             .concat(numberRegex)
@@ -127,36 +88,16 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
             .concat("))");
     private final String cycleConditionRegex = "("
             .concat(singleBooleanExpressionRegex)
-            .concat("([")
-            .concat(allSpacesRegex)
-            .concat("]*((&&)|(\\|\\|))[")
-            .concat(allSpacesRegex)
-            .concat("]*")
+            .concat("(\\s*((&&)|(\\|\\|))\\s*")
             .concat(singleBooleanExpressionRegex)
             .concat(")*)");
-    private final String cycleWhileWithPreconditionRegex = "(["
-            .concat(allSpacesRegex)
-            .concat("]*(while)[")
-            .concat(allSpacesRegex)
-            .concat("]*\\([")
-            .concat(allSpacesRegex)
-            .concat("]*")
+    private final String cycleWhileWithPreconditionRegex = "(\\s*(while)\\s*\\(\\s*"
             .concat(cycleConditionRegex)
-            .concat("[")
-            .concat(allSpacesRegex)
-            .concat("]*\\)[")
-            .concat(allSpacesRegex)
-            .concat("]*((\\{[")
-            .concat(allSpacesRegex)
-            .concat("]*")
+            .concat("\\s*\\)\\s*((\\{\\s*")
             .concat(cycleMultipleBodyRegex)
-            .concat("[")
-            .concat(allSpacesRegex)
-            .concat("]*\\})|(")
+            .concat("\\s*\\})|(")
             .concat(cycleSingleLineBodyRegex)
-            .concat("))[")
-            .concat(allSpacesRegex)
-            .concat("]*)");
+            .concat("))\\s*)");
 
     private Pattern pattern = Pattern.compile(cycleWhileWithPreconditionRegex);
     private ISemanticsAnalyzer iSemanticsAnalyzer;
@@ -275,8 +216,8 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
     }
 
     private CSharpeDataType getDeclarationDataType(String cycleBodyLine) {
-        pattern = Pattern.compile(allSpacesRegex.concat("(\\S+)"));
-        String dataType = pattern.matcher(cycleBodyLine).group().toLowerCase();
+        pattern = Pattern.compile("\\s*(\\S+)");
+        String dataType = pattern.matcher(cycleBodyLine).group().trim().toLowerCase();
         CSharpeDataType[] CSharpeDataTypes = CSharpeDataType.values();
         for (CSharpeDataType currentCSharpeDataType : CSharpeDataTypes) {
             if (currentCSharpeDataType.getDataType().equals(dataType)) {
@@ -287,16 +228,16 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
     }
 
     private boolean isDeclarationCorrect(String cycleBodyLine) {
-        pattern = Pattern.compile(allSpacesRegex.concat("(.+^=)").concat(allSpacesRegex).concat("="));
-        String variableName = pattern.matcher(cycleBodyLine).group().split("=")[0];
-        pattern = Pattern.compile(allSpacesRegex.concat("[A-z]*"));
+        pattern = Pattern.compile("\\s*[^=;]+");
+        String variableName = pattern.matcher(cycleBodyLine).group();
+        pattern = Pattern.compile("\\s*[A-z]+");
         variableName = pattern.matcher(variableName).group(1).trim();
         return iSemanticsAnalyzer.isVariableNameCorrect(variableName);
     }
 
     private boolean isInitializationCorrect(String cycleBodyLine, CSharpeDataType CSharpeDataType) {
         boolean isInitializationCorrect;
-        pattern = Pattern.compile("=".concat(allSpacesRegex).concat("(.+^;)").concat(allSpacesRegex).concat(";"));
+        pattern = Pattern.compile("=\\s*[^;]+\\s*;");
         String valueAsString = pattern.matcher(cycleBodyLine).group().trim().split("=")[1].split(";")[0];
         switch (CSharpeDataType) {
             case BYTE:
