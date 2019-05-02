@@ -19,8 +19,8 @@ public class AssemblerFunctions implements IAssemblerFunctions {
     /**
      * Method for the XOR operation by means of JNI.
      *
-     * @see IAssemblerFunctions#xorFunction(double, double)
+     * @see IAssemblerFunctions#xorFunction(int, int)
      */
     @Override
-    public native double xorFunction(double a, double b);
+    public native double xorFunction(int a, int b);
 }
