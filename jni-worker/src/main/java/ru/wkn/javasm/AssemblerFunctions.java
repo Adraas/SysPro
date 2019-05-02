@@ -22,5 +22,5 @@ public class AssemblerFunctions implements IAssemblerFunctions {
      * @see IAssemblerFunctions#xorFunction(int, int)
      */
     @Override
-    public native double xorFunction(int a, int b);
+    public native int xorFunction(int a, int b);
 }

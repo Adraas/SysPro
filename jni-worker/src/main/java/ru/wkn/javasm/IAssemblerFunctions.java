@@ -23,5 +23,5 @@ public interface IAssemblerFunctions {
      * @param b - second value for XOR operation
      * @return result {@code double} of this operation
      */
-    double xorFunction(int a, int b);
+    int xorFunction(int a, int b);
 }
