@@ -1,4 +1,4 @@
-package ru.wkn.javasm;
+package ru.wkn.jni;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

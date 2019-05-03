@@ -58,7 +58,7 @@
                     <libraries>
                         <library>
                             <type>jni</type>
-                            <narSystemPackage>ru.wkn.javasm</narSystemPackage>
+                            <narSystemPackage>ru.wkn.jni</narSystemPackage>
                         </library>
                     </libraries>
                 </configuration>
@@ -93,6 +93,12 @@
             <groupId>org.scijava</groupId>
             <artifactId>native-lib-loader</artifactId>
             <version>2.3.4</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.github.fommil/jniloader -->
+        <dependency>
+            <groupId>com.github.fommil</groupId>
+            <artifactId>jniloader</artifactId>
+            <version>1.1</version>
         </dependency>
     </dependencies>
 

@@ -1,4 +1,4 @@
-package ru.wkn.javasm;
+package ru.wkn.jni;
 
 /**
  * Class {@code AssemblerFunctions} represent invocation for assembler functions by means of JNI.
