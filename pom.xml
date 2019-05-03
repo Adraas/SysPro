@@ -42,7 +42,6 @@
         <module>file-worker</module>
         <module>expression-analyzer</module>
         <module>jni-worker</module>
-        <module>native</module>
         <module>repository</module>
     </modules>
 
