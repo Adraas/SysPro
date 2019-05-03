@@ -11,7 +11,7 @@
 
     <artifactId>jni-worker</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <packaging>nar</packaging>
 
     <name>Assembler worker</name>
     <description>Assembler worker plugin</description>
@@ -59,6 +59,7 @@
                         <library>
                             <type>jni</type>
                             <narSystemPackage>ru.wkn.jni</narSystemPackage>
+                            <name>jni_math.dll</name>
                         </library>
                     </libraries>
                 </configuration>
