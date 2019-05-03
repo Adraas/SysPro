@@ -16,47 +16,84 @@
     <name>Assembler worker</name>
     <description>Assembler worker plugin</description>
 
-    <dependencies>
-        <!-- https://mvnrepository.com/artifact/com.github.fommil/jniloader -->
-        <dependency>
-            <groupId>com.github.fommil</groupId>
-            <artifactId>jniloader</artifactId>
-            <version>1.1</version>
-        </dependency>
-    </dependencies>
-
     <build>
         <plugins>
-            <!-- https://mvnrepository.com/artifact/org.codehaus.mojo/exec-maven-plugin -->
+            <!-- https://mvnrepository.com/artifact/com.github.maven-nar/nar-maven-plugin -->
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>1.6.0</version>
+                <groupId>com.github.maven-nar</groupId>
+                <artifactId>nar-maven-plugin</artifactId>
+                <version>3.6.0</version>
+                <extensions>true</extensions>
                 <configuration>
-                    <mainClass>ru.wkn.javasm.AssemblerFunctions</mainClass>
+                    <gnuUseOnWindows>true</gnuUseOnWindows>
+
+                    <c>
+                        <name>gcc</name>
+                        <includes>
+                            <include>**/*.c</include>
+                        </includes>
+                        <options>
+                            <option>-D__int64=int64_t</option>
+                            <option>-I${JAVA_HOME}/include</option>
+                            <option>-I${JAVA_HOME}/include/win32</option>
+                            <option>${java.os.include}</option>
+                            <option>${stack.protector.option}</option>
+                            <option>${architecture.option}</option>
+                            <option>${subsystem.option}</option>
+                            <option>${debug.option}</option>
+                            <option>-shared</option>
+                            <option>-fexceptions</option>
+                            <option>-lstdc++</option>
+                        </options>
+                    </c>
+
+                    <linker>
+                        <name>gcc</name>
+                        <options>
+                            <option>${architecture.option}</option>
+                            <option>${subsystem.option}</option>
+                        </options>
+                    </linker>
+
+                    <libraries>
+                        <library>
+                            <type>jni</type>
+                            <narSystemPackage>ru.wkn.javasm</narSystemPackage>
+                        </library>
+                    </libraries>
                 </configuration>
             </plugin>
 
-            <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-assembly-plugin -->
+            <!-- https://mvnrepository.com/artifact/org.codehaus.mojo/build-helper-maven-plugin -->
             <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>3.1.1</version>
-                <configuration>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
-                </configuration>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>3.0.0</version>
                 <executions>
                     <execution>
-                        <phase>package</phase>
+                        <id>add-source</id>
+                        <phase>generate-sources</phase>
                         <goals>
-                            <goal>single</goal>
+                            <goal>add-source</goal>
                         </goals>
+                        <configuration>
+                            <sources>
+                                <source>${project.build.directory}/nar/nar-generated/</source>
+                            </sources>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
         </plugins>
-
     </build>
+
+    <dependencies>
+        <!-- https://mvnrepository.com/artifact/org.scijava/native-lib-loader -->
+        <dependency>
+            <groupId>org.scijava</groupId>
+            <artifactId>native-lib-loader</artifactId>
+            <version>2.3.4</version>
+        </dependency>
+    </dependencies>
 
 </project>
