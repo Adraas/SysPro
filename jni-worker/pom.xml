@@ -59,7 +59,6 @@
                         <library>
                             <type>jni</type>
                             <narSystemPackage>ru.wkn.jni</narSystemPackage>
-                            <name>jni_math.dll</name>
                         </library>
                     </libraries>
                 </configuration>
