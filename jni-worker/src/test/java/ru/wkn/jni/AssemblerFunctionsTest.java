@@ -19,8 +19,6 @@ class AssemblerFunctionsTest {
         assertEquals(2, assemblerFunctions.dividingFunction(6, 3));
     }
 
-
-
     @Test
     void testNativeXorFunction() {
         assertEquals(0b0110, assemblerFunctions.xorFunction(0b1010, 0b1100));
