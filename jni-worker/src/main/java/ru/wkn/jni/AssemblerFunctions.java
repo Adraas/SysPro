@@ -8,6 +8,10 @@ package ru.wkn.jni;
  */
 public class AssemblerFunctions implements IAssemblerFunctions {
 
+    static {
+        NarSystem.loadLibrary();
+    }
+
     /**
      * Method for the dividing by means of JNI.
      *
