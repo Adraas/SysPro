@@ -1,4 +1,4 @@
-package ru.wkn.analyzers;
+package ru.wkn.analyzers.util;
 
 public enum ExpressionAnalyzerType {
 

@@ -1,26 +1,24 @@
 package ru.wkn.analyzers.syntax;
 
-import ru.wkn.analyzers.syntax.semantics.ISemanticsAnalyzer;
+import org.codehaus.plexus.compiler.AbstractCompiler;
+import org.codehaus.plexus.compiler.Compiler;
+import ru.wkn.analyzers.exceptions.CompilationException;
+import ru.wkn.analyzers.exceptions.LanguageException;
+import ru.wkn.analyzers.syntax.util.Language;
+
+import java.util.List;
 
 public abstract class ExpressionAnalyzer {
 
-    private ISemanticsAnalyzer iSemanticsAnalyzer;
-    private boolean isSemanticsAnalyzerActivated;
+    private Language language;
+    private Compiler compiler;
 
-    public ExpressionAnalyzer(ISemanticsAnalyzer iSemanticsAnalyzer, boolean isSemanticsAnalyzerActivated) {
-        this.iSemanticsAnalyzer = iSemanticsAnalyzer;
-        this.isSemanticsAnalyzerActivated = isSemanticsAnalyzerActivated;
+    public ExpressionAnalyzer(Language language, AbstractCompiler compiler) {
+        this.language = language;
+        this.compiler = compiler;
     }
 
-    public abstract boolean isSyntaxCorrect(String expression);
-
-    public abstract boolean isSyntaxCorrect(String expression, boolean isSemanticsAnalyzerActivated);
-
-    public boolean isSemanticsAnalyzerActivated() {
-        return isSemanticsAnalyzerActivated;
-    }
-
-    public void setSemanticsAnalyzerActivated(boolean semanticsAnalyzerActivated) {
-        isSemanticsAnalyzerActivated = semanticsAnalyzerActivated;
-    }
+    public abstract List<String> getCompilerMessages(String cycleWhileWithPreconditionExpression,
+                                                     String tempSourcePathname, String outputPathname)
+            throws CompilationException, LanguageException;
 }
