@@ -1,8 +1,6 @@
 package ru.wkn.analyzers.syntax;
 
-import lombok.Getter;
 import org.codehaus.plexus.compiler.AbstractCompiler;
-import org.codehaus.plexus.compiler.Compiler;
 import org.codehaus.plexus.compiler.CompilerConfiguration;
 import org.codehaus.plexus.compiler.CompilerException;
 import org.codehaus.plexus.compiler.CompilerMessage;
@@ -25,27 +23,22 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@Getter
 public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
-
-    private Language language;
-    private Compiler compiler;
 
     public CycleWhileWithPreconditionAnalyzer(Language language, AbstractCompiler compiler) {
         super(language, compiler);
-        this.language = language;
-        this.compiler = compiler;
     }
 
     @Override
     public List<String> getCompilerMessages(String cycleWhileWithPreconditionExpression, String tempSourcePathname,
                                             String outputPathname) throws CompilationException, LanguageException {
-        String resultSource = ExpressionCompiler.compileExpression(cycleWhileWithPreconditionExpression, language);
+        String resultSource = ExpressionCompiler.compileExpression(cycleWhileWithPreconditionExpression,
+                super.getLanguage());
         Set<File> sources = prepareSourceFiles(resultSource, tempSourcePathname);
         CompilerConfiguration compilerConfiguration = prepareCompileConfiguration(sources, outputPathname);
         CompilerResult compilerResult;
         try {
-            compilerResult = compiler.performCompile(compilerConfiguration);
+            compilerResult = super.getCompiler().performCompile(compilerConfiguration);
             if (compilerResult.isSuccess()) {
                 List<String> compilerStringMessages = new ArrayList<>();
                 compilerStringMessages.add(CompilerStatus.COMPILE_SUCCESS.getCompilerMessage());
