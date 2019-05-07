@@ -21,6 +21,6 @@ class AssemblerFunctionsTest {
 
     @Test
     void testNativeXorFunction() {
-        assertEquals(0b0110, assemblerFunctions.xorFunction(0b1010, 0b1100));
+        assertEquals(6, assemblerFunctions.xorFunction(10, 12));
     }
 }
