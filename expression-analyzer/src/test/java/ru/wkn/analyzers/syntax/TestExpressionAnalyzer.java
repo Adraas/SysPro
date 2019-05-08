@@ -20,16 +20,16 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
-class TestCycleWhileWithPreconditionAnalyzer {
+class TestExpressionAnalyzer {
 
-    private static CycleWhileWithPreconditionAnalyzer cycleWhileWithPreconditionAnalyzer;
+    private static ExpressionAnalyzer expressionAnalyzer;
     private static String correctExpressionForAnalysis = "";
     private static String incorrectExpressionForAnalysis = "";
 
     @BeforeAll
     static void initFields() throws URISyntaxException, IOException {
-        ClassLoader classLoader = TestCycleWhileWithPreconditionAnalyzer.class.getClassLoader();
-        cycleWhileWithPreconditionAnalyzer = new CycleWhileWithPreconditionAnalyzer(Language.C_SHARPE,
+        ClassLoader classLoader = TestExpressionAnalyzer.class.getClassLoader();
+        expressionAnalyzer = new ExpressionAnalyzer(Language.C_SHARPE,
                 new CSharpCompiler());
         if (correctExpressionForAnalysis.trim().isEmpty()) {
             correctExpressionForAnalysis
@@ -60,7 +60,7 @@ class TestCycleWhileWithPreconditionAnalyzer {
     void checkSyntaxToCorrect() throws IOException, CompilationException, LanguageException {
         String outputPathname = "correct";
         String sourceFile = "correct.cs";
-        assertEquals(CompilerStatus.COMPILE_SUCCESS.getCompilerMessage(), cycleWhileWithPreconditionAnalyzer
+        assertEquals(CompilerStatus.COMPILE_SUCCESS.getCompilerMessage(), expressionAnalyzer
                 .getCompilerMessages(correctExpressionForAnalysis, sourceFile, outputPathname).get(0));
         updateOutputCatalog(outputPathname);
         updateOutputCatalog(sourceFile);
@@ -70,7 +70,7 @@ class TestCycleWhileWithPreconditionAnalyzer {
     void checkSyntaxToIncorrect() throws IOException, CompilationException, LanguageException {
         String outputPathname = "incorrect";
         String sourceFile = "incorrect.cs";
-        assertNotEquals(CompilerStatus.COMPILE_SUCCESS.getCompilerMessage(), cycleWhileWithPreconditionAnalyzer
+        assertNotEquals(CompilerStatus.COMPILE_SUCCESS.getCompilerMessage(), expressionAnalyzer
                 .getCompilerMessages(incorrectExpressionForAnalysis, sourceFile, outputPathname).get(0));
         updateOutputCatalog(outputPathname);
         updateOutputCatalog(sourceFile);
