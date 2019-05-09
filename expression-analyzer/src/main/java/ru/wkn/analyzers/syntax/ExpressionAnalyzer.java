@@ -113,8 +113,8 @@ public class ExpressionAnalyzer {
             compileMessage = new String(compileMessageAsBytes);
         }
         process.getOutputStream().close();
-        if (compileMessage.contains("error")) {
-            compileMessage = ErrorMessageGenerator.generateErrorMessage(compileMessage, language);
+        compileMessage = ErrorMessageGenerator.generateErrorMessage(compileMessage, language);
+        if (!compileMessage.trim().isEmpty()) {
             throw new CompilationException(compileMessage, new CompilerException(compileMessage));
         }
         return compileMessage;

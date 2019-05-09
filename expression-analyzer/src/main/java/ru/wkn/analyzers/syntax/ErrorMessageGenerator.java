@@ -18,10 +18,12 @@ public class ErrorMessageGenerator {
     }
 
     private static String generateCSharpErrorMessage(String compileMessage) {
-        Pattern pattern = Pattern.compile("\\S+\\.cs.*");
-        Matcher matcher = pattern.matcher(compileMessage);
-        if (matcher.find()) {
-            return matcher.group();
+        if (compileMessage.contains("error")) {
+            Pattern pattern = Pattern.compile("\\S+\\.cs.*");
+            Matcher matcher = pattern.matcher(compileMessage);
+            if (matcher.find()) {
+                return matcher.group();
+            }
         }
         return "";
     }
