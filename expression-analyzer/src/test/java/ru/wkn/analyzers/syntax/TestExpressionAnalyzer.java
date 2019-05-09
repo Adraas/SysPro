@@ -18,7 +18,7 @@ import java.util.Objects;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class TestExpressionAnalyzer {
 
@@ -58,21 +58,21 @@ class TestExpressionAnalyzer {
 
     @Test
     void checkSyntaxToCorrect() throws IOException, CompilationException, LanguageException {
-        String outputPathname = "correct";
+        String outputFile = "correct";
         String sourceFile = "correct.cs";
-        assertEquals(CompilerStatus.COMPILE_SUCCESS.getCompilerMessage(), expressionAnalyzer
-                .getCompilerMessages(correctExpressionForAnalysis, sourceFile, outputPathname).get(0));
-        updateOutputCatalog(outputPathname);
+        assertEquals(CompilerStatus.PERFORM_SUCCESSFULLY.getCompilerMessage(), expressionAnalyzer
+                .compile(correctExpressionForAnalysis, sourceFile, outputFile,
+                        "C:/Windows/Microsoft.NET/Framework/v4.0.30319/csc.exe").get(0));
         updateOutputCatalog(sourceFile);
     }
 
     @Test
-    void checkSyntaxToIncorrect() throws IOException, CompilationException, LanguageException {
-        String outputPathname = "incorrect";
+    void checkSyntaxToIncorrect() throws IOException {
+        String outputFile = "incorrect";
         String sourceFile = "incorrect.cs";
-        assertNotEquals(CompilerStatus.COMPILE_SUCCESS.getCompilerMessage(), expressionAnalyzer
-                .getCompilerMessages(incorrectExpressionForAnalysis, sourceFile, outputPathname).get(0));
-        updateOutputCatalog(outputPathname);
+        assertThrows(CompilationException.class,
+                () -> expressionAnalyzer.compile(incorrectExpressionForAnalysis, sourceFile, outputFile,
+                        "C:/Windows/Microsoft.NET/Framework/v4.0.30319/csc.exe"));
         updateOutputCatalog(sourceFile);
     }
 

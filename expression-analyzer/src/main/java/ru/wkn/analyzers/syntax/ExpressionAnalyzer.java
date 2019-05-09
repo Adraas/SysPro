@@ -15,6 +15,7 @@ import ru.wkn.analyzers.util.CompilerStatus;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -34,29 +35,41 @@ public class ExpressionAnalyzer {
         this.compiler = compiler;
     }
 
-    public List<String> getCompilerMessages(String cycleWhileWithPreconditionExpression, String tempSourcePathname,
-                                            String outputPathname) throws CompilationException, LanguageException {
-        String resultSource = ExpressionCompiler.compileExpression(cycleWhileWithPreconditionExpression, language);
-        Set<File> sources = prepareSourceFiles(resultSource, tempSourcePathname);
-        CompilerConfiguration compilerConfiguration = prepareCompileConfiguration(sources, outputPathname);
+    public List<String> compile(String expression, String tempSourcePathname, String outputFilename, String compilerPath)
+            throws CompilationException, LanguageException {
+        CompilerConfiguration compilerConfiguration = performCompile(expression, tempSourcePathname, outputFilename);
         CompilerResult compilerResult;
+        List<String> compilerStringMessages = new ArrayList<>();
         try {
+            String[] commandLine = compiler.createCommandLine(compilerConfiguration);
+            commandLine = getCompilerCommandLine(commandLine, compilerPath);
             compilerResult = compiler.performCompile(compilerConfiguration);
             if (compilerResult.isSuccess()) {
-                List<String> compilerStringMessages = new ArrayList<>();
-                compilerStringMessages.add(CompilerStatus.COMPILE_SUCCESS.getCompilerMessage());
+                compilerStringMessages.add(CompilerStatus.PERFORM_SUCCESSFULLY.getCompilerMessage());
+                compilerStringMessages.add(getCompilerMessage(commandLine));
                 return compilerStringMessages;
             } else {
-                List<String> compilerStringMessages = new ArrayList<>();
+                compilerStringMessages.add(CompilerStatus.PERFORM_UNSUCCESSFULLY.getCompilerMessage());
                 List<CompilerMessage> compilerMessages = compilerResult.getCompilerMessages();
                 for (CompilerMessage compilerMessage : compilerMessages) {
                     compilerStringMessages.add(compilerMessage.getMessage());
                 }
                 return compilerStringMessages;
             }
-        } catch (CompilerException e) {
-            throw new CompilationException(e.getMessage(), e);
+        } catch (CompilerException | IOException e) {
+            String message = "";
+            for (String currentMessage : compilerStringMessages) {
+                message = message.concat(currentMessage).concat("\n");
+            }
+            throw new CompilationException(message, e);
         }
+    }
+
+    private CompilerConfiguration performCompile(String expression, String tempSourcePathname, String outputFilename)
+            throws CompilationException, LanguageException {
+        String resultSource = ExpressionCompiler.compileExpression(expression, language);
+        Set<File> sources = prepareSourceFiles(resultSource, tempSourcePathname);
+        return prepareCompileConfiguration(sources, outputFilename);
     }
 
     private Set<File> prepareSourceFiles(String resultSource, String tempSourcePathname) throws CompilationException {
@@ -74,10 +87,43 @@ public class ExpressionAnalyzer {
         return sources;
     }
 
-    private CompilerConfiguration prepareCompileConfiguration(Set<File> sources, String outputPathname) {
+    private CompilerConfiguration prepareCompileConfiguration(Set<File> sources, String outputFilename) {
         CompilerConfiguration compilerConfiguration = new CompilerConfiguration();
         compilerConfiguration.setSourceFiles(sources);
-        compilerConfiguration.setOutputLocation(outputPathname);
+        compilerConfiguration.setOutputLocation("");
+        compilerConfiguration.setOutputFileName(outputFilename);
+        compilerConfiguration.setVerbose(true);
         return compilerConfiguration;
+    }
+
+    private String getCompilerMessage(String[] commandLine) throws IOException, CompilationException,
+            LanguageException {
+        ProcessBuilder processBuilder = new ProcessBuilder(commandLine);
+        Process process = processBuilder.redirectErrorStream(true).start();
+        InputStream inputStream = process.getInputStream();
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        byte[] compileMessageAsBytes = new byte[inputStream.available()];
+        int result = inputStream.read(compileMessageAsBytes);
+        String compileMessage = "";
+        if (result != -1) {
+            compileMessage = new String(compileMessageAsBytes);
+        }
+        process.getOutputStream().close();
+        if (compileMessage.contains("error")) {
+            compileMessage = ErrorMessageGenerator.generateErrorMessage(compileMessage, language);
+            throw new CompilationException(compileMessage, new CompilerException(compileMessage));
+        }
+        return compileMessage;
+    }
+
+    private String[] getCompilerCommandLine(String[] commandLine, String compilerPath) {
+        String[] compilerCommandLine = new String[commandLine.length + 1];
+        compilerCommandLine[0] = compilerPath;
+        System.arraycopy(commandLine, 0, compilerCommandLine, 1, compilerCommandLine.length - 1);
+        return compilerCommandLine;
     }
 }

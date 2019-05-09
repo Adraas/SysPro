@@ -7,7 +7,8 @@ import lombok.Getter;
 @Getter
 public enum CompilerStatus {
 
-    COMPILE_SUCCESS("success");
+    PERFORM_SUCCESSFULLY("Perform successfully"),
+    PERFORM_UNSUCCESSFULLY("Perform unsuccessfully");
 
     private String compilerMessage;
 }
