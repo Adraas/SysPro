@@ -1,4 +1,4 @@
-#include "ru_wkn_javasm_AssemblerFunctions.h"
+#include "ru_wkn_jni_AssemblerFunctions.h"
 #include <string.h>
 
 /*
@@ -10,7 +10,7 @@ JNIEXPORT jdouble JNICALL Java_ru_wkn_javasm_AssemblerFunctions_dividingFunction
   (JNIEnv * jenv, jobject jobj, jdouble dividend, jdouble divisor)
 {
     double result;
-    _asm {
+    __asm {
         fld divisor
         fld dividend
         fdiv st(0), st(1)
