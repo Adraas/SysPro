@@ -29,36 +29,28 @@
 
                     <c>
                         <!-- add your equivalent of C:\cygwin64\bin to your PATH environment variable -->
+                        <!--TODO: create output .dll shared library by means options of GCC-->
                         <name>gcc</name>
                         <includes>
                             <include>**/*.c</include>
                         </includes>
                         <options>
-                            <option>-D__int64=int64_t</option>
-                            <option>-I${JAVA_HOME}/include</option>
-                            <option>-I${JAVA_HOME}/include/win32</option>
-                            <option>${java.os.include}</option>
-                            <option>${stack.protector.option}</option>
-                            <option>${architecture.option}</option>
-                            <option>${subsystem.option}</option>
-                            <option>${debug.option}</option>
-                            <option>-shared</option>
-                            <option>-fexceptions</option>
-                            <option>-lstdc++</option>
+                            <option>-B ${env.JAVA_HOME}/include</option>
+                            <option>-dumpspecs</option>
                         </options>
                     </c>
 
                     <linker>
                         <name>gcc</name>
                         <options>
-                            <option>${architecture.option}</option>
-                            <option>${subsystem.option}</option>
+                            <option>-m64</option>
+                            <option>-dumpspecs</option>
                         </options>
                     </linker>
 
                     <libraries>
                         <library>
-                            <type>jni</type>
+                            <type>shared</type>
                             <narSystemPackage>ru.wkn.jni</narSystemPackage>
                         </library>
                     </libraries>
