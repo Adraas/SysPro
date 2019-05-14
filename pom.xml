@@ -106,6 +106,7 @@
                 <configuration>
                     <additionalClasspathElements>
                         <additionalClasspathElement>expression-analyzer</additionalClasspathElement>
+                        <additionalClasspathElement>jni-worker</additionalClasspathElement>
                     </additionalClasspathElements>
                     <includes>
                         <include>**/Test*.java</include>
