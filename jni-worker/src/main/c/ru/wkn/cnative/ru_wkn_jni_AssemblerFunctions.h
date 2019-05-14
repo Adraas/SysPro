@@ -6,24 +6,24 @@
 #define _Included_ru_wkn_jni_AssemblerFunctions
 #ifdef __cplusplus
 extern "C" {
-#endif
-/*
- * Class:     ru_wkn_jni_AssemblerFunctions
- * Method:    dividingFunction
- * Signature: (DD)D
- */
-JNIEXPORT jdouble JNICALL Java_ru_wkn_jni_AssemblerFunctions_dividingFunction
-  (JNIEnv *, jobject, jdouble, jdouble);
+    #endif
+    /*
+     * Class:     ru_wkn_jni_AssemblerFunctions
+     * Method:    dividingFunction
+     * Signature: (DD)D
+     */
+    __declspec(dllexport) JNIEXPORT jdouble JNICALL Java_ru_wkn_jni_AssemblerFunctions_dividingFunction
+      (JNIEnv *, jobject, jdouble, jdouble);
 
-/*
- * Class:     ru_wkn_jni_AssemblerFunctions
- * Method:    xorFunction
- * Signature: (II)I
- */
-JNIEXPORT jint JNICALL Java_ru_wkn_jni_AssemblerFunctions_xorFunction
-  (JNIEnv *, jobject, jint, jint);
+    /*
+     * Class:     ru_wkn_jni_AssemblerFunctions
+     * Method:    xorFunction
+     * Signature: (II)I
+     */
+    __declspec(dllexport) JNIEXPORT jint JNICALL Java_ru_wkn_jni_AssemblerFunctions_xorFunction
+      (JNIEnv *, jobject, jint, jint);
 
-#ifdef __cplusplus
+    #ifdef __cplusplus
 }
 #endif
 #endif
