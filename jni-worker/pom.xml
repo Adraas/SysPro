@@ -25,32 +25,36 @@
                 <version>3.6.0</version>
                 <extensions>true</extensions>
                 <configuration>
+                    <!-- add Cygwin to PATH environment variable -->
+
                     <gnuUseOnWindows>true</gnuUseOnWindows>
 
-                    <c>
-                        <!-- add your equivalent of C:\cygwin64\bin to your PATH environment variable -->
-                        <!--TODO: create output .dll shared library by means options of GCC-->
+                    <cpp>
                         <name>gcc</name>
                         <includes>
-                            <include>**/*.c</include>
+                            <include>**/*.cpp</include>
                         </includes>
                         <options>
-                            <option>-B ${env.JAVA_HOME}/include</option>
-                            <option>-dumpspecs</option>
+                            <option>-I${env.JAVA_HOME}/include</option>
+                            <option>-I${env.JAVA_HOME}/include/win32</option>
+                            <option>-DWIN64</option>
+                            <option>-DWIN32</option>
+                            <option>-c</option>
+                            <option>-shared</option>
+                            <option>-o jni-worker-1.0-SNAPSHOT.dll</option>
                         </options>
-                    </c>
+                    </cpp>
 
                     <linker>
                         <name>gcc</name>
                         <options>
-                            <option>-m64</option>
-                            <option>-dumpspecs</option>
+                            <option>-I${env.JAVA_HOME}/include</option>
+                            <option>-I${env.JAVA_HOME}/include/win32</option>
                         </options>
                     </linker>
 
                     <libraries>
                         <library>
-                            <type>shared</type>
                             <narSystemPackage>ru.wkn.jni</narSystemPackage>
                         </library>
                     </libraries>
