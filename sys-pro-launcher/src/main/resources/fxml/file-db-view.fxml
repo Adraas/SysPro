@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/2.2"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.wkn.controllers.FileDBWindowController">
+    <children>
+        <MenuBar prefWidth="600.0">
+            <menus>
+                <Menu mnemonicParsing="false" text="File">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="New"/>
+                        <MenuItem mnemonicParsing="false" text="Open"/>
+                        <MenuItem mnemonicParsing="false" text="Save"/>
+                    </items>
+                </Menu>
+            </menus>
+        </MenuBar>
+        <Button layoutX="530.0" layoutY="92.0" mnemonicParsing="false" prefWidth="55.0001220703125"
+                text="Add"/>
+        <Button fx:id="editButton" layoutX="530.0" layoutY="123.0" mnemonicParsing="false" prefWidth="56.0"
+                text="Edit"/>
+        <Button fx:id="deleteButton" layoutX="530.0" layoutY="154.0" mnemonicParsing="false" prefWidth="56.0"
+                text="Delete"/>
+        <TableView layoutX="14.0" layoutY="92.0" prefHeight="294.0" prefWidth="504.0">
+            <columns>
+                <TableColumn prefWidth="75.0" text="Address"/>
+                <TableColumn prefWidth="95.0" text="Access mode"/>
+                <TableColumn prefWidth="95.0" text="Access date"/>
+            </columns>
+        </TableView>
+        <Label layoutX="14.0" layoutY="51.0" prefHeight="17.0" prefWidth="112.0" text="Choose the variant:"/>
+        <ChoiceBox layoutX="132.0" layoutY="49.0" prefWidth="150.0"/>
+    </children>
+</AnchorPane>

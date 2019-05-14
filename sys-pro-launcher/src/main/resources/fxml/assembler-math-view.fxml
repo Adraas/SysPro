@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.wkn.controllers.AssemblerMathWindowController">
+    <children>
+        <Label layoutX="14.0" layoutY="36.0" prefHeight="17.0" prefWidth="112.0" text="Choose the variant:"/>
+        <ChoiceBox fx:id="assemblerVariantChoiceBox" layoutX="132.0" layoutY="34.0" prefWidth="165.0"/>
+        <Label layoutX="14.0" layoutY="84.0" prefHeight="17.0" prefWidth="46.0" text="Input a:"/>
+        <Label layoutX="14.0" layoutY="118.0" prefHeight="17.0" prefWidth="46.0" text="Input b:"/>
+        <TextField fx:id="inputAField" layoutX="96.0" layoutY="82.0" prefWidth="200"/>
+        <TextField fx:id="inputBField" layoutX="96.0" layoutY="116.0" prefWidth="200"/>
+        <TextArea id="messageLogArea" fx:id="assemblerMessageLog" layoutX="96.0" layoutY="223.0" prefHeight="164.0"
+                  prefWidth="490.0"/>
+        <Label layoutX="14.0" layoutY="297.0" prefHeight="17.0" prefWidth="82.0" text="Message log:"/>
+    </children>
+</AnchorPane>
