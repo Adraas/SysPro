@@ -2,6 +2,8 @@ package ru.wkn;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
+import lombok.extern.java.Log;
+import ru.wkn.exceptions.WindowTypeException;
 import ru.wkn.views.IWindow;
 import ru.wkn.views.IWindowFactory;
 import ru.wkn.views.WindowFactory;
@@ -10,6 +12,7 @@ import ru.wkn.views.WindowType;
 
 import java.io.IOException;
 
+@Log
 public class Launcher extends Application {
 
     public static void main(String[] args) {
@@ -20,11 +23,12 @@ public class Launcher extends Application {
     public void start(Stage primaryStage) {
         IWindowFactory windowFactory = new WindowFactory();
         WindowRepository windowRepository = new WindowRepository(windowFactory);
-        IWindow IWindow = windowRepository.addWindow(WindowType.MAIN_WINDOW);
+        IWindow window;
         try {
-            IWindow.show();
-        } catch (IOException e) {
-            e.printStackTrace();
+            window = windowRepository.addWindow(WindowType.MAIN_WINDOW);
+            window.show();
+        } catch (IOException | WindowTypeException e) {
+            log.warning(e.getMessage());
         }
     }
 }
