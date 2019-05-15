@@ -1,4 +1,4 @@
-package ru.wkn.jni;
+package ru.wkn.jni.functions;
 
 /**
  * Interface {@code IAssemblerFunctions} represent invocation for assembler functions.

@@ -2,6 +2,8 @@ package ru.wkn.jni;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import ru.wkn.jni.functions.AssemblerFunctions;
+import ru.wkn.jni.functions.IAssemblerFunctions;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

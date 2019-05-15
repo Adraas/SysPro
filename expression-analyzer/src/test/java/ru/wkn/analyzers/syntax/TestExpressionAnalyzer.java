@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import ru.wkn.analyzers.exceptions.CompilationException;
 import ru.wkn.analyzers.exceptions.LanguageException;
 import ru.wkn.analyzers.syntax.util.Language;
-import ru.wkn.analyzers.util.CompilerStatus;
+import ru.wkn.analyzers.syntax.util.CompilerStatus;
 
 import java.io.IOException;
 import java.net.URISyntaxException;

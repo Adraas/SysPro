@@ -1,7 +1,6 @@
 package ru.wkn.analyzers.syntax;
 
 import lombok.extern.java.Log;
-import org.codehaus.plexus.compiler.AbstractCompiler;
 import org.codehaus.plexus.compiler.Compiler;
 import org.codehaus.plexus.compiler.CompilerConfiguration;
 import org.codehaus.plexus.compiler.CompilerException;
@@ -11,7 +10,7 @@ import ru.wkn.analyzers.exceptions.CompilationException;
 import ru.wkn.analyzers.exceptions.LanguageException;
 import ru.wkn.analyzers.syntax.util.ExpressionCompiler;
 import ru.wkn.analyzers.syntax.util.Language;
-import ru.wkn.analyzers.util.CompilerStatus;
+import ru.wkn.analyzers.syntax.util.CompilerStatus;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -32,7 +31,7 @@ public class ExpressionAnalyzer {
     private Language language;
     private Compiler compiler;
 
-    public ExpressionAnalyzer(Language language, AbstractCompiler compiler) {
+    public ExpressionAnalyzer(Language language, Compiler compiler) {
         this.language = language;
         this.compiler = compiler;
     }

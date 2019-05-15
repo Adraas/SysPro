@@ -55,7 +55,7 @@
 
                     <libraries>
                         <library>
-                            <narSystemPackage>ru.wkn.jni</narSystemPackage>
+                            <narSystemPackage>ru.wkn.jni.functions</narSystemPackage>
                         </library>
                     </libraries>
                 </configuration>
