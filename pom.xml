@@ -37,12 +37,12 @@
     </properties>
 
     <modules>
-        <module>sys-pro-launcher</module>
         <module>fdb-entries</module>
         <module>file-worker</module>
         <module>repository</module>
         <module>expression-analyzer</module>
         <module>jni-worker</module>
+        <module>sys-pro-launcher</module>
     </modules>
 
     <dependencies>
