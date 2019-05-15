@@ -1,5 +1,6 @@
 package ru.wkn.analyzers.syntax;
 
+import lombok.extern.java.Log;
 import org.codehaus.plexus.compiler.AbstractCompiler;
 import org.codehaus.plexus.compiler.Compiler;
 import org.codehaus.plexus.compiler.CompilerConfiguration;
@@ -25,6 +26,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+@Log
 public class ExpressionAnalyzer {
 
     private Language language;
@@ -61,6 +63,7 @@ public class ExpressionAnalyzer {
             for (String currentMessage : compilerStringMessages) {
                 message = message.concat(currentMessage).concat("\n");
             }
+            log.warning(message);
             throw new CompilationException(message, e);
         }
     }
@@ -80,7 +83,9 @@ public class ExpressionAnalyzer {
             bufferedWriter.write(resultSource);
             bufferedWriter.close();
         } catch (IOException e) {
-            throw new CompilationException(e.getMessage(), e);
+            String message = "Source files not prepared.";
+            log.warning(message);
+            throw new CompilationException(message, e);
         }
         Set<File> sources = new HashSet<>();
         sources.add(new File(tempSourcePathname));
@@ -104,7 +109,9 @@ public class ExpressionAnalyzer {
         try {
             Thread.sleep(3000);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            String message = "Compiler's waiting interrupted.";
+            log.warning(message);
+            throw new CompilationException(message, e);
         }
         byte[] compileMessageAsBytes = new byte[inputStream.available()];
         int result = inputStream.read(compileMessageAsBytes);
@@ -115,6 +122,7 @@ public class ExpressionAnalyzer {
         process.getOutputStream().close();
         compileMessage = ErrorMessageGenerator.generateErrorMessage(compileMessage, language);
         if (!compileMessage.trim().isEmpty()) {
+            log.warning(compileMessage);
             throw new CompilationException(compileMessage, new CompilerException(compileMessage));
         }
         return compileMessage;
