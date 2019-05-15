@@ -7,6 +7,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import ru.wkn.repository.dao.EntityInstance;
 import ru.wkn.repository.dao.IDao;
+import ru.wkn.repository.exceptions.PersistenceException;
 
 import javax.persistence.Query;
 import java.io.Serializable;
@@ -22,16 +23,17 @@ public class H2Dao<V, I extends Serializable> implements IDao<V, I> {
     private EntityInstance entityInstance;
 
     @Override
-    public boolean create(V newInstance) {
+    public boolean create(V newInstance) throws PersistenceException {
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
             session.save(newInstance);
             transaction.commit();
         } catch (HibernateException e) {
-            log.warning("Element ".concat(newInstance.toString()).concat(" not created"));
+            String message = "Element ".concat(newInstance.toString()).concat(" not created");
+            log.warning(message);
             Objects.requireNonNull(transaction).rollback();
-            return false;
+            throw new PersistenceException(message, e);
         }
         return true;
     }
@@ -42,31 +44,33 @@ public class H2Dao<V, I extends Serializable> implements IDao<V, I> {
     }
 
     @Override
-    public boolean update(V transientInstance) {
+    public boolean update(V transientInstance) throws PersistenceException {
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
             session.update(transientInstance);
             transaction.commit();
         } catch (HibernateException e) {
-            log.warning("Element ".concat(transientInstance.toString()).concat(" not updated"));
+            String message = "Element ".concat(transientInstance.toString()).concat(" not updated");
+            log.warning(message);
             Objects.requireNonNull(transaction).rollback();
-            return false;
+            throw new PersistenceException(message, e);
         }
         return true;
     }
 
     @Override
-    public boolean delete(V transientInstance) {
+    public boolean delete(V transientInstance) throws PersistenceException {
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
             session.delete(transientInstance);
             transaction.commit();
         } catch (HibernateException e) {
-            log.warning("Element ".concat(transientInstance.toString()).concat(" not deleted"));
+            String message = "Element ".concat(transientInstance.toString()).concat(" not deleted");
+            log.warning(message);
             Objects.requireNonNull(transaction).rollback();
-            return false;
+            throw new PersistenceException(message, e);
         }
         return true;
     }

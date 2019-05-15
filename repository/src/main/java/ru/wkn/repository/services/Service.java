@@ -2,6 +2,7 @@ package ru.wkn.repository.services;
 
 import lombok.AllArgsConstructor;
 import ru.wkn.repository.dao.IDao;
+import ru.wkn.repository.exceptions.PersistenceException;
 
 import java.io.Serializable;
 import java.util.List;
@@ -12,7 +13,7 @@ public class Service<V, I extends Serializable> implements IService<V, I> {
     private IDao<V, I> dao;
 
     @Override
-    public boolean create(V newInstance) {
+    public boolean create(V newInstance) throws PersistenceException {
         return dao.create(newInstance);
     }
 
@@ -22,12 +23,12 @@ public class Service<V, I extends Serializable> implements IService<V, I> {
     }
 
     @Override
-    public boolean update(V transientInstance) {
+    public boolean update(V transientInstance) throws PersistenceException {
         return dao.update(transientInstance);
     }
 
     @Override
-    public boolean delete(V transientInstance) {
+    public boolean delete(V transientInstance) throws PersistenceException {
         return dao.delete(transientInstance);
     }
 
