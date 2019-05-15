@@ -1,7 +1,8 @@
 package ru.wkn.jni.functions;
 
 /**
- * Class {@code AssemblerFunctions} represent invocation for assembler functions by means of JNI.
+ * Class {@code AssemblerFunctions} represents invocation for assembler functions by means of JNI
+ * and implements {@code IAssemblerFunctions}.
  *
  * @see IAssemblerFunctions
  * @author Alexey Konev

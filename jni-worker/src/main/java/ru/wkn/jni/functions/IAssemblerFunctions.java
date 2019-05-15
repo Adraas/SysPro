@@ -1,7 +1,7 @@
 package ru.wkn.jni.functions;
 
 /**
- * Interface {@code IAssemblerFunctions} represent invocation for assembler functions.
+ * Interface {@code IAssemblerFunctions} represents invocation for assembler functions.
  *
  * @author Alexey Konev
  */
