@@ -15,32 +15,58 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Class {@code FileWriter} represents file's writing and implements {@code EFileWriter} class.
+ *
+ * @see EFileWriter
+ * @author Artem Pikalov
+ */
 public class FileWriter<T extends IEntry> extends EFileWriter<T> {
 
+    /**
+     * Initializes a newly created {@code FileWriter} object with given {@link EFile} and {@code String} object value.
+     *
+     * @see EFileWriter#EFileWriter(EFile, String)
+     */
     public FileWriter(EFile<T> eFile, String charsetName) {
         super(eFile, charsetName);
     }
 
+    /**
+     * @see EFileWriter#append(T)
+     */
     @Override
     public boolean append(T entry) {
         return getEFile().getEntries().add(entry);
     }
 
+    /**
+     * @see EFileWriter#append(List)
+     */
     @Override
     public boolean append(List<T> entries) {
         return getEFile().getEntries().addAll(entries);
     }
 
+    /**
+     * @see EFileWriter#delete(T)
+     */
     @Override
     public boolean delete(T entry) {
         return getEFile().getEntries().remove(entry);
     }
 
+    /**
+     * @see EFileWriter#delete(int)
+     */
     @Override
     public boolean delete(int entryNumber) {
         return delete(getEFile().getEntries().get(entryNumber));
     }
 
+    /**
+     * @see EFileWriter#deleteSome(List)
+     */
     @Override
     public boolean deleteSome(List<T> entries) {
         boolean isDeleted = true;
@@ -51,6 +77,9 @@ public class FileWriter<T extends IEntry> extends EFileWriter<T> {
         return isDeleted;
     }
 
+    /**
+     * @see EFileWriter#deleteSome(int, int)
+     */
     @Override
     public boolean deleteSome(int startEntry, int endEntry) {
         boolean isDeleted = true;
@@ -60,6 +89,9 @@ public class FileWriter<T extends IEntry> extends EFileWriter<T> {
         return isDeleted;
     }
 
+    /**
+     * @see EFileWriter#saveFile()
+     */
     @Override
     public boolean saveFile() throws IOException {
         EFile<T> eFile = getEFile();
