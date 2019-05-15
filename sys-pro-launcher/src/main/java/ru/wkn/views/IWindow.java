@@ -1,8 +1,10 @@
 package ru.wkn.views;
 
+import java.io.IOException;
+
 public interface IWindow {
 
-    void show();
+    void show() throws IOException;
 
     void close();
 }
