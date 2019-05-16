@@ -7,7 +7,9 @@ import lombok.Getter;
 @Getter
 public enum EntityInstance {
 
-    NETWORK_RESOURCE("network_resource"), NETWORK_SERVER("network_server");
+    NETWORK_RESOURCE("network_resource"),
+    NETWORK_SERVER("network_server"),
+    NETWORK_ACCESS("network_access");
 
     private String entityInstance;
 }

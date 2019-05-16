@@ -45,4 +45,23 @@
         </attributes>
     </entity>
 
+    <entity class="ru.wkn.entries.access.bin.AccessEntry">
+        <table name="network_access"/>
+        <attributes>
+            <id name="id">
+                <column name="id" insertable="false" unique="true" nullable="false" updatable="false"/>
+                <generated-value strategy="IDENTITY"/>
+            </id>
+            <basic name="login">
+                <column name="login" nullable="false"/>
+            </basic>
+            <basic name="passwordHashCode">
+                <column name="password_hash_code" nullable="false"/>
+            </basic>
+            <basic name="email">
+                <column name="login" nullable="false"/>
+            </basic>
+        </attributes>
+    </entity>
+
 </entity-mappings>

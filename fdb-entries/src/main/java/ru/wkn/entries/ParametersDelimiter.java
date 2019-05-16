@@ -19,7 +19,12 @@ public enum ParametersDelimiter {
     /**
      * Delimiter for the PlainText files.
      */
-    SERVER_PLAIN_TEXT_DELIMITER("::");
+    SERVER_PLAIN_TEXT_DELIMITER("::"),
+
+    /**
+     * Delimiter for the .bin files.
+     */
+    ACCESS_BIN_DELIMITER("##");
 
     /**
      * Delimiter as {@code String} line.

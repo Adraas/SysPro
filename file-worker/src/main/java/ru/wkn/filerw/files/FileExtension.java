@@ -6,7 +6,9 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum FileExtension {
 
-    CSV("csv"), PLAIN_TEXT("txt");
+    CSV("csv"),
+    PLAIN_TEXT("txt"),
+    BIN("bin");
 
     @Getter
     private String fileExtension;

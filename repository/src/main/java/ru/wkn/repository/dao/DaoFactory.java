@@ -1,6 +1,7 @@
 package ru.wkn.repository.dao;
 
 import org.hibernate.Session;
+import ru.wkn.entries.access.bin.AccessEntry;
 import ru.wkn.entries.resource.csv.ResourceEntry;
 import ru.wkn.entries.server.plaintext.ServerEntry;
 import ru.wkn.repository.dao.h2.H2Dao;
@@ -15,6 +16,8 @@ public class DaoFactory<V, I extends Serializable> implements IDaoFactory<V, I> 
                 ? new H2Dao<>((Class<V>) ResourceEntry.class, session, entityInstance)
                 : entityInstance.equals(EntityInstance.NETWORK_SERVER)
                 ? new H2Dao<>((Class<V>) ServerEntry.class, session, entityInstance)
+                : entityInstance.equals(EntityInstance.NETWORK_ACCESS)
+                ? new H2Dao<>((Class<V>) AccessEntry.class, session, entityInstance)
                 : null;
     }
 }

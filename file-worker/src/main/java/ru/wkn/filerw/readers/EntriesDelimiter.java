@@ -6,7 +6,9 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum EntriesDelimiter {
 
-    CSV_DELIMITER(";\n"), PLAIN_TEXT_DELIMITER(":\n");
+    CSV_DELIMITER(";\n"),
+    PLAIN_TEXT_DELIMITER(":\n"),
+    BIN_DELIMITER("#\n");
 
     @Getter
     private String entryDelimiter;
