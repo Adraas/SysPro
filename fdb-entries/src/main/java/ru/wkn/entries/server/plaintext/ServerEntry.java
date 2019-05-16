@@ -9,10 +9,10 @@ import ru.wkn.entries.IEntry;
 import ru.wkn.entries.ParametersDelimiter;
 
 /**
- * Class {@code ServerEntry} represent network server information.
+ * Class {@code ServerEntry} represents network server information.
  *
  * @see IEntry
- * @author Artem Pikalov
+ * @author Alexey Konev
  */
 @NoArgsConstructor
 @Getter
@@ -57,9 +57,7 @@ public class ServerEntry implements IEntry {
     }
 
     /**
-     * Method for the representation this entry as single {@code String} line.
-     *
-     * @see IEntry
+     * @see IEntry#singleLineRecording()
      */
     @Override
     public String singleLineRecording() {

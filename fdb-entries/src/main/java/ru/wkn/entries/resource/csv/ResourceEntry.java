@@ -11,7 +11,7 @@ import ru.wkn.entries.ParametersDelimiter;
 import java.sql.Date;
 
 /**
- * Class {@code ResourceEntry} represent network resource information.
+ * Class {@code ResourceEntry} represents network resource information.
  *
  * @see IEntry
  * @author Artem Pikalov
@@ -59,9 +59,7 @@ public class ResourceEntry implements IEntry {
     }
 
     /**
-     * Method for the representation this entry as single {@code String} line.
-     *
-     * @see IEntry
+     * @see IEntry#singleLineRecording()
      */
     @Override
     public String singleLineRecording() {
