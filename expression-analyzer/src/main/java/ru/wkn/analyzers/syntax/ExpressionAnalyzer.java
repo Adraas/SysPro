@@ -1,5 +1,6 @@
 package ru.wkn.analyzers.syntax;
 
+import ru.wkn.analyzers.exceptions.ExpressionException;
 import ru.wkn.analyzers.syntax.semantics.ISemanticsAnalyzer;
 
 public abstract class ExpressionAnalyzer {
@@ -12,9 +13,9 @@ public abstract class ExpressionAnalyzer {
         this.isSemanticsAnalyzerActivated = isSemanticsAnalyzerActivated;
     }
 
-    public abstract boolean isSyntaxCorrect(String expression);
+    public abstract boolean isSyntaxCorrect(String expression) throws ExpressionException;
 
-    public abstract boolean isSyntaxCorrect(String expression, boolean isSemanticsAnalyzerActivated);
+    public abstract boolean isSyntaxCorrect(String expression, boolean isSemanticsAnalyzerActivated) throws ExpressionException;
 
     public boolean isSemanticsAnalyzerActivated() {
         return isSemanticsAnalyzerActivated;

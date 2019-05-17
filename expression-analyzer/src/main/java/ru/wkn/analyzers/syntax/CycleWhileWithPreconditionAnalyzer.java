@@ -1,6 +1,7 @@
 package ru.wkn.analyzers.syntax;
 
 import lombok.Getter;
+import ru.wkn.analyzers.exceptions.ExpressionException;
 import ru.wkn.analyzers.syntax.semantics.ISemanticsAnalyzer;
 import ru.wkn.analyzers.syntax.util.ActionType;
 import ru.wkn.analyzers.syntax.util.CSharpeDataType;
@@ -111,12 +112,12 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
     }
 
     @Override
-    public boolean isSyntaxCorrect(String expression) {
+    public boolean isSyntaxCorrect(String expression) throws ExpressionException {
         return isSyntaxCorrect(expression, isSemanticsAnalyzerActivated);
     }
 
     @Override
-    public boolean isSyntaxCorrect(String expression, boolean isSemanticsAnalyzerActivated) {
+    public boolean isSyntaxCorrect(String expression, boolean isSemanticsAnalyzerActivated) throws ExpressionException {
         Matcher matcher = pattern.matcher(expression);
         if (matcher.matches()) {
             if (isSemanticsAnalyzerActivated) {
@@ -132,10 +133,10 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
             }
             return true;
         }
-        return false;
+        throw new ExpressionException("syntax is incorrect");
     }
 
-    private boolean isConditionCorrect(String cycleCondition) {
+    private boolean isConditionCorrect(String cycleCondition) throws ExpressionException {
         Matcher matcher;
         int i;
 
@@ -149,7 +150,7 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
                     && !iSemanticsAnalyzer.isLongValueCorrect(matcher.group(i))
                     && !iSemanticsAnalyzer.isFloatValueCorrect(matcher.group(i))
                     && !iSemanticsAnalyzer.isDoubleValueCorrect(matcher.group(i))) {
-                return false;
+                throw new ExpressionException("cycle's condition is incorrect");
             }
             i++;
         }
@@ -160,24 +161,24 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
         while (matcher.find()) {
             if (!iSemanticsAnalyzer.isVariableNameCorrect(matcher.group(i))
                     && !iSemanticsAnalyzer.isBooleanValueCorrect(matcher.group(i))) {
-                return false;
+                throw new ExpressionException("cycle's condition is incorrect");
             }
             i++;
         }
         return true;
     }
 
-    private boolean isBodyCorrect(String cycleBody) {
+    private boolean isBodyCorrect(String cycleBody) throws ExpressionException {
         String[] cycleBodyLines = cycleBody.split(";");
         for (String currentLine : cycleBodyLines) {
             if (!isLineCorrect(currentLine)) {
-                return false;
+                throw new ExpressionException("cycle's body is incorrect");
             }
         }
         return true;
     }
 
-    private boolean isLineCorrect(String cycleBodyLine) {
+    private boolean isLineCorrect(String cycleBodyLine) throws ExpressionException {
         ActionType actionType = getLineTypeAction(cycleBodyLine);
         switch (Objects.requireNonNull(actionType)) {
             case INVOCATION:
@@ -192,7 +193,7 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
         return false;
     }
 
-    private ActionType getLineTypeAction(String cycleBodyLine) {
+    private ActionType getLineTypeAction(String cycleBodyLine) throws ExpressionException {
         pattern = Pattern.compile(streamMethodInvocationsRegex);
         if (pattern.matcher(cycleBodyLine).matches()) {
             return ActionType.INVOCATION;
@@ -212,7 +213,7 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
         if (pattern.matcher(cycleBodyLine).matches()) {
             return ActionType.DECLARATION_WITH_INITIALIZATION;
         }
-        return null;
+        throw new ExpressionException("unknown action type");
     }
 
     private CSharpeDataType getDeclarationDataType(String cycleBodyLine) {
@@ -227,15 +228,19 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
         return CSharpeDataType.COMPOSITE_DATA_TYPE;
     }
 
-    private boolean isDeclarationCorrect(String cycleBodyLine) {
+    private boolean isDeclarationCorrect(String cycleBodyLine) throws ExpressionException {
         pattern = Pattern.compile("\\s*[^=;]+");
         String variableName = pattern.matcher(cycleBodyLine).group();
         pattern = Pattern.compile("\\s*[A-z]+");
         variableName = pattern.matcher(variableName).group(1).trim();
-        return iSemanticsAnalyzer.isVariableNameCorrect(variableName);
+        if (iSemanticsAnalyzer.isVariableNameCorrect(variableName)) {
+            return true;
+        } else {
+            throw new ExpressionException("variable declaration is incorrect");
+        }
     }
 
-    private boolean isInitializationCorrect(String cycleBodyLine, CSharpeDataType CSharpeDataType) {
+    private boolean isInitializationCorrect(String cycleBodyLine, CSharpeDataType CSharpeDataType) throws ExpressionException {
         boolean isInitializationCorrect;
         pattern = Pattern.compile("=\\s*[^;]+\\s*;");
         String valueAsString = pattern.matcher(cycleBodyLine).group().trim().split("=")[1].split(";")[0];
@@ -270,14 +275,15 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
             case COMPOSITE_DATA_TYPE:
                 isInitializationCorrect = true;
                 break;
-            default:
-                isInitializationCorrect = false;
-                break;
+            default: {
+                throw new ExpressionException("unknown data type");
+            }
         }
         return isInitializationCorrect;
     }
 
-    private boolean isDeclarationWithInitializationCorrect(String cycleBodyLine, CSharpeDataType CSharpeDataType) {
+    private boolean isDeclarationWithInitializationCorrect(String cycleBodyLine, CSharpeDataType CSharpeDataType)
+            throws ExpressionException {
         return isDeclarationCorrect(cycleBodyLine) && isInitializationCorrect(cycleBodyLine, CSharpeDataType);
     }
 }
