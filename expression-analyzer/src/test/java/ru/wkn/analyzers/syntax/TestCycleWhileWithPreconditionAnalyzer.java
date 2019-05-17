@@ -18,7 +18,7 @@ import java.util.Objects;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class TestCycleWhileWithPreconditionAnalyzer {
@@ -111,8 +111,9 @@ class TestCycleWhileWithPreconditionAnalyzer {
     }
 
     @Test
-    void checkSyntaxToIncorrectWithoutSemanticsTest() throws ExpressionException {
-        assertFalse(cycleWhileWithPreconditionAnalyzer.isSyntaxCorrect(incorrectExpressionForAnalysis));
+    void checkSyntaxToIncorrectWithoutSemanticsTest() {
+        assertThrows(ExpressionException.class, () -> cycleWhileWithPreconditionAnalyzer
+                .isSyntaxCorrect(incorrectExpressionForAnalysis));
     }
 
     @Test
@@ -122,7 +123,8 @@ class TestCycleWhileWithPreconditionAnalyzer {
 
     @Test
     void checkSyntaxToIncorrectWithSemanticsTest() throws ExpressionException {
-        assertFalse(cycleWhileWithPreconditionAnalyzer.isSyntaxCorrect(incorrectExpressionForAnalysis, true));
+        assertThrows(ExpressionException.class, () -> cycleWhileWithPreconditionAnalyzer
+                .isSyntaxCorrect(incorrectExpressionForAnalysis));
     }
 
     @ParameterizedTest
