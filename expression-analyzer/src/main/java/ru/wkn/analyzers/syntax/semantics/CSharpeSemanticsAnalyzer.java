@@ -73,8 +73,10 @@ public class CSharpeSemanticsAnalyzer implements ISemanticsAnalyzer {
 
     @Override
     public boolean isCharacterValueCorrect(String characterValueAsString) {
-        Pattern pattern = Pattern.compile(".");
-        return pattern.matcher(characterValueAsString).matches();
+        double length = characterValueAsString.length();
+        return characterValueAsString.startsWith("\"")
+                && characterValueAsString.endsWith("\"")
+                && (length == 3 || length == 4);
     }
 
     @Override
