@@ -20,28 +20,49 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
             .concat(anyNameCharSequenceRegex)
             .concat(")");
     private final String numberRegex = "((([1-9][0-9]*)|(0))(\\.[0-9]+)?)";
-    private final String singleMethodInvocationRegex = "("
+    private final String singleMethodOrVariableInvocationRegex = "(("
             .concat(anyNameCharSequenceRegex)
             .concat("\\s*\\.\\s*)?")
             .concat(anyNameCharSequenceRegex)
-            .concat("(\\s*\\((\\s*(")
+            .concat("(\\s*(\\((\\s*(((")
             .concat(anyNameCharSequenceRegex)
-            .concat("\\s*)|((")
+            .concat(")|(")
+            .concat(numberRegex)
+            .concat("))\\s*)|((((")
             .concat(anyNameCharSequenceRegex)
-            .concat("\\s*)(,\\s*")
+            .concat(")|(")
+            .concat(numberRegex)
+            .concat("))\\s*)(,\\s*((")
             .concat(anyNameCharSequenceRegex)
-            .concat("\\s*)*))?\\s*\\))");
-    private final String streamMethodInvocationsRegex = "(("
-            .concat(singleMethodInvocationRegex)
+            .concat(")|(")
+            .concat(numberRegex)
+            .concat("))\\s*)*))?\\s*\\))?))");
+    private final String streamMethodOrVariableInvocationsRegex = "(("
+            .concat(singleMethodOrVariableInvocationRegex)
             .concat(")(\\s*\\.\\s*")
-            .concat(singleMethodInvocationRegex)
+            .concat(singleMethodOrVariableInvocationRegex)
             .concat(")*)");
+    private final String mathExpressionRegex = "((("
+            .concat(numberRegex)
+            .concat(")|(")
+            .concat(streamMethodOrVariableInvocationsRegex)
+            .concat(")|(")
+            .concat(anyNameCharSequenceRegex)
+            .concat("))(\\s*[\\+\\-\\*\\/]?\\s*((")
+            .concat(numberRegex)
+            .concat(")|(")
+            .concat(streamMethodOrVariableInvocationsRegex)
+            .concat(")|(")
+            .concat(anyNameCharSequenceRegex)
+            .concat(")))+)");
     private final String variableAssignmentRegex = "("
             .concat(anyNameCharSequenceRegex)
             .concat("\\s*=\\s*((")
             .concat(numberRegex)
             .concat(")|(")
-            .concat(streamMethodInvocationsRegex)
+            .concat(mathExpressionRegex)
+            .concat(")|(")
+            .concat(streamMethodOrVariableInvocationsRegex)
             .concat(")|(")
             .concat(anyNameCharSequenceRegex)
             .concat(")|(\".*\")))");
@@ -49,19 +70,21 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
             .concat(variableDeclarationRegex)
             .concat("\\s*=\\s*((")
             .concat(numberRegex)
+            //.concat(")|(")
+            //.concat(mathExpressionRegex)
             .concat(")|(")
-            .concat(streamMethodInvocationsRegex)
+            .concat(streamMethodOrVariableInvocationsRegex)
             .concat(")|(")
             .concat(anyNameCharSequenceRegex)
             .concat(")|(\".*\")))");
-    private final String cycleSingleLineBodyRegex = "((("
+    private final String cycleSingleLineBodyRegex = "((((//)|"
             .concat(variableDeclarationAndAssignmentRegex)
             .concat(")|(")
             .concat(variableAssignmentRegex)
             .concat(")|(")
             .concat(variableDeclarationRegex)
             .concat(")|(")
-            .concat(streamMethodInvocationsRegex)
+            .concat(streamMethodOrVariableInvocationsRegex)
             .concat("))\\s*;)");
     private final String cycleMultipleBodyRegex = "(("
             .concat(cycleSingleLineBodyRegex)
@@ -71,18 +94,18 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
             .concat(")|(")
             .concat(numberRegex)
             .concat(")|(")
-            .concat(streamMethodInvocationsRegex)
+            .concat(streamMethodOrVariableInvocationsRegex)
             .concat("))\\s*(>|<|(>=)|(<=)|(==))\\s*((")
             .concat(anyNameCharSequenceRegex)
             .concat(")|(")
             .concat(numberRegex)
             .concat(")|(")
-            .concat(streamMethodInvocationsRegex)
+            .concat(streamMethodOrVariableInvocationsRegex)
             .concat(")))");
     private final String singleBooleanExpressionRegex = "((true)|(false)|("
             .concat(comparisonOperationRegex)
             .concat(")|(")
-            .concat(streamMethodInvocationsRegex)
+            .concat(streamMethodOrVariableInvocationsRegex)
             .concat(")|(")
             .concat(anyNameCharSequenceRegex)
             .concat("))");
@@ -196,7 +219,7 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
     }
 
     private ActionType getLineTypeAction(String cycleBodyLine) throws ExpressionException {
-        pattern = Pattern.compile(streamMethodInvocationsRegex);
+        pattern = Pattern.compile(streamMethodOrVariableInvocationsRegex);
         if (pattern.matcher(cycleBodyLine).matches()) {
             return ActionType.INVOCATION;
         }
