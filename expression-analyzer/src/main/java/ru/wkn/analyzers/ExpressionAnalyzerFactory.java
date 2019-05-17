@@ -1,5 +1,7 @@
 package ru.wkn.analyzers;
 
+import ru.wkn.analyzers.exceptions.AnalyzerException;
+import ru.wkn.analyzers.exceptions.LanguageException;
 import ru.wkn.analyzers.syntax.CycleWhileWithPreconditionAnalyzer;
 import ru.wkn.analyzers.syntax.ExpressionAnalyzer;
 import ru.wkn.analyzers.syntax.util.Language;
@@ -10,13 +12,24 @@ public class ExpressionAnalyzerFactory implements IExpressionAnalyzerFactory {
 
     @Override
     public ExpressionAnalyzer createExpressionAnalyzer(ExpressionAnalyzerType expressionAnalyzerType,
-                                                       Language language, boolean isSemanticsAnalyzerActivated) {
-        return expressionAnalyzerType.equals(ExpressionAnalyzerType.CYCLE_WHILE_WITH_PRECONDITION)
+                                                       Language language, boolean isSemanticsAnalyzerActivated)
+            throws LanguageException, AnalyzerException {
+        ExpressionAnalyzer expressionAnalyzer = expressionAnalyzerType
+                .equals(ExpressionAnalyzerType.CYCLE_WHILE_WITH_PRECONDITION)
                 ? new CycleWhileWithPreconditionAnalyzer(createSemanticsAnalyzer(language), isSemanticsAnalyzerActivated)
                 : null;
+        if (expressionAnalyzer == null) {
+            throw new AnalyzerException(expressionAnalyzerType.name());
+        }
+        return expressionAnalyzer;
     }
 
-    private ISemanticsAnalyzer createSemanticsAnalyzer(Language language) {
-        return language.equals(Language.C_SHARPE) ? new CSharpeSemanticsAnalyzer() : null;
+    private ISemanticsAnalyzer createSemanticsAnalyzer(Language language) throws LanguageException {
+        ISemanticsAnalyzer semanticsAnalyzer = language.equals(Language.C_SHARPE) ? new CSharpeSemanticsAnalyzer()
+                : null;
+        if (semanticsAnalyzer == null) {
+            throw new LanguageException("semantics analyzer for ".concat(language.name()).concat(" not found"));
+        }
+        return semanticsAnalyzer;
     }
 }

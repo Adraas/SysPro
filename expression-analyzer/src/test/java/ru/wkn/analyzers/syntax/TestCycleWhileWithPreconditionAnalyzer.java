@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
+import ru.wkn.analyzers.exceptions.ExpressionException;
 import ru.wkn.analyzers.syntax.semantics.CSharpeSemanticsAnalyzer;
 
 import java.io.BufferedWriter;
@@ -105,22 +106,22 @@ class TestCycleWhileWithPreconditionAnalyzer {
     }
 
     @Test
-    void checkSyntaxToCorrectWithoutSemanticsTest() {
+    void checkSyntaxToCorrectWithoutSemanticsTest() throws ExpressionException {
         assertTrue(cycleWhileWithPreconditionAnalyzer.isSyntaxCorrect(correctExpressionForAnalysis));
     }
 
     @Test
-    void checkSyntaxToIncorrectWithoutSemanticsTest() {
+    void checkSyntaxToIncorrectWithoutSemanticsTest() throws ExpressionException {
         assertFalse(cycleWhileWithPreconditionAnalyzer.isSyntaxCorrect(incorrectExpressionForAnalysis));
     }
 
     @Test
-    void checkSyntaxToCorrectWithSemanticsTest() {
+    void checkSyntaxToCorrectWithSemanticsTest() throws ExpressionException {
         assertTrue(cycleWhileWithPreconditionAnalyzer.isSyntaxCorrect(correctExpressionForAnalysis, true));
     }
 
     @Test
-    void checkSyntaxToIncorrectWithSemanticsTest() {
+    void checkSyntaxToIncorrectWithSemanticsTest() throws ExpressionException {
         assertFalse(cycleWhileWithPreconditionAnalyzer.isSyntaxCorrect(incorrectExpressionForAnalysis, true));
     }
 

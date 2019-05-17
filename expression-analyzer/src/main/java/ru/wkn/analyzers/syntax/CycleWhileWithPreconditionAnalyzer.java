@@ -240,7 +240,8 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
         }
     }
 
-    private boolean isInitializationCorrect(String cycleBodyLine, CSharpeDataType CSharpeDataType) throws ExpressionException {
+    private boolean isInitializationCorrect(String cycleBodyLine, CSharpeDataType CSharpeDataType)
+            throws ExpressionException {
         boolean isInitializationCorrect;
         pattern = Pattern.compile("=\\s*[^;]+\\s*;");
         String valueAsString = pattern.matcher(cycleBodyLine).group().trim().split("=")[1].split(";")[0];
