@@ -6,43 +6,75 @@ public class CSharpeSemanticsAnalyzer implements ISemanticsAnalyzer {
 
     @Override
     public boolean isByteValueCorrect(String byteValueAsString) {
-        double value = Byte.valueOf(byteValueAsString);
-        return value <= Byte.MAX_VALUE && value >= Byte.MIN_VALUE;
+        double value = Double.valueOf(byteValueAsString);
+        return value <= 255 && value >= 0 && !byteValueAsString.contains(".");
     }
 
     @Override
     public boolean isShortValueCorrect(String shortValueAsString) {
-        double value = Short.valueOf(shortValueAsString);
-        return value <= Short.MAX_VALUE && value >= Short.MIN_VALUE;
+        double value = Double.valueOf(shortValueAsString);
+        return value <= 32767 && value >= -32768 && !shortValueAsString.contains(".");
     }
 
     @Override
     public boolean isIntegerValueCorrect(String integerValueAsString) {
-        double value = Integer.valueOf(integerValueAsString);
-        return value <= Integer.MAX_VALUE && value >= Integer.MIN_VALUE;
+        double value = Double.valueOf(integerValueAsString);
+        return value <= 2147483647 && value >= -2147483648 && !integerValueAsString.contains(".");
     }
 
     @Override
     public boolean isLongValueCorrect(String longValueAsString) {
-        double value = Long.valueOf(longValueAsString);
-        return value <= Long.MAX_VALUE && value >= Long.MIN_VALUE;
+        double value = Double.valueOf(longValueAsString);
+        return value <= 0x7FFFFFFFFFFFFFFFL && value > -9.223372036854776e+18
+                && !longValueAsString.contains(".");
     }
 
     @Override
     public boolean isFloatValueCorrect(String floatValueAsString) {
-        double value = Float.valueOf(floatValueAsString);
-        return value <= Float.MAX_VALUE && value >= Float.MIN_VALUE;
+        double value = Double.valueOf(floatValueAsString);
+        return value <= -3.4e+38f && value >= -3.4e+38f;
     }
 
     @Override
     public boolean isDoubleValueCorrect(String doubleValueAsString) {
         double value = Double.valueOf(doubleValueAsString);
-        return value <= Double.MAX_VALUE && value >= Double.MIN_VALUE;
+        return value <= 1.7e+308d && value >= 5e-324d;
+    }
+
+    @Override
+    public boolean isDecimalValueCorrect(String decimalValueAsString) {
+        double value = Double.valueOf(decimalValueAsString);
+        return value <= 7.9e+28d && value >= 0.00000000000000000000000000001d;
+    }
+
+    @Override
+    public boolean isSbyteValueCorrect(String sbyteValueAsString) {
+        double value = Double.valueOf(sbyteValueAsString);
+        return value <= 127 && value >= -128 && !sbyteValueAsString.contains(".");
+    }
+
+    @Override
+    public boolean isUshortValueCorrect(String ushortValueAsString) {
+        double value = Double.valueOf(ushortValueAsString);
+        return value <= 65535 && value >= 0 && !ushortValueAsString.contains(".");
+    }
+
+    @Override
+    public boolean isUintegerValueCorrect(String uintegerValueAsString) {
+        double value = Double.valueOf(uintegerValueAsString);
+        return value <= 4.294967295e+9 && value >= 0 && !uintegerValueAsString.contains(".");
+    }
+
+    @Override
+    public boolean isUlongValueCorrect(String ulongValueAsString) {
+        double value = Double.valueOf(ulongValueAsString);
+        return value <= 1.8446744073709552e+19 && value >= 0 && !ulongValueAsString.contains(".");
     }
 
     @Override
     public boolean isCharacterValueCorrect(String characterValueAsString) {
-        return false;
+        Pattern pattern = Pattern.compile(".");
+        return pattern.matcher(characterValueAsString).matches();
     }
 
     @Override

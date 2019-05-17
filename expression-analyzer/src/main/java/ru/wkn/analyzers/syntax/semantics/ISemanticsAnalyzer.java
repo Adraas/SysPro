@@ -14,6 +14,16 @@ public interface ISemanticsAnalyzer {
 
     boolean isDoubleValueCorrect(String doubleValueAsString);
 
+    boolean isDecimalValueCorrect(String decimalValueAsString);
+
+    boolean isSbyteValueCorrect(String sbyteValueAsString);
+
+    boolean isUshortValueCorrect(String ushortValueAsString);
+
+    boolean isUintegerValueCorrect(String uintegerValueAsString);
+
+    boolean isUlongValueCorrect(String ulongValueAsString);
+
     boolean isCharacterValueCorrect(String characterValueAsString);
 
     boolean isBooleanValueCorrect(String booleanValueAsString);

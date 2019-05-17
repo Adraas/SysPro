@@ -263,6 +263,21 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
             case DOUBLE:
                 isInitializationCorrect = iSemanticsAnalyzer.isDoubleValueCorrect(valueAsString);
                 break;
+            case DECIMAL:
+                isInitializationCorrect = iSemanticsAnalyzer.isDecimalValueCorrect(valueAsString);
+                break;
+            case SBYTE:
+                isInitializationCorrect = iSemanticsAnalyzer.isSbyteValueCorrect(valueAsString);
+                break;
+            case USHORT:
+                isInitializationCorrect = iSemanticsAnalyzer.isUshortValueCorrect(valueAsString);
+                break;
+            case UINTEGER:
+                isInitializationCorrect = iSemanticsAnalyzer.isUintegerValueCorrect(valueAsString);
+                break;
+            case ULONG:
+                isInitializationCorrect = iSemanticsAnalyzer.isUlongValueCorrect(valueAsString);
+                break;
             case CHARACTER:
                 isInitializationCorrect = iSemanticsAnalyzer.isCharacterValueCorrect(valueAsString);
                 break;
