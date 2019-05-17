@@ -69,14 +69,24 @@ class TestCycleWhileWithPreconditionAnalyzer {
                 .concat("`HelloType     _say4Me_Hello\n"));
         bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getNumberRegex()
                 .concat("`2344.235\n"));
-        bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getSingleMethodInvocationRegex()
+        bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getSingleMethodOrVariableInvocationRegex()
                 .concat("`_say4Me_Hello(say, me ,hello)\n"));
-        bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getSingleMethodInvocationRegex()
+        bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getSingleMethodOrVariableInvocationRegex()
                 .concat("`_hello2me.sayMe2(asd, df,fsd    )\n"));
-        bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getSingleMethodInvocationRegex()
+        bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getSingleMethodOrVariableInvocationRegex()
                 .concat("`hello2me(        )\n"));
-        bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getStreamMethodInvocationsRegex()
+        bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getStreamMethodOrVariableInvocationsRegex()
                 .concat("`_hello2me.sayMe2(asd, df,fsd    ).sayMe2(asd, df,fsd    )\n"));
+        bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getMathExpressionRegex()
+                .concat("`i + hello().get()\n"));
+        bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getMathExpressionRegex()
+                .concat("`i + hello().get\n"));
+        bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getMathExpressionRegex()
+                .concat("`i/3\n"));
+        bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getVariableAssignmentRegex()
+                .concat("`i=i + hello().get\n"));
+        bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getVariableAssignmentRegex()
+                .concat("`i=i + i/3\n"));
         bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getVariableAssignmentRegex()
                 .concat("`hello2me =    yes\n"));
         bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getVariableAssignmentRegex()
@@ -92,8 +102,7 @@ class TestCycleWhileWithPreconditionAnalyzer {
         bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getCycleSingleLineBodyRegex()
                 .concat("`HelloType hello2me   = 2344.235 ;\n"));
         bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getCycleMultipleBodyRegex()
-                .concat("`HelloType hello2me   = 2344.235 ;sayMe2(asd, df,fsd    );hello2me =  sayMe2(asd, df,fsd  );"
-                        .concat("\n")));
+                .concat("`HelloType hello2me  = 2344.235 ;sayMe2(asd, df,fsd   );hello2me = sayMe2(asd, df,fsd );\n"));
         bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getComparisonOperationRegex()
                 .concat("`hello2me   == 2344.235 \n"));
         bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getComparisonOperationRegex()
