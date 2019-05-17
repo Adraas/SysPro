@@ -1,5 +1,7 @@
 package ru.wkn.entries;
 
+import ru.wkn.entries.exceptions.EntryException;
+
 /**
  * Interface {@code IEntryFactory} represent factory for {@link IEntry} entities.
  *
@@ -14,5 +16,5 @@ public interface IEntryFactory {
      * @param parametersDelimiter - delimiter for parameters line
      * @return object of {@link IEntry} type
      */
-    IEntry createEntry(String parametersLine, ParametersDelimiter parametersDelimiter);
+    IEntry createEntry(String parametersLine, ParametersDelimiter parametersDelimiter) throws EntryException;
 }
