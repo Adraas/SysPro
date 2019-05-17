@@ -118,6 +118,9 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
     @Override
     public boolean isSyntaxCorrect(String expression, boolean isSemanticsAnalyzerActivated) throws ExpressionException {
         Matcher matcher = pattern.matcher(expression);
+        if (expression.trim().isEmpty()) {
+            return true;
+        }
         if (matcher.matches()) {
             if (isSemanticsAnalyzerActivated) {
                 String cycleCondition;
