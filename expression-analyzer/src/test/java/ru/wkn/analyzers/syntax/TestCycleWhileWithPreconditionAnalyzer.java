@@ -33,17 +33,17 @@ class TestCycleWhileWithPreconditionAnalyzer {
         CSharpeSemanticsAnalyzer cSharpeSemanticsAnalyzer = new CSharpeSemanticsAnalyzer();
         cycleWhileWithPreconditionAnalyzer = new CycleWhileWithPreconditionAnalyzer(cSharpeSemanticsAnalyzer, false);
         if (correctExpressionForAnalysis.trim().isEmpty()) {
-            initExpressionForAnalysis(correctExpressionForAnalysis, "expressions/correct_while_expression.txt",
-                    classLoader);
+            correctExpressionForAnalysis = initExpressionForAnalysis(correctExpressionForAnalysis,
+                    "expressions/correct_while_expression.txt", classLoader);
         }
         if (incorrectExpressionForAnalysis.trim().isEmpty()) {
-            initExpressionForAnalysis(incorrectExpressionForAnalysis, "expressions/incorrect_while_expression.txt",
-                    classLoader);
+            incorrectExpressionForAnalysis = initExpressionForAnalysis(incorrectExpressionForAnalysis,
+                    "expressions/incorrect_while_expression.txt", classLoader);
         }
         setParametersIntoCSVFile(classLoader);
     }
 
-    static void initExpressionForAnalysis(String expressionForAnalysis, String path, ClassLoader classLoader)
+    static String initExpressionForAnalysis(String expressionForAnalysis, String path, ClassLoader classLoader)
             throws URISyntaxException, IOException {
         Stream<String> stream = Files.lines(Paths.get(Objects.requireNonNull(classLoader
                 .getResource(path)).toURI()));
@@ -51,6 +51,7 @@ class TestCycleWhileWithPreconditionAnalyzer {
         while (iterator.hasNext()) {
             expressionForAnalysis = expressionForAnalysis.concat(iterator.next());
         }
+        return expressionForAnalysis;
     }
 
     static void setParametersIntoCSVFile(ClassLoader classLoader) throws URISyntaxException, IOException {
