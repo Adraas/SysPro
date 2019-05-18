@@ -4,3 +4,6 @@ branches:
   except:
     - master
     - dev
+compiler:
+  - gcc
+install: true
