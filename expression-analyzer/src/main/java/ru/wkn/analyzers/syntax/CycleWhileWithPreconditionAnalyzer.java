@@ -116,9 +116,9 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
             .concat(")*)");
     private final String cycleWhileWithPreconditionRegex = "(\\s*(while)\\s*\\(\\s*"
             .concat(cycleConditionRegex)
-            .concat("\\s*\\)\\s*((\\{\\s*")
+            .concat("\\s*\\)\\s*((\\{\\s*(")
             .concat(cycleMultipleBodyRegex)
-            .concat("\\s*\\})|(")
+            .concat("\\s*)?\\})|(")
             .concat(cycleSingleLineBodyRegex)
             .concat("))\\s*)");
 
