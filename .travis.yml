@@ -1,0 +1,6 @@
+language: java
+os: windows
+branches:
+  except:
+    - master
+    - dev
