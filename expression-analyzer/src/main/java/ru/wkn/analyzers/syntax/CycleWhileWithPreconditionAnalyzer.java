@@ -2,6 +2,7 @@ package ru.wkn.analyzers.syntax;
 
 import lombok.Getter;
 import ru.wkn.analyzers.exceptions.ExpressionException;
+import ru.wkn.analyzers.exceptions.messages.ErrorMessages;
 import ru.wkn.analyzers.syntax.semantics.ISemanticsAnalyzer;
 import ru.wkn.analyzers.syntax.util.ActionType;
 import ru.wkn.analyzers.syntax.util.CSharpeDataType;
@@ -151,7 +152,7 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
                     .concat("\\s*\\)");
             String cycleCondition = getElementOfExpression(expression, regex);
             if (cycleCondition.isEmpty()) {
-                throw new ExpressionException("cycle's condition is incorrect");
+                throw new ExpressionException(ErrorMessages.CONDITION_ERROR.getErrorMessage());
             }
             cycleCondition = cycleCondition.substring(1, cycleCondition.length() - 1);
 
@@ -196,7 +197,7 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
                     && !iSemanticsAnalyzer.isLongValueCorrect(matcher.group(i))
                     && !iSemanticsAnalyzer.isFloatValueCorrect(matcher.group(i))
                     && !iSemanticsAnalyzer.isDoubleValueCorrect(matcher.group(i))) {
-                throw new ExpressionException("cycle's condition is incorrect");
+                throw new ExpressionException(ErrorMessages.CONDITION_ERROR.getErrorMessage());
             }
             i++;
         }
@@ -207,7 +208,7 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
         while (matcher.find()) {
             if (!iSemanticsAnalyzer.isVariableNameCorrect(matcher.group(i))
                     && !iSemanticsAnalyzer.isBooleanValueCorrect(matcher.group(i))) {
-                throw new ExpressionException("cycle's condition is incorrect");
+                throw new ExpressionException(ErrorMessages.CONDITION_ERROR.getErrorMessage());
             }
             i++;
         }
@@ -218,7 +219,7 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
         String[] cycleBodyLines = cycleBody.split(";");
         for (String currentLine : cycleBodyLines) {
             if (!isLineCorrect(currentLine, currentBodyLine)) {
-                throw new ExpressionException("cycle's body is incorrect after line "
+                throw new ExpressionException(ErrorMessages.LINE_ERROR.getErrorMessage()
                         .concat(String.valueOf(currentBodyLine)));
             }
             currentBodyLine += moveToLine(currentLine, cycleSingleBodyLineRegex);
@@ -276,7 +277,8 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
         if (pattern.matcher(cycleBodyLine).matches()) {
             return ActionType.DECLARATION_WITH_INITIALIZATION;
         }
-        throw new ExpressionException("unknown action type after line ".concat(String.valueOf(currentBodyLine)));
+        throw new ExpressionException(ErrorMessages.ACTION_TYPE_ERROR.getErrorMessage()
+                .concat(String.valueOf(currentBodyLine)));
     }
 
     private CSharpeDataType getDeclarationDataType(String cycleBodyLine) {
@@ -299,7 +301,7 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
         if (iSemanticsAnalyzer.isVariableNameCorrect(variableName)) {
             return true;
         } else {
-            throw new ExpressionException("variable declaration is incorrect after line "
+            throw new ExpressionException(ErrorMessages.VARIABLE_DECLARATION_ERROR.getErrorMessage()
                     .concat(String.valueOf(currentBodyLine)));
         }
     }
@@ -356,7 +358,8 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
                 isInitializationCorrect = true;
                 break;
             default: {
-                throw new ExpressionException("unknown data type after line ".concat(String.valueOf(currentBodyLine)));
+                throw new ExpressionException(ErrorMessages.DATA_TYPE_ERROR.getErrorMessage()
+                        .concat(String.valueOf(currentBodyLine)));
             }
         }
         return isInitializationCorrect;
