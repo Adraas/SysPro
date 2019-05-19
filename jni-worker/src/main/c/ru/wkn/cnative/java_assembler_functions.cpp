@@ -14,7 +14,7 @@ extern "C" __declspec(dllexport) JNIEXPORT jdouble JNICALL Java_ru_wkn_javasm_As
         "fld %[dr]\n\t"
         "fld %[dd]\n\t"
         "fdiv %%st(0), %%st(1)\n\t"
-        "fst %[res] \n\t"
+        "fst %[res]\n\t"
         : [res] "=m" (result)
         : [dr] "m" (divisor),
         [dd] "m" (dividend)
@@ -32,9 +32,9 @@ extern "C" __declspec(dllexport) JNIEXPORT jint JNICALL Java_ru_wkn_jni_Assemble
 {
     int result;
     asm(
-        "Mov %%eax, %[a]\n\t"
-        "Mov %%eax, %[b]\n\t"
-        "Mov %[res], %%eax\n\t"
+        "mov %%eax, %[a]\n\t"
+        "mov %%eax, %[b]\n\t"
+        "mov %[res], %%eax\n\t"
         : [res] "=m" (result)
         : [a] "m" (a),
         [b] "m" (b)
