@@ -25,7 +25,7 @@ extern "C" __declspec(dllexport) JNIEXPORT jdouble JNICALL Java_ru_wkn_javasm_As
 /*
  * Class:     ru_wkn_javasm_AssemblerFunctions
  * Method:    xorFunction
- * Signature: (DD)D
+ * Signature: (II)I
  */
 extern "C" __declspec(dllexport) JNIEXPORT jint JNICALL Java_ru_wkn_jni_AssemblerFunctions_xorFunction
   (JNIEnv * jenv, jobject jobj, jint a, jint b)
@@ -40,4 +40,14 @@ extern "C" __declspec(dllexport) JNIEXPORT jint JNICALL Java_ru_wkn_jni_Assemble
         [b] "m" (b)
         : "cc");
     return result;
+}
+
+/*
+ * Class:     ru_wkn_javasm_AssemblerFunctions
+ * Method:    multiplicationOperation
+ * Signature: (II)I
+ */
+extern "C" __declspec(dllexport) JNIEXPORT jint JNICALL Java_ru_wkn_jni_AssemblerFunctions_multiplicationOperation
+  (JNIEnv * jenv, jobject jobj, jint firstMultiplier, jint secondMultiplier)
+{
 }

@@ -23,6 +23,14 @@ extern "C" {
     __declspec(dllexport) JNIEXPORT jint JNICALL Java_ru_wkn_jni_AssemblerFunctions_xorFunction
       (JNIEnv *, jobject, jint, jint);
 
+    /*
+     * Class:     ru_wkn_jni_AssemblerFunctions
+     * Method:    multiplicationOperation
+     * Signature: (II)I
+     */
+    __declspec(dllexport) JNIEXPORT jint JNICALL Java_ru_wkn_jni_AssemblerFunctions_multiplicationOperation
+      (JNIEnv *, jobject, jint, jint);
+
     #ifdef __cplusplus
 }
 #endif
