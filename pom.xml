@@ -25,7 +25,14 @@
             <id>2</id>
             <name>Alexey Konev</name>
             <roles>
-                <role>developer</role>
+                <role>designer</role>
+            </roles>
+        </developer>
+        <developer>
+            <id>3</id>
+            <name>Dinar Mahmutov</name>
+            <roles>
+                <role>consultant</role>
             </roles>
         </developer>
     </developers>
