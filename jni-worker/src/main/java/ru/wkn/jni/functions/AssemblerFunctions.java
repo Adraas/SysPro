@@ -5,7 +5,9 @@ package ru.wkn.jni.functions;
  * and implements {@code IAssemblerFunctions}.
  *
  * @see IAssemblerFunctions
+ * @author Artem Pikalov
  * @author Alexey Konev
+ * @author Dinar Mahmutov
  */
 public class AssemblerFunctions implements IAssemblerFunctions {
 
@@ -14,18 +16,20 @@ public class AssemblerFunctions implements IAssemblerFunctions {
     }
 
     /**
-     * Method for the dividing by means of JNI.
-     *
      * @see IAssemblerFunctions#dividingFunction(double, double)
      */
     @Override
     public native double dividingFunction(double dividend, double divisor);
 
     /**
-     * Method for the XOR operation by means of JNI.
-     *
      * @see IAssemblerFunctions#xorFunction(int, int)
      */
     @Override
     public native int xorFunction(int a, int b);
+
+    /**
+     * @see IAssemblerFunctions#multiplicationFunction(int, int)
+     */
+    @Override
+    public native int multiplicationFunction(int firstMultiplier, int secondMultiplier);
 }

@@ -3,7 +3,9 @@ package ru.wkn.jni.functions;
 /**
  * Interface {@code IAssemblerFunctions} represents invocation for assembler functions.
  *
+ * @author Artem Pikalov
  * @author Alexey Konev
+ * @author Dinar Mahmutov
  */
 public interface IAssemblerFunctions {
 
@@ -12,7 +14,7 @@ public interface IAssemblerFunctions {
      *
      * @param dividend - dividend for dividing function
      * @param divisor - divisor for dividing function
-     * @return result {@code double} of this operation
+     * @return result of {@code double} type of this operation
      */
     double dividingFunction(double dividend, double divisor);
 
@@ -21,7 +23,16 @@ public interface IAssemblerFunctions {
      *
      * @param a - first value for XOR operation
      * @param b - second value for XOR operation
-     * @return result {@code double} of this operation
+     * @return result of {@code double} type of this operation
      */
     int xorFunction(int a, int b);
+
+    /**
+     * Method for the multiplication operation.
+     *
+     * @param firstMultiplier - first multiplier for multiplication operation
+     * @param secondMultiplier - second multiplier for multiplication operation
+     * @return result of {@code int} type of this operation
+     */
+    int multiplicationFunction(int firstMultiplier, int secondMultiplier);
 }
