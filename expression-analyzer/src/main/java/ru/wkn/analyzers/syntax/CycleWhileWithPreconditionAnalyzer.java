@@ -124,20 +124,10 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
             .concat("))\\s*)");
 
     private Pattern pattern = Pattern.compile(cycleWhileWithPreconditionRegex);
-    private ISemanticsAnalyzer iSemanticsAnalyzer;
-    private boolean isSemanticsAnalyzerActivated;
 
     public CycleWhileWithPreconditionAnalyzer(ISemanticsAnalyzer iSemanticsAnalyzer,
                                               boolean isSemanticsAnalyzerActivated) {
         super(iSemanticsAnalyzer, isSemanticsAnalyzerActivated);
-        this.iSemanticsAnalyzer = iSemanticsAnalyzer;
-        this.isSemanticsAnalyzerActivated = isSemanticsAnalyzerActivated;
-    }
-
-    @Override
-    public boolean isSyntaxCorrect(String expression, boolean isSemanticsAnalyzerActivated) throws ExpressionException {
-        setSemanticsAnalyzerActivated(isSemanticsAnalyzerActivated);
-        return isSyntaxCorrect(expression);
     }
 
     @Override
@@ -191,12 +181,12 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
         matcher = pattern.matcher(cycleCondition);
         i = 0;
         while (matcher.find()) {
-            if (!iSemanticsAnalyzer.isByteValueCorrect(matcher.group(i))
-                    && !iSemanticsAnalyzer.isShortValueCorrect(matcher.group(i))
-                    && !iSemanticsAnalyzer.isIntegerValueCorrect(matcher.group(i))
-                    && !iSemanticsAnalyzer.isLongValueCorrect(matcher.group(i))
-                    && !iSemanticsAnalyzer.isFloatValueCorrect(matcher.group(i))
-                    && !iSemanticsAnalyzer.isDoubleValueCorrect(matcher.group(i))) {
+            if (!getISemanticsAnalyzer().isByteValueCorrect(matcher.group(i))
+                    && !getISemanticsAnalyzer().isShortValueCorrect(matcher.group(i))
+                    && !getISemanticsAnalyzer().isIntegerValueCorrect(matcher.group(i))
+                    && !getISemanticsAnalyzer().isLongValueCorrect(matcher.group(i))
+                    && !getISemanticsAnalyzer().isFloatValueCorrect(matcher.group(i))
+                    && !getISemanticsAnalyzer().isDoubleValueCorrect(matcher.group(i))) {
                 throw new ExpressionException(ErrorMessages.CONDITION_ERROR.getErrorMessage());
             }
             i++;
@@ -206,8 +196,8 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
         matcher = pattern.matcher(cycleCondition);
         i = 0;
         while (matcher.find()) {
-            if (!iSemanticsAnalyzer.isVariableNameCorrect(matcher.group(i))
-                    && !iSemanticsAnalyzer.isBooleanValueCorrect(matcher.group(i))) {
+            if (!getISemanticsAnalyzer().isVariableNameCorrect(matcher.group(i))
+                    && !getISemanticsAnalyzer().isBooleanValueCorrect(matcher.group(i))) {
                 throw new ExpressionException(ErrorMessages.CONDITION_ERROR.getErrorMessage());
             }
             i++;
@@ -233,20 +223,20 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
             case INVOCATION:
                 return true;
             case DECLARATION: {
-                if (isSemanticsAnalyzerActivated) {
+                if (isSemanticsAnalyzerActivated()) {
                     return isDeclarationCorrect(cycleBodyLine, currentBodyLine);
                 }
                 return true;
             }
             case INITIALIZATION: {
-                if (isSemanticsAnalyzerActivated) {
+                if (isSemanticsAnalyzerActivated()) {
                     return isInitializationCorrect(cycleBodyLine, getDeclarationDataType(cycleBodyLine),
                             currentBodyLine);
                 }
                 return true;
             }
             case DECLARATION_WITH_INITIALIZATION: {
-                if (isSemanticsAnalyzerActivated) {
+                if (isSemanticsAnalyzerActivated()) {
                     return isDeclarationWithInitializationCorrect(cycleBodyLine, getDeclarationDataType(cycleBodyLine),
                             currentBodyLine);
                 }
@@ -298,7 +288,7 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
         String variableName = pattern.matcher(cycleBodyLine).group();
         pattern = Pattern.compile("\\s*[A-z]+");
         variableName = pattern.matcher(variableName).group(1).trim();
-        if (iSemanticsAnalyzer.isVariableNameCorrect(variableName)) {
+        if (getISemanticsAnalyzer().isVariableNameCorrect(variableName)) {
             return true;
         } else {
             throw new ExpressionException(ErrorMessages.VARIABLE_DECLARATION_ERROR.getErrorMessage()
@@ -313,46 +303,46 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
         String valueAsString = pattern.matcher(cycleBodyLine).group().trim().split("=")[1].split(";")[0];
         switch (CSharpeDataType) {
             case BYTE:
-                isInitializationCorrect = iSemanticsAnalyzer.isByteValueCorrect(valueAsString);
+                isInitializationCorrect = getISemanticsAnalyzer().isByteValueCorrect(valueAsString);
                 break;
             case SHORT:
-                isInitializationCorrect = iSemanticsAnalyzer.isShortValueCorrect(valueAsString);
+                isInitializationCorrect = getISemanticsAnalyzer().isShortValueCorrect(valueAsString);
                 break;
             case INTEGER:
-                isInitializationCorrect = iSemanticsAnalyzer.isIntegerValueCorrect(valueAsString);
+                isInitializationCorrect = getISemanticsAnalyzer().isIntegerValueCorrect(valueAsString);
                 break;
             case LONG:
-                isInitializationCorrect = iSemanticsAnalyzer.isLongValueCorrect(valueAsString);
+                isInitializationCorrect = getISemanticsAnalyzer().isLongValueCorrect(valueAsString);
                 break;
             case FLOAT:
-                isInitializationCorrect = iSemanticsAnalyzer.isFloatValueCorrect(valueAsString);
+                isInitializationCorrect = getISemanticsAnalyzer().isFloatValueCorrect(valueAsString);
                 break;
             case DOUBLE:
-                isInitializationCorrect = iSemanticsAnalyzer.isDoubleValueCorrect(valueAsString);
+                isInitializationCorrect = getISemanticsAnalyzer().isDoubleValueCorrect(valueAsString);
                 break;
             case DECIMAL:
-                isInitializationCorrect = iSemanticsAnalyzer.isDecimalValueCorrect(valueAsString);
+                isInitializationCorrect = getISemanticsAnalyzer().isDecimalValueCorrect(valueAsString);
                 break;
             case SBYTE:
-                isInitializationCorrect = iSemanticsAnalyzer.isSbyteValueCorrect(valueAsString);
+                isInitializationCorrect = getISemanticsAnalyzer().isSbyteValueCorrect(valueAsString);
                 break;
             case USHORT:
-                isInitializationCorrect = iSemanticsAnalyzer.isUshortValueCorrect(valueAsString);
+                isInitializationCorrect = getISemanticsAnalyzer().isUshortValueCorrect(valueAsString);
                 break;
             case UINTEGER:
-                isInitializationCorrect = iSemanticsAnalyzer.isUintegerValueCorrect(valueAsString);
+                isInitializationCorrect = getISemanticsAnalyzer().isUintegerValueCorrect(valueAsString);
                 break;
             case ULONG:
-                isInitializationCorrect = iSemanticsAnalyzer.isUlongValueCorrect(valueAsString);
+                isInitializationCorrect = getISemanticsAnalyzer().isUlongValueCorrect(valueAsString);
                 break;
             case CHARACTER:
-                isInitializationCorrect = iSemanticsAnalyzer.isCharacterValueCorrect(valueAsString);
+                isInitializationCorrect = getISemanticsAnalyzer().isCharacterValueCorrect(valueAsString);
                 break;
             case BOOLEAN:
-                isInitializationCorrect = iSemanticsAnalyzer.isBooleanValueCorrect(valueAsString);
+                isInitializationCorrect = getISemanticsAnalyzer().isBooleanValueCorrect(valueAsString);
                 break;
             case STRING:
-                isInitializationCorrect = iSemanticsAnalyzer.isStringValueCorrect(valueAsString);
+                isInitializationCorrect = getISemanticsAnalyzer().isStringValueCorrect(valueAsString);
                 break;
             case COMPOSITE_DATA_TYPE:
                 isInitializationCorrect = true;
