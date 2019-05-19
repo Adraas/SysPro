@@ -50,4 +50,15 @@ extern "C" __declspec(dllexport) JNIEXPORT jint JNICALL Java_ru_wkn_jni_Assemble
 extern "C" __declspec(dllexport) JNIEXPORT jint JNICALL Java_ru_wkn_jni_AssemblerFunctions_multiplicationOperation
   (JNIEnv * jenv, jobject jobj, jint firstMultiplier, jint secondMultiplier)
 {
+    int result;
+    asm(
+        "mov %%ax, %[fm]\n\t"
+        "mov %%bx, %[sm]\n\t"
+        "mul %%bx\n\t"
+        "mov %[res], %%ax\n\t"
+        : [res] "=m" (result)
+        : [fm] "m" (firstMultiplier),
+        [sm] "m" (secondMultiplier)
+        : "cc");
+    return result;
 }
