@@ -1,5 +1,7 @@
 package ru.wkn.analyzers.syntax.semantics;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.regex.Pattern;
 
 public class CSharpeSemanticsAnalyzer implements ISemanticsAnalyzer {
@@ -24,9 +26,10 @@ public class CSharpeSemanticsAnalyzer implements ISemanticsAnalyzer {
 
     @Override
     public boolean isLongValueCorrect(String longValueAsString) {
-        double value = Double.valueOf(longValueAsString);
-        return value <= 0x7FFFFFFFFFFFFFFFL && value > -9.223372036854776e+18
-                && !longValueAsString.contains(".");
+        return new BigInteger(longValueAsString.getBytes())
+                .compareTo(new BigInteger(String.valueOf(0x7FFFFFFFFFFFFFFFL))) >= 0
+                && new BigInteger(longValueAsString.getBytes())
+                .compareTo(new BigInteger("9223372036854800000")) <= 0 && !longValueAsString.contains(".");
     }
 
     @Override
@@ -37,8 +40,8 @@ public class CSharpeSemanticsAnalyzer implements ISemanticsAnalyzer {
 
     @Override
     public boolean isDoubleValueCorrect(String doubleValueAsString) {
-        double value = Double.valueOf(doubleValueAsString);
-        return value <= 1.7e+308d && value >= 5e-324d;
+        return new BigDecimal(doubleValueAsString).compareTo(new BigDecimal(1.7e+308d)) >= 0
+                && new BigDecimal(doubleValueAsString).compareTo(new BigDecimal(5e-324d)) <= 0;
     }
 
     @Override
