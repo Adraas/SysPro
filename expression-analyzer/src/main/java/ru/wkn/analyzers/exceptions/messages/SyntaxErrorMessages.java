@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public enum ErrorMessages {
+public enum SyntaxErrorMessages {
 
     CONDITION_ERROR("cycle's condition is incorrect"),
     LINE_ERROR("cycle's body is incorrect after line "),
