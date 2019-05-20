@@ -1,6 +1,7 @@
 package ru.wkn.analyzers.syntax;
 
 import lombok.Getter;
+import lombok.extern.java.Log;
 import ru.wkn.analyzers.exceptions.ExpressionException;
 import ru.wkn.analyzers.exceptions.SemanticsException;
 import ru.wkn.analyzers.exceptions.messages.SemanticsErrorMessages;
@@ -12,6 +13,7 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@Log
 @Getter
 public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
 
@@ -145,7 +147,10 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
                     .concat("\\s*\\)");
             String cycleCondition = getElementOfExpression(expression, regex);
             if (cycleCondition.isEmpty()) {
-                throw new ExpressionException(SyntaxErrorMessages.CONDITION_ERROR.getErrorMessage());
+                ExpressionException expressionException =
+                        new ExpressionException(SyntaxErrorMessages.CONDITION_ERROR.getErrorMessage());
+                log.warning(expressionException.getMessage());
+                throw expressionException;
             }
             cycleCondition = cycleCondition.substring(1, cycleCondition.length() - 1);
 
@@ -187,8 +192,11 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
             while (matcher.find()) {
                 String currentGroup = matcher.group(i);
                 if (!numberIsCorrect(currentGroup)) {
-                    throw new SemanticsException(SemanticsErrorMessages.NUMBER_FORMAT_ERROR.getErrorMessage(),
-                            currentBodyLine);
+                    SemanticsException semanticsException =
+                            new SemanticsException(SemanticsErrorMessages.NUMBER_FORMAT_ERROR.getErrorMessage(),
+                                    currentBodyLine);
+                    log.warning(semanticsException.getMessage());
+                    throw semanticsException;
                 }
                 i++;
             }
@@ -199,8 +207,11 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
             while (matcher.find()) {
                 if (!getISemanticsAnalyzer().isVariableNameCorrect(matcher.group(i))
                         && !getISemanticsAnalyzer().isBooleanValueCorrect(matcher.group(i))) {
-                    throw new SemanticsException(SemanticsErrorMessages.VARIABLE_NAME_ERROR.getErrorMessage(),
-                            currentBodyLine);
+                    SemanticsException semanticsException =
+                            new SemanticsException(SemanticsErrorMessages.VARIABLE_NAME_ERROR.getErrorMessage(),
+                                    currentBodyLine);
+                    log.warning(semanticsException.getMessage());
+                    throw semanticsException;
                 }
                 i++;
             }
@@ -212,8 +223,11 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
         String[] cycleBodyLines = cycleBody.split(";");
         for (String currentLine : cycleBodyLines) {
             if (!isLineCorrect(currentLine, currentBodyLine)) {
-                throw new ExpressionException(SyntaxErrorMessages.LINE_ERROR.getErrorMessage()
-                        .concat(String.valueOf(currentBodyLine)));
+                ExpressionException expressionException =
+                        new ExpressionException(SyntaxErrorMessages.LINE_ERROR.getErrorMessage()
+                                .concat(String.valueOf(currentBodyLine)));
+                log.warning(expressionException.getMessage());
+                throw expressionException;
             }
             currentBodyLine += moveToLine(currentLine, cycleSingleBodyLineRegex);
         }
@@ -268,8 +282,11 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
         if (pattern.matcher(cycleBodyLine).matches()) {
             return ActionType.DECLARATION_WITH_INITIALIZATION;
         }
-        throw new ExpressionException(SyntaxErrorMessages.ACTION_TYPE_ERROR.getErrorMessage()
-                .concat(String.valueOf(currentBodyLine)));
+        ExpressionException expressionException =
+                new ExpressionException(SyntaxErrorMessages.ACTION_TYPE_ERROR.getErrorMessage()
+                        .concat(String.valueOf(currentBodyLine)));
+        log.warning(expressionException.getMessage());
+        throw expressionException;
     }
 
     private boolean isDeclarationCorrect(String cycleBodyLine, int currentBodyLine) throws SemanticsException {
@@ -280,8 +297,11 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
         if (getISemanticsAnalyzer().isVariableNameCorrect(variableName)) {
             return true;
         } else {
-            throw new SemanticsException(SemanticsErrorMessages.VARIABLE_NAME_ERROR.getErrorMessage(),
-                    currentBodyLine);
+            SemanticsException semanticsException =
+                    new SemanticsException(SemanticsErrorMessages.VARIABLE_NAME_ERROR.getErrorMessage(),
+                            currentBodyLine);
+            log.warning(semanticsException.getMessage());
+            throw semanticsException;
         }
     }
 
@@ -317,19 +337,25 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
                         || getISemanticsAnalyzer().isStringValueCorrect(currentGroup));
             }
         } else {
-            throw new SemanticsException(SemanticsErrorMessages.INITIALIZATION_ERROR.getErrorMessage(),
-                    currentBodyLine);
+            SemanticsException semanticsException =
+                    new SemanticsException(SemanticsErrorMessages.INITIALIZATION_ERROR.getErrorMessage(),
+                            currentBodyLine);
+            log.warning(semanticsException.getMessage());
+            throw semanticsException;
         }
         if (isInitializationCorrect) {
             return true;
         } else {
-            throw new SemanticsException(SemanticsErrorMessages.INITIALIZATION_ERROR.getErrorMessage(),
-                    currentBodyLine);
+            SemanticsException semanticsException =
+                    new SemanticsException(SemanticsErrorMessages.INITIALIZATION_ERROR.getErrorMessage(),
+                            currentBodyLine);
+            log.warning(semanticsException.getMessage());
+            throw semanticsException;
         }
     }
 
     private boolean isDeclarationWithInitializationCorrect(String cycleBodyLine, int currentBodyLine)
-            throws ExpressionException, SemanticsException {
+            throws SemanticsException {
         return isDeclarationCorrect(cycleBodyLine, currentBodyLine)
                 && isInitializationCorrect(cycleBodyLine, currentBodyLine);
     }
