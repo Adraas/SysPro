@@ -1,4 +1,4 @@
 while (i < 3) {
     i = i + 3;
-    i = i / 8FFFFFFFFFFFFFFFFFF;
+    i = i / 0x8FFFFFFFFFFFFFFFFFF;
 }
