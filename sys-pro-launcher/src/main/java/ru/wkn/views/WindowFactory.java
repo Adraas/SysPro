@@ -53,6 +53,13 @@ public class WindowFactory implements IWindowFactory {
                 height = 200;
                 break;
             }
+            case NETWORK_ACCESS_WINDOW: {
+                resource = "/fxml/bin-entry-view.fxml";
+                title = "Network access";
+                width = 343;
+                height = 200;
+                break;
+            }
             default: {
                 throw new WindowTypeException("unknown window type for application.");
             }
