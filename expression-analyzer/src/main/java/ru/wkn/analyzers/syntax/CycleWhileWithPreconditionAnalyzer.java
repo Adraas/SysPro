@@ -285,8 +285,7 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
         }
     }
 
-    private boolean isInitializationCorrect(String cycleBodyLine, int currentBodyLine) throws ExpressionException,
-            SemanticsException {
+    private boolean isInitializationCorrect(String cycleBodyLine, int currentBodyLine) throws SemanticsException {
         boolean isInitializationCorrect = true;
         String initialization = cycleBodyLine.split("=")[1];
         pattern = Pattern.compile("\\s*.*");
