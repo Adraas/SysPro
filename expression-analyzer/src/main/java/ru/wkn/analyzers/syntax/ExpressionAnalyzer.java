@@ -3,6 +3,7 @@ package ru.wkn.analyzers.syntax;
 import lombok.Getter;
 import lombok.Setter;
 import ru.wkn.analyzers.exceptions.ExpressionException;
+import ru.wkn.analyzers.exceptions.SemanticsException;
 import ru.wkn.analyzers.syntax.semantics.ISemanticsAnalyzer;
 
 @Getter
@@ -17,9 +18,10 @@ public abstract class ExpressionAnalyzer {
         this.isSemanticsAnalyzerActivated = isSemanticsAnalyzerActivated;
     }
 
-    public abstract boolean isSyntaxCorrect(String expression) throws ExpressionException;
+    public abstract boolean isSyntaxCorrect(String expression) throws ExpressionException, SemanticsException;
 
-    public boolean isSyntaxCorrect(String expression, boolean isSemanticsAnalyzerActivated) throws ExpressionException {
+    public boolean isSyntaxCorrect(String expression, boolean isSemanticsAnalyzerActivated) throws ExpressionException,
+            SemanticsException {
         setSemanticsAnalyzerActivated(isSemanticsAnalyzerActivated);
         return isSyntaxCorrect(expression);
     }
