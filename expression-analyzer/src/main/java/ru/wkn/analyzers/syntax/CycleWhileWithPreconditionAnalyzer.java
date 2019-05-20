@@ -77,7 +77,7 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
             .concat(streamMethodOrVariableInvocationsRegex)
             .concat(")|(")
             .concat(anyNameCharSequenceRegex)
-            .concat(")|(\".*\")))");
+            .concat(")|(\"[^\"]*\")))");
     private final String cycleSingleBodyLineRegex = "((((//)|"
             .concat(variableDeclarationAndAssignmentRegex)
             .concat(")|(")
