@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 import ru.wkn.analyzers.exceptions.ExpressionException;
+import ru.wkn.analyzers.exceptions.SemanticsException;
 import ru.wkn.analyzers.syntax.semantics.CSharpeSemanticsAnalyzer;
 
 import java.io.BufferedWriter;
@@ -26,6 +27,7 @@ class TestCycleWhileWithPreconditionAnalyzer {
     private static CycleWhileWithPreconditionAnalyzer cycleWhileWithPreconditionAnalyzer;
     private static String correctExpressionForAnalysis = "";
     private static String incorrectExpressionForAnalysis = "";
+    private static String correctExpressionWithIncorrectsemanticsForAnalyzer = "";
 
     @BeforeAll
     static void initFields() throws URISyntaxException, IOException {
@@ -39,6 +41,11 @@ class TestCycleWhileWithPreconditionAnalyzer {
         if (incorrectExpressionForAnalysis.trim().isEmpty()) {
             incorrectExpressionForAnalysis = initExpressionForAnalysis(incorrectExpressionForAnalysis,
                     "expressions/incorrect_while_expression.txt", classLoader);
+        }
+        if (correctExpressionWithIncorrectsemanticsForAnalyzer.trim().isEmpty()) {
+            correctExpressionWithIncorrectsemanticsForAnalyzer =
+                    initExpressionForAnalysis(correctExpressionWithIncorrectsemanticsForAnalyzer,
+                            "expressions/correct_while_expression_with_incorrect_semantics.txt", classLoader);
         }
         setParametersIntoCSVFile(classLoader);
     }
@@ -119,7 +126,7 @@ class TestCycleWhileWithPreconditionAnalyzer {
     }
 
     @Test
-    void checkSyntaxToCorrectWithoutSemanticsTest() throws ExpressionException {
+    void checkSyntaxToCorrectWithoutSemanticsTest() throws ExpressionException, SemanticsException {
         assertTrue(cycleWhileWithPreconditionAnalyzer.isSyntaxCorrect(correctExpressionForAnalysis));
     }
 
@@ -130,14 +137,14 @@ class TestCycleWhileWithPreconditionAnalyzer {
     }
 
     @Test
-    void checkSyntaxToCorrectWithSemanticsTest() throws ExpressionException {
+    void checkSyntaxToCorrectWithSemanticsTest() throws ExpressionException, SemanticsException {
         assertTrue(cycleWhileWithPreconditionAnalyzer.isSyntaxCorrect(correctExpressionForAnalysis, true));
     }
 
     @Test
     void checkSyntaxToIncorrectWithSemanticsTest() {
-        assertThrows(ExpressionException.class, () -> cycleWhileWithPreconditionAnalyzer
-                .isSyntaxCorrect(incorrectExpressionForAnalysis));
+        assertThrows(SemanticsException.class, () -> cycleWhileWithPreconditionAnalyzer
+                .isSyntaxCorrect(correctExpressionWithIncorrectsemanticsForAnalyzer, true));
     }
 
     @ParameterizedTest
