@@ -2,10 +2,11 @@ package ru.wkn.analyzers.syntax;
 
 import lombok.Getter;
 import ru.wkn.analyzers.exceptions.ExpressionException;
-import ru.wkn.analyzers.exceptions.messages.ErrorMessages;
+import ru.wkn.analyzers.exceptions.SemanticsException;
+import ru.wkn.analyzers.exceptions.messages.SemanticsErrorMessages;
+import ru.wkn.analyzers.exceptions.messages.SyntaxErrorMessages;
 import ru.wkn.analyzers.syntax.semantics.ISemanticsAnalyzer;
 import ru.wkn.analyzers.syntax.util.ActionType;
-import ru.wkn.analyzers.syntax.util.CSharpeDataType;
 
 import java.util.Objects;
 import java.util.regex.Matcher;
@@ -58,7 +59,7 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
             .concat(")))+)");
     private final String variableAssignmentRegex = "(("
             .concat(anyNameCharSequenceRegex)
-            .concat("((\\s*((=)|(\\+=)|(\\-=)|(\\*=)|(\\/=))\\s*((")
+            .concat("((\\s*((=)|(\\+=)|(\\-=)|(\\*=)|(\\/=)|(\\|=)|(\\&=))\\s*((")
             .concat(numberRegex)
             .concat(")|(")
             .concat(mathExpressionRegex)
@@ -71,7 +72,7 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
             .concat("))");
     private final String variableDeclarationAndAssignmentRegex = "("
             .concat(variableDeclarationRegex)
-            .concat("\\s*((=)|(\\+=)|(\\-=)|(\\*=)|(\\/=))\\s*((")
+            .concat("\\s*=\\s*((")
             .concat(numberRegex)
             .concat(")|(")
             .concat(mathExpressionRegex)
@@ -133,7 +134,7 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
     }
 
     @Override
-    public boolean isSyntaxCorrect(String expression) throws ExpressionException {
+    public boolean isSyntaxCorrect(String expression) throws ExpressionException, SemanticsException {
         Matcher matcher = pattern.matcher(expression);
         if (expression.trim().isEmpty()) {
             return true;
@@ -144,7 +145,7 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
                     .concat("\\s*\\)");
             String cycleCondition = getElementOfExpression(expression, regex);
             if (cycleCondition.isEmpty()) {
-                throw new ExpressionException(ErrorMessages.CONDITION_ERROR.getErrorMessage());
+                throw new ExpressionException(SyntaxErrorMessages.CONDITION_ERROR.getErrorMessage());
             }
             cycleCondition = cycleCondition.substring(1, cycleCondition.length() - 1);
 
@@ -161,7 +162,7 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
 
             int currentBodyLine = 1;
             currentBodyLine += moveToLine(expression, "\\s*") + moveToLine(expression, cycleConditionRegex);
-            return isConditionCorrect(cycleCondition) && isBodyCorrect(cycleBody, currentBodyLine);
+            return isConditionCorrect(cycleCondition, currentBodyLine) && isBodyCorrect(cycleBody, currentBodyLine);
         }
         return true;
     }
@@ -175,43 +176,43 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
         return "";
     }
 
-    private boolean isConditionCorrect(String cycleCondition) throws ExpressionException {
+    private boolean isConditionCorrect(String cycleCondition, int currentBodyLine) throws SemanticsException {
         Matcher matcher;
         int i;
 
-        pattern = Pattern.compile(numberRegex);
-        matcher = pattern.matcher(cycleCondition);
-        i = 0;
-        while (matcher.find()) {
-            if (!getISemanticsAnalyzer().isByteValueCorrect(matcher.group(i))
-                    && !getISemanticsAnalyzer().isShortValueCorrect(matcher.group(i))
-                    && !getISemanticsAnalyzer().isIntegerValueCorrect(matcher.group(i))
-                    && !getISemanticsAnalyzer().isLongValueCorrect(matcher.group(i))
-                    && !getISemanticsAnalyzer().isFloatValueCorrect(matcher.group(i))
-                    && !getISemanticsAnalyzer().isDoubleValueCorrect(matcher.group(i))) {
-                throw new ExpressionException(ErrorMessages.CONDITION_ERROR.getErrorMessage());
+        if (isSemanticsAnalyzerActivated()) {
+            pattern = Pattern.compile(numberRegex);
+            matcher = pattern.matcher(cycleCondition);
+            i = 0;
+            while (matcher.find()) {
+                String currentGroup = matcher.group(i);
+                if (!numberIsCorrect(currentGroup)) {
+                    throw new SemanticsException(SemanticsErrorMessages.NUMBER_FORMAT_ERROR.getErrorMessage(),
+                            currentBodyLine);
+                }
+                i++;
             }
-            i++;
-        }
 
-        pattern = Pattern.compile(anyNameCharSequenceRegex);
-        matcher = pattern.matcher(cycleCondition);
-        i = 0;
-        while (matcher.find()) {
-            if (!getISemanticsAnalyzer().isVariableNameCorrect(matcher.group(i))
-                    && !getISemanticsAnalyzer().isBooleanValueCorrect(matcher.group(i))) {
-                throw new ExpressionException(ErrorMessages.CONDITION_ERROR.getErrorMessage());
+            pattern = Pattern.compile(anyNameCharSequenceRegex);
+            matcher = pattern.matcher(cycleCondition);
+            i = 0;
+            while (matcher.find()) {
+                if (!getISemanticsAnalyzer().isVariableNameCorrect(matcher.group(i))
+                        && !getISemanticsAnalyzer().isBooleanValueCorrect(matcher.group(i))) {
+                    throw new SemanticsException(SemanticsErrorMessages.VARIABLE_NAME_ERROR.getErrorMessage(),
+                            currentBodyLine);
+                }
+                i++;
             }
-            i++;
         }
         return true;
     }
 
-    private boolean isBodyCorrect(String cycleBody, int currentBodyLine) throws ExpressionException {
+    private boolean isBodyCorrect(String cycleBody, int currentBodyLine) throws ExpressionException, SemanticsException {
         String[] cycleBodyLines = cycleBody.split(";");
         for (String currentLine : cycleBodyLines) {
             if (!isLineCorrect(currentLine, currentBodyLine)) {
-                throw new ExpressionException(ErrorMessages.LINE_ERROR.getErrorMessage()
+                throw new ExpressionException(SyntaxErrorMessages.LINE_ERROR.getErrorMessage()
                         .concat(String.valueOf(currentBodyLine)));
             }
             currentBodyLine += moveToLine(currentLine, cycleSingleBodyLineRegex);
@@ -219,7 +220,8 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
         return true;
     }
 
-    private boolean isLineCorrect(String cycleBodyLine, int currentBodyLine) throws ExpressionException {
+    private boolean isLineCorrect(String cycleBodyLine, int currentBodyLine) throws ExpressionException,
+            SemanticsException {
         ActionType actionType = getLineTypeAction(cycleBodyLine, currentBodyLine);
         switch (Objects.requireNonNull(actionType)) {
             case INVOCATION:
@@ -232,15 +234,13 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
             }
             case INITIALIZATION: {
                 if (isSemanticsAnalyzerActivated()) {
-                    return isInitializationCorrect(cycleBodyLine, getDeclarationDataType(cycleBodyLine),
-                            currentBodyLine);
+                    return isInitializationCorrect(cycleBodyLine, currentBodyLine);
                 }
                 return true;
             }
             case DECLARATION_WITH_INITIALIZATION: {
                 if (isSemanticsAnalyzerActivated()) {
-                    return isDeclarationWithInitializationCorrect(cycleBodyLine, getDeclarationDataType(cycleBodyLine),
-                            currentBodyLine);
+                    return isDeclarationWithInitializationCorrect(cycleBodyLine, currentBodyLine);
                 }
                 return true;
             }
@@ -248,44 +248,31 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
         return false;
     }
 
-    // TODO: check and fix patterns for action types definition
     private ActionType getLineTypeAction(String cycleBodyLine, int currentBodyLine) throws ExpressionException {
-        pattern = Pattern.compile(streamMethodOrVariableInvocationsRegex);
+        pattern = Pattern.compile("\\s*".concat(streamMethodOrVariableInvocationsRegex).concat("\\s*"));
         if (pattern.matcher(cycleBodyLine).matches()) {
             return ActionType.INVOCATION;
         }
 
-        pattern = Pattern.compile(variableDeclarationRegex);
+        pattern = Pattern.compile("\\s*".concat(variableDeclarationRegex).concat("\\s*"));
         if (pattern.matcher(cycleBodyLine).matches()) {
             return ActionType.DECLARATION;
         }
 
-        pattern = Pattern.compile(variableAssignmentRegex);
+        pattern = Pattern.compile("\\s*".concat(variableAssignmentRegex).concat("\\s*"));
         if (pattern.matcher(cycleBodyLine).matches()) {
             return ActionType.INITIALIZATION;
         }
 
-        pattern = Pattern.compile(variableDeclarationAndAssignmentRegex);
+        pattern = Pattern.compile("\\s*".concat(variableDeclarationAndAssignmentRegex).concat("\\s*"));
         if (pattern.matcher(cycleBodyLine).matches()) {
             return ActionType.DECLARATION_WITH_INITIALIZATION;
         }
-        throw new ExpressionException(ErrorMessages.ACTION_TYPE_ERROR.getErrorMessage()
+        throw new ExpressionException(SyntaxErrorMessages.ACTION_TYPE_ERROR.getErrorMessage()
                 .concat(String.valueOf(currentBodyLine)));
     }
 
-    private CSharpeDataType getDeclarationDataType(String cycleBodyLine) {
-        pattern = Pattern.compile("\\s*(\\S+)");
-        String dataType = pattern.matcher(cycleBodyLine).group().trim().toLowerCase();
-        CSharpeDataType[] CSharpeDataTypes = CSharpeDataType.values();
-        for (CSharpeDataType currentCSharpeDataType : CSharpeDataTypes) {
-            if (currentCSharpeDataType.getDataType().equals(dataType)) {
-                return currentCSharpeDataType;
-            }
-        }
-        return CSharpeDataType.COMPOSITE_DATA_TYPE;
-    }
-
-    private boolean isDeclarationCorrect(String cycleBodyLine, int currentBodyLine) throws ExpressionException {
+    private boolean isDeclarationCorrect(String cycleBodyLine, int currentBodyLine) throws SemanticsException {
         pattern = Pattern.compile("\\s*[^=;]+");
         String variableName = pattern.matcher(cycleBodyLine).group();
         pattern = Pattern.compile("\\s*[A-z]+");
@@ -293,74 +280,59 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
         if (getISemanticsAnalyzer().isVariableNameCorrect(variableName)) {
             return true;
         } else {
-            throw new ExpressionException(ErrorMessages.VARIABLE_DECLARATION_ERROR.getErrorMessage()
-                    .concat(String.valueOf(currentBodyLine)));
+            throw new SemanticsException(SemanticsErrorMessages.VARIABLE_NAME_ERROR.getErrorMessage(),
+                    currentBodyLine);
         }
     }
 
-    private boolean isInitializationCorrect(String cycleBodyLine, CSharpeDataType CSharpeDataType, int currentBodyLine)
-            throws ExpressionException {
-        boolean isInitializationCorrect;
-        pattern = Pattern.compile("=\\s*[^;]+\\s*;");
-        String valueAsString = pattern.matcher(cycleBodyLine).group().trim().split("=")[1].split(";")[0];
-        switch (CSharpeDataType) {
-            case BYTE:
-                isInitializationCorrect = getISemanticsAnalyzer().isByteValueCorrect(valueAsString);
-                break;
-            case SHORT:
-                isInitializationCorrect = getISemanticsAnalyzer().isShortValueCorrect(valueAsString);
-                break;
-            case INTEGER:
-                isInitializationCorrect = getISemanticsAnalyzer().isIntegerValueCorrect(valueAsString);
-                break;
-            case LONG:
-                isInitializationCorrect = getISemanticsAnalyzer().isLongValueCorrect(valueAsString);
-                break;
-            case FLOAT:
-                isInitializationCorrect = getISemanticsAnalyzer().isFloatValueCorrect(valueAsString);
-                break;
-            case DOUBLE:
-                isInitializationCorrect = getISemanticsAnalyzer().isDoubleValueCorrect(valueAsString);
-                break;
-            case DECIMAL:
-                isInitializationCorrect = getISemanticsAnalyzer().isDecimalValueCorrect(valueAsString);
-                break;
-            case SBYTE:
-                isInitializationCorrect = getISemanticsAnalyzer().isSbyteValueCorrect(valueAsString);
-                break;
-            case USHORT:
-                isInitializationCorrect = getISemanticsAnalyzer().isUshortValueCorrect(valueAsString);
-                break;
-            case UINTEGER:
-                isInitializationCorrect = getISemanticsAnalyzer().isUintegerValueCorrect(valueAsString);
-                break;
-            case ULONG:
-                isInitializationCorrect = getISemanticsAnalyzer().isUlongValueCorrect(valueAsString);
-                break;
-            case CHARACTER:
-                isInitializationCorrect = getISemanticsAnalyzer().isCharacterValueCorrect(valueAsString);
-                break;
-            case BOOLEAN:
-                isInitializationCorrect = getISemanticsAnalyzer().isBooleanValueCorrect(valueAsString);
-                break;
-            case STRING:
-                isInitializationCorrect = getISemanticsAnalyzer().isStringValueCorrect(valueAsString);
-                break;
-            case COMPOSITE_DATA_TYPE:
-                isInitializationCorrect = true;
-                break;
-            default: {
-                throw new ExpressionException(ErrorMessages.DATA_TYPE_ERROR.getErrorMessage()
-                        .concat(String.valueOf(currentBodyLine)));
+    private boolean isInitializationCorrect(String cycleBodyLine, int currentBodyLine) throws ExpressionException,
+            SemanticsException {
+        boolean isInitializationCorrect = true;
+        String initialization = cycleBodyLine.split("=")[1];
+        pattern = Pattern.compile("\\s*.*");
+        Matcher matcher = pattern.matcher(initialization);
+
+        if (matcher.find()) {
+            String valueAsString = matcher.group();
+
+            pattern = Pattern.compile(anyNameCharSequenceRegex);
+            matcher = pattern.matcher(valueAsString);
+            while (matcher.find()) {
+                String currentGroup = matcher.group();
+                isInitializationCorrect &= (getISemanticsAnalyzer().isBooleanValueCorrect(currentGroup)
+                        || getISemanticsAnalyzer().isVariableNameCorrect(currentGroup));
             }
+
+            pattern = Pattern.compile(numberRegex);
+            matcher = pattern.matcher(valueAsString);
+            while (matcher.find()) {
+                String currentGroup = matcher.group();
+                isInitializationCorrect &= numberIsCorrect(currentGroup);
+            }
+
+            pattern = Pattern.compile("(((\")|(\'))[^\'\"]*((\")|(\')))");
+            matcher = pattern.matcher(valueAsString);
+            while (matcher.find()) {
+                String currentGroup = matcher.group();
+                isInitializationCorrect &= (getISemanticsAnalyzer().isCharacterValueCorrect(currentGroup)
+                        || getISemanticsAnalyzer().isStringValueCorrect(currentGroup));
+            }
+        } else {
+            throw new SemanticsException(SemanticsErrorMessages.INITIALIZATION_ERROR.getErrorMessage(),
+                    currentBodyLine);
         }
-        return isInitializationCorrect;
+        if (isInitializationCorrect) {
+            return true;
+        } else {
+            throw new SemanticsException(SemanticsErrorMessages.INITIALIZATION_ERROR.getErrorMessage(),
+                    currentBodyLine);
+        }
     }
 
-    private boolean isDeclarationWithInitializationCorrect(String cycleBodyLine, CSharpeDataType CSharpeDataType,
-                                                           int currentBodyLine) throws ExpressionException {
+    private boolean isDeclarationWithInitializationCorrect(String cycleBodyLine, int currentBodyLine)
+            throws ExpressionException, SemanticsException {
         return isDeclarationCorrect(cycleBodyLine, currentBodyLine)
-                && isInitializationCorrect(cycleBodyLine, CSharpeDataType, currentBodyLine);
+                && isInitializationCorrect(cycleBodyLine, currentBodyLine);
     }
 
     private int moveToLine(String subexpression, String pattern) {
@@ -376,5 +348,19 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
             }
         }
         return currentBodyLine;
+    }
+
+    private boolean numberIsCorrect(String currentGroup) {
+        return getISemanticsAnalyzer().isByteValueCorrect(currentGroup)
+                || getISemanticsAnalyzer().isShortValueCorrect(currentGroup)
+                || getISemanticsAnalyzer().isIntegerValueCorrect(currentGroup)
+                || getISemanticsAnalyzer().isLongValueCorrect(currentGroup)
+                || getISemanticsAnalyzer().isFloatValueCorrect(currentGroup)
+                || getISemanticsAnalyzer().isDoubleValueCorrect(currentGroup)
+                || getISemanticsAnalyzer().isDecimalValueCorrect(currentGroup)
+                || getISemanticsAnalyzer().isSbyteValueCorrect(currentGroup)
+                || getISemanticsAnalyzer().isUshortValueCorrect(currentGroup)
+                || getISemanticsAnalyzer().isUintegerValueCorrect(currentGroup)
+                || getISemanticsAnalyzer().isUlongValueCorrect(currentGroup);
     }
 }
