@@ -130,6 +130,31 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
     }
 
     @Override
+    public boolean expressionIsSolved(String expression) throws ExpressionException {
+        String regex = "\\(\\s*"
+                .concat(cycleConditionRegex)
+                .concat("\\s*\\)");
+        String cycleCondition = getElementOfExpression(expression, regex);
+        if (cycleCondition.isEmpty()) {
+            return false;
+        }
+        cycleCondition = cycleCondition.substring(1, cycleCondition.length() - 1);
+        switch (cycleCondition.trim()) {
+            case "true": {
+                return true;
+            }
+            case "false": {
+                return false;
+            }
+            default: {
+                ExpressionException expressionException = new ExpressionException("need compilation for checking");
+                log.warning(expressionException.getMessage());
+                throw expressionException;
+            }
+        }
+    }
+
+    @Override
     public boolean isSyntaxCorrect(String expression) throws ExpressionException, SemanticsException {
         Matcher matcher = pattern.matcher(expression);
         if (expression.trim().isEmpty()) {

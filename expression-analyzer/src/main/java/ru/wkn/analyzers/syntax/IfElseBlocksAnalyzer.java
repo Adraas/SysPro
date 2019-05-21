@@ -23,6 +23,11 @@ public class IfElseBlocksAnalyzer extends ExpressionAnalyzer {
     }
 
     @Override
+    public boolean expressionIsSolved(String expression) throws ExpressionException {
+        return false;
+    }
+
+    @Override
     public boolean isSyntaxCorrect(String expression) throws ExpressionException {
         return false;
     }
