@@ -3,6 +3,8 @@ os: windows
 branches:
   except:
     - master
+jdk:
+  - C:\Program Files\Java\jdk1.8.0_181
 install: true
 script:
   - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
