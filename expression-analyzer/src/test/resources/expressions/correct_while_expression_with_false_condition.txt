@@ -1,0 +1,4 @@
+while (false) {
+    i = i + 3;
+    i = i / 3;
+}
