@@ -3,6 +3,7 @@ os: windows
 branches:
   except:
     - master
-compiler:
-  - gcc
 install: true
+script:
+  - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+  - mvn test -B
