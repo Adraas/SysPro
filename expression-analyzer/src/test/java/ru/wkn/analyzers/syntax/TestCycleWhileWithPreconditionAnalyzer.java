@@ -104,15 +104,12 @@ class TestCycleWhileWithPreconditionAnalyzer {
                 .concat("`HelloType hello2me   =  sayMe2(asd, df,fsd    )\n"));
         bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getVariableDeclarationAndAssignmentRegex()
                 .concat("`HelloType hello2me   =  sayMe2\n"));
-
-        // TODO: fix patterns for this test's block
         bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getVariableDeclarationAndAssignmentRegex()
                 .concat("`HelloType hello2me   = 2344.235\n"));
         bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getCycleSingleBodyLineRegex()
                 .concat("`HelloType hello2me   = 2344.235 ;\n"));
         bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getCycleMultipleBodyRegex()
                 .concat("`HelloType hello2me  = 2344.235 ;sayMe2(asd, df,fsd   );hello2me = sayMe2(asd, df,fsd );\n"));
-
         bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getComparisonOperationRegex()
                 .concat("`hello2me   == 2344.235 \n"));
         bufferedWriter.write(cycleWhileWithPreconditionAnalyzer.getComparisonOperationRegex()
