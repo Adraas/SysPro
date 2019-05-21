@@ -19,6 +19,7 @@ import java.util.Objects;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -27,7 +28,9 @@ class TestCycleWhileWithPreconditionAnalyzer {
     private static CycleWhileWithPreconditionAnalyzer cycleWhileWithPreconditionAnalyzer;
     private static String correctExpressionForAnalysis = "";
     private static String incorrectExpressionForAnalysis = "";
-    private static String correctExpressionWithIncorrectsemanticsForAnalyzer = "";
+    private static String correctExpressionWithIncorrectSemanticsForAnalyzer = "";
+    private static String correctExpressionWithTrueConditionForAnalyzer = "";
+    private static String correctExpressionWithFalseConditionForAnalyzer = "";
 
     @BeforeAll
     static void initFields() throws URISyntaxException, IOException {
@@ -42,10 +45,20 @@ class TestCycleWhileWithPreconditionAnalyzer {
             incorrectExpressionForAnalysis = initExpressionForAnalysis(incorrectExpressionForAnalysis,
                     "expressions/incorrect_while_expression.txt", classLoader);
         }
-        if (correctExpressionWithIncorrectsemanticsForAnalyzer.trim().isEmpty()) {
-            correctExpressionWithIncorrectsemanticsForAnalyzer =
-                    initExpressionForAnalysis(correctExpressionWithIncorrectsemanticsForAnalyzer,
+        if (correctExpressionWithIncorrectSemanticsForAnalyzer.trim().isEmpty()) {
+            correctExpressionWithIncorrectSemanticsForAnalyzer =
+                    initExpressionForAnalysis(correctExpressionWithIncorrectSemanticsForAnalyzer,
                             "expressions/correct_while_expression_with_incorrect_semantics.txt", classLoader);
+        }
+        if (correctExpressionWithTrueConditionForAnalyzer.trim().isEmpty()) {
+            correctExpressionWithTrueConditionForAnalyzer =
+                    initExpressionForAnalysis(correctExpressionWithTrueConditionForAnalyzer,
+                            "expressions/correct_while_expression_with_true_condition.txt", classLoader);
+        }
+        if (correctExpressionWithFalseConditionForAnalyzer.trim().isEmpty()) {
+            correctExpressionWithFalseConditionForAnalyzer =
+                    initExpressionForAnalysis(correctExpressionWithFalseConditionForAnalyzer,
+                            "expressions/correct_while_expression_with_false_condition.txt", classLoader);
         }
         setParametersIntoCSVFile(classLoader);
     }
@@ -141,7 +154,23 @@ class TestCycleWhileWithPreconditionAnalyzer {
     @Test
     void checkSyntaxToIncorrectWithSemanticsTest() {
         assertThrows(SemanticsException.class, () -> cycleWhileWithPreconditionAnalyzer
-                .isSyntaxCorrect(correctExpressionWithIncorrectsemanticsForAnalyzer, true));
+                .isSyntaxCorrect(correctExpressionWithIncorrectSemanticsForAnalyzer, true));
+    }
+
+    @Test
+    void checkExpressionToSolvabilityTest() throws ExpressionException {
+        assertTrue(cycleWhileWithPreconditionAnalyzer.expressionIsSolved(correctExpressionWithTrueConditionForAnalyzer));
+    }
+
+    @Test
+    void checkExpressionToUnsolvabilityTest() throws ExpressionException {
+        assertFalse(cycleWhileWithPreconditionAnalyzer.expressionIsSolved(correctExpressionWithFalseConditionForAnalyzer));
+    }
+
+    @Test
+    void checkExpressionToUncertaintyTest() {
+        assertThrows(ExpressionException.class, () -> cycleWhileWithPreconditionAnalyzer
+                .expressionIsSolved(correctExpressionForAnalysis));
     }
 
     @ParameterizedTest
