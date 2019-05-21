@@ -20,7 +20,7 @@ install:
         Write-Host "Unzipping Maven..."
         [System.IO.Compression.ZipFile]::ExtractToDirectory("C:\Program Files (x86)\Apache\Maven\bin.zip", "C:\Program Files (x86)\Apache\Maven")
       }
-  - cmd: SET PATH=C:\Program Files (x86)\Apache\Maven\apache-maven-3.2.5\bin;%JAVA_HOME%\bin;%PATH:C:\Ruby193\bin;=%
+  - cmd: SET PATH=C:\Program Files (x86)\Apache\Maven\apache-maven-3.2.5\bin;%JAVA_HOME%\bin;C:\MinGW\bin;%PATH:C:\Ruby193\bin;=%
   - cmd: SET MAVEN_OPTS=-XX:MaxPermSize=2g -Xmx4g
   - cmd: SET JAVA_OPTS=-XX:MaxPermSize=2g -Xmx4g
   - cmd: mvn --version
