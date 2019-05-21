@@ -42,9 +42,9 @@ public class AccessEntry implements IEntry {
     /**
      * Initializes a newly created {@code AccessEntry} object.
      *
-     * @param login - {@link AccessEntry#login}
-     * @param passwordHashCode - {@link AccessEntry#passwordHashCode}
-     * @param email - {@link AccessEntry#email}
+     * @param login {@link AccessEntry#login}
+     * @param passwordHashCode {@link AccessEntry#passwordHashCode}
+     * @param email {@link AccessEntry#email}
      */
     public AccessEntry(String login, String passwordHashCode, String email) {
         this.login = login;

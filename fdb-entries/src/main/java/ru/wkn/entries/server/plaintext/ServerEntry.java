@@ -46,9 +46,9 @@ public class ServerEntry implements IEntry {
     /**
      * Initializes a newly created {@code ServerEntry} object.
      *
-     * @param url - {@link ServerEntry#url}
-     * @param port - {@link ServerEntry#port}
-     * @param protocolType - {@link ServerEntry#protocolType}
+     * @param url {@link ServerEntry#url}
+     * @param port {@link ServerEntry#port}
+     * @param protocolType {@link ServerEntry#protocolType}
      */
     public ServerEntry(String url, int port, ProtocolType protocolType) {
         this.url = url;

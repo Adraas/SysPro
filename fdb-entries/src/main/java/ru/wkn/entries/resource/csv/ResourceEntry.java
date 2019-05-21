@@ -48,9 +48,9 @@ public class ResourceEntry implements IEntry {
     /**
      * Initializes a newly created {@code ResourceEntry} object.
      *
-     * @param url - {@link ResourceEntry#url}
-     * @param accessMode - {@link ResourceEntry#accessMode}
-     * @param accessDate - {@link ResourceEntry#accessDate}
+     * @param url {@link ResourceEntry#url}
+     * @param accessMode {@link ResourceEntry#accessMode}
+     * @param accessDate {@link ResourceEntry#accessDate}
      */
     public ResourceEntry(String url, AccessMode accessMode, Date accessDate) {
         this.url = url;

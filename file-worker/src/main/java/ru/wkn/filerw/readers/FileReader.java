@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Abstract class {@code FileReader} represents file's reading and implements {@code EFileReader} class.
+ * Class {@code FileReader} represents file's reading and implements {@code EFileReader} class.
  *
  * @see EFileReader
  * @author Artem Pikalov

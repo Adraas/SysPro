@@ -10,6 +10,7 @@ import java.util.List;
 /**
  * Abstract class {@code EFileReader} represents file's reading.
  *
+ * @param <T> extends {@link IEntry} type
  * @author Artem Pikalov
  */
 @Getter
@@ -24,7 +25,7 @@ public abstract class EFileReader<T extends IEntry> {
     /**
      * Initializes a newly created {@code EFileReader} object with given {@link EFile} and {@code String} object value.
      *
-     * @param eFile - {@code EFile} object, represented file
+     * @param eFile {@code EFile} object, represented file
      */
     public EFileReader(EFile<T> eFile) {
         this.eFile = eFile;
@@ -33,7 +34,7 @@ public abstract class EFileReader<T extends IEntry> {
     /**
      * The method for reading entry by number.
      *
-     * @param entryNumber - number (ID) of entry in file
+     * @param entryNumber number (ID) of entry in file
      * @return {@link IEntry} object, represented entry from file
      */
     public abstract IEntry read(int entryNumber);
@@ -41,8 +42,8 @@ public abstract class EFileReader<T extends IEntry> {
     /**
      * The method for reading entries from specific interval.
      *
-     * @param startEntry - number of first value of interval
-     * @param endEntry - number of last value of interval
+     * @param startEntry number of first value of interval
+     * @param endEntry number of last value of interval
      * @return {@code List} object, represented collection of entries from file
      */
     public abstract List<T> readSome(int startEntry, int endEntry);
@@ -57,7 +58,7 @@ public abstract class EFileReader<T extends IEntry> {
     /**
      * The method for content checking.
      *
-     * @param entry - entry for search in file
+     * @param entry entry for search in file
      * @return {@code true} if the entry is contained in file, else - {@code false}
      */
     public abstract boolean contains(T entry);
