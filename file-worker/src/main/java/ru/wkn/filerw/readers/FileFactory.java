@@ -16,8 +16,17 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class {@code FileFactory} contains factory method for the {@link EFile} objects creating.
+ *
+ * @see IFileFactory
+ * @author Artem Pikalov
+ */
 public class FileFactory<T extends IEntry> implements IFileFactory<T> {
 
+    /**
+     * @see IFileFactory#createEFile(String, String, EntriesDelimiter, IEntryFactory, ParametersDelimiter)
+     */
     @Override
     public EFile<T> createEFile(String path, String charsetName, EntriesDelimiter entriesDelimiter,
                                 IEntryFactory entryFactory, ParametersDelimiter parametersDelimiter)
