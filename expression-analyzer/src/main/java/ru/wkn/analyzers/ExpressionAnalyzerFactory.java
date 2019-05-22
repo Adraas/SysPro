@@ -4,6 +4,7 @@ import ru.wkn.analyzers.exceptions.AnalyzerException;
 import ru.wkn.analyzers.exceptions.LanguageException;
 import ru.wkn.analyzers.syntax.CycleWhileWithPreconditionAnalyzer;
 import ru.wkn.analyzers.syntax.ExpressionAnalyzer;
+import ru.wkn.analyzers.syntax.semantics.ICSharpeSemanticsAnalyzer;
 import ru.wkn.analyzers.syntax.util.Language;
 import ru.wkn.analyzers.syntax.semantics.CSharpeSemanticsAnalyzer;
 import ru.wkn.analyzers.syntax.semantics.ISemanticsAnalyzer;
@@ -16,7 +17,8 @@ public class ExpressionAnalyzerFactory implements IExpressionAnalyzerFactory {
             throws LanguageException, AnalyzerException {
         ExpressionAnalyzer expressionAnalyzer = expressionAnalyzerType
                 .equals(ExpressionAnalyzerType.CYCLE_WHILE_WITH_PRECONDITION)
-                ? new CycleWhileWithPreconditionAnalyzer(createSemanticsAnalyzer(language), isSemanticsAnalyzerActivated)
+                ? new CycleWhileWithPreconditionAnalyzer((ICSharpeSemanticsAnalyzer) createSemanticsAnalyzer(language),
+                isSemanticsAnalyzerActivated)
                 : null;
         if (expressionAnalyzer == null) {
             throw new AnalyzerException(expressionAnalyzerType.name());

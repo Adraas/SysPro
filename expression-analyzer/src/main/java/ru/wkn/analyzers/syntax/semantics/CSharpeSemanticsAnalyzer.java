@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.regex.Pattern;
 
-public class CSharpeSemanticsAnalyzer implements ISemanticsAnalyzer {
+public class CSharpeSemanticsAnalyzer implements ICSharpeSemanticsAnalyzer {
 
     @Override
     public boolean isByteValueCorrect(String byteValueAsString) {

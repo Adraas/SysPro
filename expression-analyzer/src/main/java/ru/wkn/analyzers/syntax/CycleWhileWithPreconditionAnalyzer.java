@@ -6,7 +6,7 @@ import ru.wkn.analyzers.exceptions.ExpressionException;
 import ru.wkn.analyzers.exceptions.SemanticsException;
 import ru.wkn.analyzers.exceptions.messages.SemanticsErrorMessages;
 import ru.wkn.analyzers.exceptions.messages.SyntaxErrorMessages;
-import ru.wkn.analyzers.syntax.semantics.ISemanticsAnalyzer;
+import ru.wkn.analyzers.syntax.semantics.ICSharpeSemanticsAnalyzer;
 import ru.wkn.analyzers.syntax.util.ActionType;
 
 import java.util.Objects;
@@ -124,9 +124,9 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
 
     private Pattern pattern = Pattern.compile(cycleWhileWithPreconditionRegex);
 
-    public CycleWhileWithPreconditionAnalyzer(ISemanticsAnalyzer iSemanticsAnalyzer,
+    public CycleWhileWithPreconditionAnalyzer(ICSharpeSemanticsAnalyzer semanticsAnalyzer,
                                               boolean isSemanticsAnalyzerActivated) {
-        super(iSemanticsAnalyzer, isSemanticsAnalyzerActivated);
+        super(semanticsAnalyzer, isSemanticsAnalyzerActivated);
     }
 
     @Override
@@ -413,10 +413,10 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
                 || getISemanticsAnalyzer().isLongValueCorrect(currentGroup)
                 || getISemanticsAnalyzer().isFloatValueCorrect(currentGroup)
                 || getISemanticsAnalyzer().isDoubleValueCorrect(currentGroup)
-                || getISemanticsAnalyzer().isDecimalValueCorrect(currentGroup)
-                || getISemanticsAnalyzer().isSbyteValueCorrect(currentGroup)
-                || getISemanticsAnalyzer().isUshortValueCorrect(currentGroup)
-                || getISemanticsAnalyzer().isUintegerValueCorrect(currentGroup)
-                || getISemanticsAnalyzer().isUlongValueCorrect(currentGroup);
+                || ((ICSharpeSemanticsAnalyzer) getISemanticsAnalyzer()).isDecimalValueCorrect(currentGroup)
+                || ((ICSharpeSemanticsAnalyzer) getISemanticsAnalyzer()).isSbyteValueCorrect(currentGroup)
+                || ((ICSharpeSemanticsAnalyzer) getISemanticsAnalyzer()).isUshortValueCorrect(currentGroup)
+                || ((ICSharpeSemanticsAnalyzer) getISemanticsAnalyzer()).isUintegerValueCorrect(currentGroup)
+                || ((ICSharpeSemanticsAnalyzer) getISemanticsAnalyzer()).isUlongValueCorrect(currentGroup);
     }
 }
