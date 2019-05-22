@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Class {@code FileWriter} represents file's writing and implements {@code EFileWriter} class.
+ * The class {@code FileWriter} represents file's writing and implements {@code EFileWriter} class.
  *
  * @see EFileWriter
  * @author Artem Pikalov
@@ -24,7 +24,7 @@ import java.util.Objects;
 public class FileWriter<T extends IEntry> extends EFileWriter<T> {
 
     /**
-     * Initializes a newly created {@code FileWriter} object with given {@link EFile} and {@code String} object value.
+     * Initializes a newly created {@code EFileWriter} object.
      *
      * @see EFileWriter#EFileWriter(EFile, String)
      */

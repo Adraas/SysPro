@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * Enum with typical parameter-delimiters.
+ * The enum with typical parameter-delimiters.
  *
  * @author Artem Pikalov
  */

@@ -1,7 +1,7 @@
 package ru.wkn.entries;
 
 /**
- * Interface {@code IEntry} represent entry entity for file-worker and DB-worker.
+ * The interface {@code IEntry} represent entry entity for file-worker and DB-worker.
  *
  * @author Artem Pikalov
  */

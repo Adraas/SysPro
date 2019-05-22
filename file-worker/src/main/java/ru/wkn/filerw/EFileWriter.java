@@ -9,9 +9,9 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * Abstract class {@code EFileWriter} represents file's writing.
+ * The abstract class {@code EFileWriter} represents file's writing.
  *
- * @param <T> extends {@link IEntry} type
+ * @param <T> extends {@code IEntry} type
  * @author Artem Pikalov
  */
 @Getter
@@ -19,7 +19,7 @@ import java.util.List;
 public abstract class EFileWriter<T extends IEntry> {
 
     /**
-     * {@link EFile} object, represented file.
+     * {@code EFile} object, represented file.
      */
     private EFile<T> eFile;
     /**
@@ -28,10 +28,11 @@ public abstract class EFileWriter<T extends IEntry> {
     private String charsetName;
 
     /**
-     * Initializes a newly created {@code EFileWriter} object with given {@link EFile} and {@code String} object value.
+     * Initializes a newly created {@code EFileWriter} object with given {@code EFile} object ({@link #eFile})
+     * and {@code String} object ({@link #charsetName}) values.
      *
-     * @param eFile {@code EFile} object, represented file
-     * @param charsetName charset for file's writing
+     * @param eFile {@link #eFile}
+     * @param charsetName {@link #charsetName}
      */
     public EFileWriter(EFile<T> eFile, String charsetName) {
         this.eFile = eFile;

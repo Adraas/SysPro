@@ -6,7 +6,7 @@ import lombok.Setter;
 import ru.wkn.jni.functions.IAssemblerFunctions;
 
 /**
- * Class {@code IAssemblerFunctions} represent invocation for math assembler functions.
+ * The class {@code IAssemblerFunctions} represents invocation for math assembler functions.
  *
  * @author Alexey Konev
  */

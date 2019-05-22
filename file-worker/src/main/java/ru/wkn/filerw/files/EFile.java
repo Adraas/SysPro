@@ -8,9 +8,9 @@ import ru.wkn.entries.IEntry;
 import java.util.List;
 
 /**
- * Class {@code EFile} represents the concrete real file.
+ * The class {@code EFile} represents the concrete real file.
  *
- * @param <T> extends {@link IEntry} type
+ * @param <T> extends {@code IEntry} type
  * @author Artem Pikalov
  */
 @AllArgsConstructor

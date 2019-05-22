@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Class {@code FileFactory} contains factory method for the {@link EFile} objects creating.
+ * The class {@code FileFactory} contains factory method for the {@code EFile} objects creating.
  *
  * @see IFileFactory
  * @author Artem Pikalov

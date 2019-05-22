@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * Enum with access mode types for network resource.
+ * The enum with access mode types for network resource.
  *
  * @author Artem Pikalov
  */

@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * Enum with typical protocol types.
+ * The enum with typical protocol types.
  *
  * @author Artem Pikalov
  */

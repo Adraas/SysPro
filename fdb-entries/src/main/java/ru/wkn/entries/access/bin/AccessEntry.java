@@ -8,7 +8,7 @@ import ru.wkn.entries.IEntry;
 import ru.wkn.entries.ParametersDelimiter;
 
 /**
- * Class {@code AccessEntry} represents access information.
+ * The class {@code AccessEntry} represents access information.
  *
  * @see IEntry
  * @author Dinar Mahmutov
@@ -42,9 +42,9 @@ public class AccessEntry implements IEntry {
     /**
      * Initializes a newly created {@code AccessEntry} object.
      *
-     * @param login {@link AccessEntry#login}
-     * @param passwordHashCode {@link AccessEntry#passwordHashCode}
-     * @param email {@link AccessEntry#email}
+     * @param login {@link #login}
+     * @param passwordHashCode {@link #passwordHashCode}
+     * @param email {@link #email}
      */
     public AccessEntry(String login, String passwordHashCode, String email) {
         this.login = login;

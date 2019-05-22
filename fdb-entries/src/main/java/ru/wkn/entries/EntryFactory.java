@@ -10,7 +10,7 @@ import ru.wkn.entries.server.plaintext.ServerEntry;
 import java.sql.Date;
 
 /**
- * Class {@code EntryFactory} represent implementation of the factory for {@link IEntry} entities.
+ * The class {@code EntryFactory} represent implementation of the factory for {@code IEntry} entities.
  *
  * @see IEntry
  * @author Artem Pikalov

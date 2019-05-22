@@ -8,9 +8,9 @@ import ru.wkn.filerw.files.EFile;
 import java.util.List;
 
 /**
- * Abstract class {@code EFileReader} represents file's reading.
+ * The abstract class {@code EFileReader} represents file's reading.
  *
- * @param <T> extends {@link IEntry} type
+ * @param <T> extends {@code IEntry} type
  * @author Artem Pikalov
  */
 @Getter
@@ -18,12 +18,12 @@ import java.util.List;
 public abstract class EFileReader<T extends IEntry> {
 
     /**
-     * {@link EFile} object, represented file.
+     * {@code EFile} object, represented file.
      */
     private EFile<T> eFile;
 
     /**
-     * Initializes a newly created {@code EFileReader} object with given {@link EFile} and {@code String} object value.
+     * Initializes a newly created {@code EFileReader} object with given {@code EFile} object ({@link #eFile}) value.
      *
      * @param eFile {@code EFile} object, represented file
      */
@@ -35,7 +35,7 @@ public abstract class EFileReader<T extends IEntry> {
      * The method for reading entry by number.
      *
      * @param entryNumber number (ID) of entry in file
-     * @return {@link IEntry} object, represented entry from file
+     * @return {@code IEntry} object, represented entry from file
      */
     public abstract IEntry read(int entryNumber);
 

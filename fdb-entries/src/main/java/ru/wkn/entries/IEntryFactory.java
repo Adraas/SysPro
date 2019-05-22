@@ -3,18 +3,18 @@ package ru.wkn.entries;
 import ru.wkn.entries.exceptions.EntryException;
 
 /**
- * Interface {@code IEntryFactory} represent factory for {@link IEntry} entities.
+ * The interface {@code IEntryFactory} represent factory for {@code IEntry} entities.
  *
  * @author Artem Pikalov
  */
 public interface IEntryFactory {
 
     /**
-     * Method for the creating {@link IEntry} object.
+     * Method for the creating {@code IEntry} object.
      *
-     * @param parametersLine main information for the {@link IEntry} object into single {@code String} line
+     * @param parametersLine main information for the {@code IEntry} object into single {@code String} line
      * @param parametersDelimiter delimiter for parameters line
-     * @return object of {@link IEntry} type
+     * @return object of {@code IEntry} type
      */
     IEntry createEntry(String parametersLine, ParametersDelimiter parametersDelimiter) throws EntryException;
 }

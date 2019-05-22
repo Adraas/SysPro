@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Class {@code FileReader} represents file's reading and implements {@code EFileReader} class.
+ * The class {@code FileReader} represents file's reading and implements {@code EFileReader} class.
  *
  * @see EFileReader
  * @author Artem Pikalov
@@ -16,7 +16,7 @@ import java.util.List;
 public class FileReader<T extends IEntry> extends EFileReader<T> {
 
     /**
-     * Initializes a newly created {@code FileReader} object with given {@link EFile} and {@code String} object value.
+     * Initializes a newly created {@code FileReader} object.
      *
      * @see EFileReader#EFileReader(EFile)
      */

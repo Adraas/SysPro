@@ -9,7 +9,7 @@ import ru.wkn.entries.IEntry;
 import ru.wkn.entries.ParametersDelimiter;
 
 /**
- * Class {@code ServerEntry} represents network server information.
+ * The class {@code ServerEntry} represents network server information.
  *
  * @see IEntry
  * @author Alexey Konev
@@ -46,9 +46,9 @@ public class ServerEntry implements IEntry {
     /**
      * Initializes a newly created {@code ServerEntry} object.
      *
-     * @param url {@link ServerEntry#url}
-     * @param port {@link ServerEntry#port}
-     * @param protocolType {@link ServerEntry#protocolType}
+     * @param url {@link #url}
+     * @param port {@link #port}
+     * @param protocolType {@link #protocolType}
      */
     public ServerEntry(String url, int port, ProtocolType protocolType) {
         this.url = url;

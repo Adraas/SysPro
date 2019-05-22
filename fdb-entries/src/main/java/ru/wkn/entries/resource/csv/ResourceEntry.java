@@ -11,7 +11,7 @@ import ru.wkn.entries.ParametersDelimiter;
 import java.sql.Date;
 
 /**
- * Class {@code ResourceEntry} represents network resource information.
+ * The class {@code ResourceEntry} represents network resource information.
  *
  * @see IEntry
  * @author Artem Pikalov
@@ -48,9 +48,9 @@ public class ResourceEntry implements IEntry {
     /**
      * Initializes a newly created {@code ResourceEntry} object.
      *
-     * @param url {@link ResourceEntry#url}
-     * @param accessMode {@link ResourceEntry#accessMode}
-     * @param accessDate {@link ResourceEntry#accessDate}
+     * @param url {@link #url}
+     * @param accessMode {@link #accessMode}
+     * @param accessDate {@link #accessDate}
      */
     public ResourceEntry(String url, AccessMode accessMode, Date accessDate) {
         this.url = url;
