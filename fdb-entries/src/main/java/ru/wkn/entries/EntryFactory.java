@@ -10,7 +10,7 @@ import ru.wkn.entries.server.plaintext.ServerEntry;
 import java.sql.Date;
 
 /**
- * Class {@code EntryFactory} represent realisation of the factory for {@link IEntry} entities.
+ * Class {@code EntryFactory} represent implementation of the factory for {@link IEntry} entities.
  *
  * @see IEntry
  * @author Artem Pikalov
@@ -22,7 +22,13 @@ public class EntryFactory implements IEntryFactory {
      */
     @Override
     public IEntry createEntry(String parametersLine, ParametersDelimiter parametersDelimiter) throws EntryException {
+        if (parametersLine.replaceAll(parametersDelimiter.getParametersDelimiter(), "").trim().isEmpty()) {
+            throw new EntryException("parameters is absent");
+        }
         String[] parameters = parametersLine.split(parametersDelimiter.getParametersDelimiter());
+        if (parameters.length < 3) {
+            throw new EntryException("parameters is incorrect");
+        }
         IEntry entry = parametersDelimiter.equals(ParametersDelimiter.RESOURCE_CSV_DELIMITER)
                 ? new ResourceEntry(parameters[0], AccessMode.valueOf(parameters[1]), Date.valueOf(parameters[2]))
                 : parametersDelimiter.equals(ParametersDelimiter.SERVER_PLAIN_TEXT_DELIMITER)
