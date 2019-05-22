@@ -161,10 +161,10 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
             return true;
         }
         if (!matcher.matches()) {
-            String regex = "\\(\\s*"
+            String conditionRegex = "\\(\\s*"
                     .concat(cycleConditionRegex)
                     .concat("\\s*\\)");
-            String cycleCondition = getElementOfExpression(expression, regex);
+            String cycleCondition = getElementOfExpression(expression, conditionRegex);
             if (cycleCondition.isEmpty()) {
                 ExpressionException expressionException =
                         new ExpressionException(SyntaxErrorMessages.CONDITION_ERROR.getErrorMessage());
@@ -173,7 +173,8 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
             }
             cycleCondition = cycleCondition.substring(1, cycleCondition.length() - 1);
 
-            String cycleBody = getElementOfExpression(expression,"((\\{\\s*("
+            String tempExpression = expression.split(conditionRegex.concat("\\s*"))[1];
+            String cycleBody = getElementOfExpression(tempExpression,"^((\\{\\s*("
                     .concat(cycleMultipleBodyRegex)
                     .concat("\\s*)?\\})|(")
                     .concat(cycleSingleBodyLineRegex)
@@ -181,7 +182,7 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
             if (!cycleBody.isEmpty()) {
                 cycleBody = cycleBody.substring(1, cycleBody.length() - 1);
             } else {
-                cycleBody = expression.split(regex.concat("\\s*"))[1];
+                cycleBody = expression.split(conditionRegex.concat("\\s*"))[1];
             }
 
             int currentBodyLine = 1;
