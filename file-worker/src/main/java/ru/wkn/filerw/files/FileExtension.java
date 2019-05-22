@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * The enum {@code FileExtension} represents extension of the real file.
+ * The enum {@code FileExtension} contains extensions for the real files.
  *
  * @author Artem Pikalov
  */

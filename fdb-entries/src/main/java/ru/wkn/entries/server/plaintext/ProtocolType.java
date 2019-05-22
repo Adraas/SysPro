@@ -4,9 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * The enum with typical protocol types.
+ * The enum {@code ProtocolType} contains typical protocol types.
  *
- * @author Artem Pikalov
+ * @author Alexey Konev
  */
 @AllArgsConstructor
 public enum  ProtocolType {

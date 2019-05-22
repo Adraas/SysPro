@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * The enum {@code EntriesDelimiter} represents delimiters between entries in a file.
+ * The enum {@code EntriesDelimiter} contains delimiters between entries in a file.
  *
  * @author Artem Pikalov
  */
