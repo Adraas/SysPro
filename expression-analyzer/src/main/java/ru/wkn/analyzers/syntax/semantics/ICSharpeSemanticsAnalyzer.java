@@ -3,6 +3,7 @@ package ru.wkn.analyzers.syntax.semantics;
 /**
  * The interface {@code ICSharpeSemanticsAnalyzer} represents abstract semantics analyzer for C# expressions.
  *
+ * @see ISemanticsAnalyzer
  * @author Artem Pikalov
  */
 public interface ICSharpeSemanticsAnalyzer extends ISemanticsAnalyzer {
