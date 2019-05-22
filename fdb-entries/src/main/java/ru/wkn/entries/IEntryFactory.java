@@ -15,6 +15,7 @@ public interface IEntryFactory {
      * @param parametersLine main information for the {@code IEntry} object into single {@code String} line
      * @param parametersDelimiter delimiter for parameters line
      * @return object of {@code IEntry} type
+     * @throws EntryException thrown if some problems with specific entry
      */
     IEntry createEntry(String parametersLine, ParametersDelimiter parametersDelimiter) throws EntryException;
 }
