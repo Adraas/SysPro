@@ -9,8 +9,17 @@ import ru.wkn.analyzers.syntax.util.Language;
 import ru.wkn.analyzers.syntax.semantics.CSharpeSemanticsAnalyzer;
 import ru.wkn.analyzers.syntax.semantics.ISemanticsAnalyzer;
 
+/**
+ * The class {@code ExpressionAnalyzerFactory} contains factory method for the {@code ExpressionAnalyzer}
+ * objects creating.
+ *
+ * @author Artem Pikalov
+ */
 public class ExpressionAnalyzerFactory implements IExpressionAnalyzerFactory {
 
+    /**
+     * @see IExpressionAnalyzerFactory#createExpressionAnalyzer(ExpressionAnalyzerType, Language, boolean)
+     */
     @Override
     public ExpressionAnalyzer createExpressionAnalyzer(ExpressionAnalyzerType expressionAnalyzerType,
                                                        Language language, boolean isSemanticsAnalyzerActivated)

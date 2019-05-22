@@ -7,12 +7,19 @@ import ru.wkn.analyzers.exceptions.SemanticsException;
 import ru.wkn.analyzers.exceptions.messages.SemanticsErrorMessages;
 import ru.wkn.analyzers.exceptions.messages.SyntaxErrorMessages;
 import ru.wkn.analyzers.syntax.semantics.ICSharpeSemanticsAnalyzer;
+import ru.wkn.analyzers.syntax.semantics.ISemanticsAnalyzer;
 import ru.wkn.analyzers.syntax.util.ActionType;
 
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * The class {@code CycleWhileWithPreconditionAnalyzer} represents analyzer for the C# expressions.
+ *
+ * @see ExpressionAnalyzer
+ * @author Artem Pikalov
+ */
 @Log
 @Getter
 public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
@@ -124,11 +131,19 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
 
     private Pattern pattern = Pattern.compile(cycleWhileWithPreconditionRegex);
 
+    /**
+     * Initializes a newly created {@code ExpressionAnalyzer} object.
+     *
+     * @see ExpressionAnalyzer#ExpressionAnalyzer(ISemanticsAnalyzer, boolean)
+     */
     public CycleWhileWithPreconditionAnalyzer(ICSharpeSemanticsAnalyzer semanticsAnalyzer,
                                               boolean isSemanticsAnalyzerActivated) {
         super(semanticsAnalyzer, isSemanticsAnalyzerActivated);
     }
 
+    /**
+     * @see ExpressionAnalyzer#expressionIsSolved(String)
+     */
     @Override
     public boolean expressionIsSolved(String expression) throws ExpressionException {
         String regex = "\\(\\s*"
@@ -154,6 +169,9 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
         }
     }
 
+    /**
+     * @see ExpressionAnalyzer#isSyntaxCorrect(String)
+     */
     @Override
     public boolean isSyntaxCorrect(String expression) throws ExpressionException, SemanticsException {
         Matcher matcher = pattern.matcher(expression);
