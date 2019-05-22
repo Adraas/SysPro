@@ -7,7 +7,6 @@ package ru.wkn.jni.functions;
  * @see IAssemblerFunctions
  * @author Artem Pikalov
  * @author Alexey Konev
- * @author Dinar Mahmutov
  */
 public class AssemblerFunctions implements IAssemblerFunctions {
 

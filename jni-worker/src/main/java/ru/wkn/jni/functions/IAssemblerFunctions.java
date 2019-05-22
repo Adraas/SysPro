@@ -5,7 +5,6 @@ package ru.wkn.jni.functions;
  *
  * @author Artem Pikalov
  * @author Alexey Konev
- * @author Dinar Mahmutov
  */
 public interface IAssemblerFunctions {
 

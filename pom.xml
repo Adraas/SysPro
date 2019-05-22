@@ -28,13 +28,6 @@
                 <role>designer</role>
             </roles>
         </developer>
-        <developer>
-            <id>3</id>
-            <name>Dinar Mahmutov</name>
-            <roles>
-                <role>consultant</role>
-            </roles>
-        </developer>
     </developers>
 
     <properties>
