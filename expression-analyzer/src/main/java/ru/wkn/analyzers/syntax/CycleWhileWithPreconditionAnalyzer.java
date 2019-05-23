@@ -16,6 +16,7 @@ import java.util.regex.Pattern;
 
 /**
  * The class {@code CycleWhileWithPreconditionAnalyzer} represents analyzer for the C# expressions.
+ * Analyzer works by means regular expressions for each element of input expression.
  *
  * @see ExpressionAnalyzer
  * @author Artem Pikalov
