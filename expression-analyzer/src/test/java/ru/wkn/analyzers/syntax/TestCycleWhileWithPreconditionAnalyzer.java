@@ -69,7 +69,7 @@ class TestCycleWhileWithPreconditionAnalyzer {
                 .getResource(path)).toURI()));
         Iterator<String> iterator = stream.iterator();
         while (iterator.hasNext()) {
-            expressionForAnalysis = expressionForAnalysis.concat(iterator.next());
+            expressionForAnalysis = expressionForAnalysis.concat(iterator.next()).concat("\n");
         }
         return expressionForAnalysis;
     }

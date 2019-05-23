@@ -274,6 +274,9 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
 
     private boolean isLineCorrect(String cycleBodyLine, int currentBodyLine) throws ExpressionException,
             SemanticsException {
+        if (cycleBodyLine.trim().isEmpty()) {
+            return true;
+        }
         ActionType actionType = getLineTypeAction(cycleBodyLine, currentBodyLine);
         switch (Objects.requireNonNull(actionType)) {
             case INVOCATION:
