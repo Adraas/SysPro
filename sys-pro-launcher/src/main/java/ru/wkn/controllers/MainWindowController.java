@@ -2,7 +2,11 @@ package ru.wkn.controllers;
 
 import javafx.fxml.FXML;
 
-public class MainWindowController {
+public class MainWindowController extends Controller {
+
+    public MainWindowController(WindowRepository windowRepository) {
+        super(windowRepository);
+    }
 
     @FXML
     private void clickOnFile() {
