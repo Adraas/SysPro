@@ -29,6 +29,7 @@ public class Launcher extends Application {
             window.show();
         } catch (IOException | WindowTypeException e) {
             log.warning(e.getMessage());
+            e.printStackTrace();
         }
     }
 }
