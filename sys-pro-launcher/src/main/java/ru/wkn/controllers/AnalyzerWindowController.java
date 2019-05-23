@@ -12,4 +12,8 @@ public class AnalyzerWindowController {
     private TextArea messageLogArea;
     @FXML
     private ChoiceBox variantChoseBox;
+
+    @FXML
+    private void onClickRun() {
+    }
 }

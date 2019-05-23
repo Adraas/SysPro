@@ -15,4 +15,8 @@ public class AssemblerMathWindowController {
     private TextField inputBField;
     @FXML
     private TextArea assemblerMessageLog;
+
+    @FXML
+    private void onClickRun() {
+    }
 }
