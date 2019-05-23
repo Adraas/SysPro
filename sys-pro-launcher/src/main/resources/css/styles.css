@@ -1,0 +1,7 @@
+div.myButton input {
+    background:url(../images/play.png) no-repeat;
+    cursor:pointer;
+    width: 25px;
+    height: 25px;
+    border: none;
+}
