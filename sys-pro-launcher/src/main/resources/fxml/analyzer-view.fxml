@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
-<AnchorPane prefHeight="422.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/2.2"
+<AnchorPane prefHeight="422.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.wkn.controllers.AnalyzerWindowController">
     <children>
         <TextArea fx:id="inputArea" layoutX="150.0" layoutY="69.0" prefHeight="164.0" prefWidth="428.0"/>
@@ -13,5 +14,6 @@
         <Label layoutX="61.0" layoutY="314.0" prefHeight="17.0" prefWidth="82.0" text="Message log:"/>
         <Label layoutX="32.0" layoutY="41.0" prefHeight="17.0" prefWidth="112.0" text="Choose the variant:"/>
         <ChoiceBox fx:id="variantChoseBox" layoutX="150.0" layoutY="37.0" prefWidth="150.0"/>
+        <CheckBox layoutX="392.0" layoutY="41.0" mnemonicParsing="false" text="semantics checking is activated"/>
     </children>
 </AnchorPane>
