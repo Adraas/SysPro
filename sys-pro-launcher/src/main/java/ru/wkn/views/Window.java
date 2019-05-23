@@ -22,10 +22,23 @@ public class Window implements IWindow {
         this.height = height;
     }
 
+    public Window(String resource, String title, int width, int height, Stage stage) {
+        this.resource = resource;
+        this.title = title;
+        this.width = width;
+        this.height = height;
+        this.stage = stage;
+    }
+
     @Override
     public void show() throws IOException {
         init();
         stage.show();
+    }
+
+    @Override
+    public void hide() {
+        stage.hide();
     }
 
     @Override

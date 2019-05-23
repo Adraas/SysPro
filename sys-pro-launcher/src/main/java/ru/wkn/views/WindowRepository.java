@@ -26,6 +26,10 @@ public class WindowRepository {
         return window;
     }
 
+    public IWindow getWindow(WindowType windowType) {
+        return windows.get(windowType);
+    }
+
     public void deleteWindow(WindowType windowType) {
         windows.remove(windowType);
     }

@@ -1,5 +1,6 @@
 package ru.wkn.views;
 
+import javafx.stage.Stage;
 import ru.wkn.exceptions.WindowTypeException;
 
 public class WindowFactory implements IWindowFactory {
@@ -16,7 +17,9 @@ public class WindowFactory implements IWindowFactory {
                 title = "SysPro 1.0 | Main window";
                 width = 600;
                 height = 400;
-                break;
+                Stage stage = new Stage();
+                stage.setOnCloseRequest(event -> System.exit(0));
+                return new Window(resource, title, width, height, stage);
             }
             case ANALYZER_WINDOW: {
                 resource = "/fxml/analyzer-view.fxml";

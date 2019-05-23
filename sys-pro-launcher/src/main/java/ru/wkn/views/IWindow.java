@@ -6,5 +6,7 @@ public interface IWindow {
 
     void show() throws IOException;
 
+    void hide();
+
     void close();
 }
