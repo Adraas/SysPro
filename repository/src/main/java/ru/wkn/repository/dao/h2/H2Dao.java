@@ -14,12 +14,29 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * The interface {@code H2Dao} represents the implementation layout data access object for the H2 Database.
+ *
+ * @see IDao
+ * @author Artem Pikalov
+ */
 @AllArgsConstructor
 @Log
 public class H2Dao<V, I extends Serializable> implements IDao<V, I> {
 
+    /**
+     * The meta-data about entity object.
+     */
     private Class<V> entityClass;
+
+    /**
+     * The object represents connection session.
+     */
     private Session session;
+
+    /**
+     * The enum object represents datasource name.
+     */
     private EntityInstance entityInstance;
 
     @Override

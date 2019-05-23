@@ -8,8 +8,18 @@ import ru.wkn.repository.dao.h2.H2Dao;
 
 import java.io.Serializable;
 
+/**
+ * The interface {@code DaoFactory} contains factory method for the {@code IDao}
+ * objects creating with implement.
+ *
+ * @see IDao
+ * @author Artem Pikalov
+ */
 public class DaoFactory<V, I extends Serializable> implements IDaoFactory<V, I> {
 
+    /**
+     * @see IDaoFactory#createDao(EntityInstance, Session)
+     */
     @Override
     public IDao<V, I> createDao(EntityInstance entityInstance, Session session) {
         return entityInstance.equals(EntityInstance.NETWORK_RESOURCE)
