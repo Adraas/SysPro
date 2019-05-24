@@ -2,7 +2,6 @@ package ru.wkn.controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
-import ru.wkn.views.WindowRepository;
 import ru.wkn.views.WindowType;
 
 import java.io.IOException;
@@ -11,10 +10,6 @@ import java.io.Reader;
 import java.util.Properties;
 
 public class MainWindowController extends Controller {
-
-    public MainWindowController(WindowRepository windowRepository) {
-        super(windowRepository);
-    }
 
     @FXML
     private void clickOnFile() {
@@ -35,7 +30,7 @@ public class MainWindowController extends Controller {
     private void clickOnAbout() {
         Properties properties = new Properties();
         Reader reader =
-                new InputStreamReader(getClass().getResourceAsStream("/information/information.properties"));
+                new InputStreamReader(getClass().getResourceAsStream("/information/info.properties"));
         try {
             properties.load(reader);
         } catch (IOException e) {

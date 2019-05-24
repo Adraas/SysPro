@@ -1,20 +1,19 @@
 package ru.wkn.controllers;
 
 import javafx.scene.control.Alert;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import ru.wkn.exceptions.WindowTypeException;
 import ru.wkn.views.IWindow;
+import ru.wkn.views.WindowFactory;
 import ru.wkn.views.WindowRepository;
 import ru.wkn.views.WindowType;
 
 import java.io.IOException;
 
-@AllArgsConstructor
 @Getter
 public abstract class Controller {
 
-    private WindowRepository windowRepository;
+    private WindowRepository windowRepository = new WindowRepository(new WindowFactory());
 
     public void showInformation(String title, String message, Alert.AlertType alertType) {
         Alert alert = new Alert(alertType);
