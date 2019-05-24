@@ -14,6 +14,7 @@ public class Window implements IWindow {
     private int width;
     private int height;
     private Stage stage = new Stage();
+    private boolean isInitialized = false;
 
     public Window(String resource, String title, int width, int height) {
         this.resource = resource;
@@ -32,7 +33,10 @@ public class Window implements IWindow {
 
     @Override
     public void show() throws IOException {
-        init();
+        if (!isInitialized) {
+            init();
+            isInitialized = true;
+        }
         stage.show();
     }
 
