@@ -39,6 +39,9 @@ public class H2Dao<V, I extends Serializable> implements IDao<V, I> {
      */
     private EntityInstance entityInstance;
 
+    /**
+     * @see IDao#create(V)
+     */
     @Override
     public boolean create(V newInstance) throws PersistenceException {
         Transaction transaction = null;
@@ -55,11 +58,17 @@ public class H2Dao<V, I extends Serializable> implements IDao<V, I> {
         return true;
     }
 
+    /**
+     * @see IDao#read(I)
+     */
     @Override
     public V read(I index) {
         return session.get(entityClass, index);
     }
 
+    /**
+     * @see IDao#update(V)
+     */
     @Override
     public boolean update(V transientInstance) throws PersistenceException {
         Transaction transaction = null;
@@ -76,6 +85,9 @@ public class H2Dao<V, I extends Serializable> implements IDao<V, I> {
         return true;
     }
 
+    /**
+     * @see IDao#delete(V)
+     */
     @Override
     public boolean delete(V transientInstance) throws PersistenceException {
         Transaction transaction = null;
@@ -92,6 +104,9 @@ public class H2Dao<V, I extends Serializable> implements IDao<V, I> {
         return true;
     }
 
+    /**
+     * @see IDao#getAll()
+     */
     @Override
     public List<V> getAll() {
         List<V> vList;

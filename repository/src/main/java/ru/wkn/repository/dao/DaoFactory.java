@@ -9,8 +9,8 @@ import ru.wkn.repository.dao.h2.H2Dao;
 import java.io.Serializable;
 
 /**
- * The interface {@code DaoFactory} contains factory method for the {@code IDao}
- * objects creating with implement.
+ * The interface {@code DaoFactory} contains factory method implementation for the {@code IDao}
+ * objects creating.
  *
  * @see IDao
  * @author Artem Pikalov

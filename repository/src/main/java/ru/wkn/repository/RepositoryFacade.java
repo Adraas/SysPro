@@ -13,15 +13,32 @@ import ru.wkn.repository.services.ServiceFactory;
 
 import java.io.Serializable;
 
+/**
+ * The class {@code RepositoryFacade} represents the facade design pattern for the repository.
+ *
+ * @author Artem Pikalov
+ */
+@Getter
 public class RepositoryFacade<V, I extends Serializable> {
 
-    @Getter
+    /**
+     * The service for the working with the repository.
+     */
     private IService service;
 
+    /**
+     * Initializes a newly created {@code RepositoryFacade} object
+     * @param entityInstance the enum object represents datasource name
+     */
     public RepositoryFacade(EntityInstance entityInstance) {
         serviceReinitialize(entityInstance);
     }
 
+    /**
+     * The method for the initializing {@code IService} instance.
+     *
+     * @param entityInstance the enum object represents datasource name
+     */
     public void serviceReinitialize(EntityInstance entityInstance) {
         IDaoFactory<V, I> daoFactory = new DaoFactory<>();
         IDao<V, I> dao = daoFactory.createDao(entityInstance,
