@@ -47,7 +47,8 @@ public class Window implements IWindow {
 
     @Override
     public void close() {
-        stage.close();
+        hide();
+        isInitialized = false;
     }
 
     private void init() throws IOException {
@@ -59,6 +60,7 @@ public class Window implements IWindow {
 
     @Override
     protected void finalize() {
+        close();
         stage = null;
     }
 }

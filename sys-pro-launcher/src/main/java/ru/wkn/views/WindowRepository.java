@@ -2,6 +2,7 @@ package ru.wkn.views;
 
 import lombok.AllArgsConstructor;
 import ru.wkn.exceptions.WindowTypeException;
+import ru.wkn.views.events.SwitchingEvent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,8 +21,9 @@ public class WindowRepository {
         return windows.containsKey(windowType);
     }
 
-    public IWindow addWindow(WindowType windowType) throws WindowTypeException {
-        IWindow window = windowFactory.createWindow(windowType);
+    public IWindow addWindow(WindowType windowType, SwitchingEvent<WindowType> switchingEvent)
+            throws WindowTypeException {
+        IWindow window = windowFactory.createWindow(windowType, switchingEvent);
         windows.put(windowType, window);
         return window;
     }

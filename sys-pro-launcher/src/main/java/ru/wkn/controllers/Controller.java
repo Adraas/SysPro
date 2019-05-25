@@ -2,32 +2,40 @@ package ru.wkn.controllers;
 
 import javafx.scene.control.Alert;
 import lombok.Getter;
-import ru.wkn.exceptions.WindowTypeException;
 import ru.wkn.views.IWindow;
+import ru.wkn.views.IWindowFactory;
 import ru.wkn.views.WindowFactory;
 import ru.wkn.views.WindowRepository;
 import ru.wkn.views.WindowType;
+import ru.wkn.views.events.SwitchingEvent;
 
 import java.io.IOException;
 
-@Getter
 public abstract class Controller {
 
-    private WindowRepository windowRepository = new WindowRepository(new WindowFactory());
+    @Getter
+    private static WindowRepository windowRepository;
+    @Getter
+    private static SwitchingEvent<WindowType> switchingEvent = Controller::openNewWindow;
 
-    public void showInformation(String title, String message, Alert.AlertType alertType) {
+    static {
+        IWindowFactory windowFactory = new WindowFactory();
+        windowRepository = new WindowRepository(windowFactory);
+    }
+
+    protected static void showInformation(String title, String message, Alert.AlertType alertType) {
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
         alert.setContentText(message);
         alert.show();
     }
 
-    public void openNewWindow(WindowType currentWindowType, WindowType newWindowType) {
+    protected static void openNewWindow(WindowType currentWindowType, WindowType newWindowType) {
         try {
-            getWindowRepository().getWindow(currentWindowType).hide();
-            IWindow newWindow = getWindowRepository().addWindow(newWindowType);
+            windowRepository.getWindow(currentWindowType).hide();
+            IWindow newWindow = windowRepository.getWindow(newWindowType);
             newWindow.show();
-        } catch (WindowTypeException | IOException e) {
+        } catch (IOException e) {
             showInformation("Error", e.getMessage(), Alert.AlertType.ERROR);
             e.printStackTrace();
         }
