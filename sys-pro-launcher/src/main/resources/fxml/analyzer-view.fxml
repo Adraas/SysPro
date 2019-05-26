@@ -14,8 +14,8 @@
                   minHeight="-Infinity" minWidth="-Infinity" prefHeight="164.0" prefWidth="428.0"/>
         <Label layoutX="23.0" layoutY="69.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
                minWidth="-Infinity" prefHeight="17.0" prefWidth="121.0" text="Input the construction:"/>
-        <TextArea fx:id="messageLogArea" layoutX="150.0" layoutY="240.0" maxHeight="-Infinity" maxWidth="-Infinity"
-                  minHeight="-Infinity" minWidth="-Infinity" prefHeight="164.0" prefWidth="428.0"/>
+        <TextArea fx:id="messageLogArea" editable="false" layoutX="150.0" layoutY="240.0" maxHeight="-Infinity"
+                  maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="164.0" prefWidth="428.0"/>
         <Label layoutX="73.0" layoutY="240.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
                minWidth="-Infinity" prefHeight="17.0" prefWidth="71.0" text="Message log:"/>
         <Label layoutX="41.0" layoutY="41.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
