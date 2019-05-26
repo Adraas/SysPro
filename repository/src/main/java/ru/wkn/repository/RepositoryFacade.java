@@ -27,8 +27,13 @@ public class RepositoryFacade<V, I extends Serializable> {
     private IService service;
 
     /**
+     * The enum object represents datasource name
+     */
+    private EntityInstance entityInstance;
+
+    /**
      * Initializes a newly created {@code RepositoryFacade} object
-     * @param entityInstance the enum object represents datasource name
+     * @param entityInstance {@link #entityInstance}
      */
     public RepositoryFacade(EntityInstance entityInstance) {
         serviceReinitialize(entityInstance);
