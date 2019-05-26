@@ -9,7 +9,7 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
-            prefWidth="600.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+            prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="ru.wkn.controllers.FileDBWindowController">
     <children>
         <MenuBar maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0"
@@ -17,37 +17,40 @@
             <menus>
                 <Menu mnemonicParsing="false" text="File">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="New file"/>
-                        <Menu mnemonicParsing="false" text="Data source">
+                        <MenuItem mnemonicParsing="false" onAction="#clickOnNewFile" text="New file"/>
+                        <Menu mnemonicParsing="false" text="Open">
                             <items>
-                                <MenuItem mnemonicParsing="false" text="Open file"/>
-                                <MenuItem mnemonicParsing="false" text="Open database"/>
+                                <MenuItem mnemonicParsing="false" onAction="#clickOnOpenFile" text="file"/>
+                                <MenuItem mnemonicParsing="false" onAction="#clickOnOpenDatabase" text="database"/>
                             </items>
                         </Menu>
                         <Menu mnemonicParsing="false" text="Save as/to">
                             <items>
-                                <MenuItem mnemonicParsing="false" text="file"/>
-                                <MenuItem mnemonicParsing="false" text="database"/>
+                                <MenuItem mnemonicParsing="false" onAction="#clickOnSaveAsFile" text="file"/>
+                                <MenuItem mnemonicParsing="false" onAction="#clickOnSaveToDatabase" text="database"/>
                             </items>
                         </Menu>
                     </items>
                 </Menu>
             </menus>
         </MenuBar>
-        <Button layoutX="530.0" layoutY="92.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-                minWidth="-Infinity" mnemonicParsing="false" onAction="#clickOnAdd" prefHeight="25.0" prefWidth="56.0"
-                text="Add"/>
-        <Button fx:id="editButton" layoutX="530.0" layoutY="123.0" maxHeight="-Infinity" maxWidth="-Infinity"
-                minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#clickOnEdit"
-                prefHeight="25.0" prefWidth="56.0" text="Edit"/>
-        <Button fx:id="deleteButton" layoutX="530.0" layoutY="154.0" maxHeight="-Infinity" maxWidth="-Infinity"
-                minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#clickOnDelete"
-                prefHeight="25.0" prefWidth="56.0" text="Delete"/>
+        <Button fx:id="addButton" disable="true" layoutX="530.0" layoutY="92.0" maxHeight="-Infinity"
+                maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false"
+                onAction="#clickOnAdd" prefHeight="25.0" prefWidth="56.0" text="Add"/>
+        <Button fx:id="editButton" disable="true" layoutX="530.0" layoutY="123.0" maxHeight="-Infinity"
+                maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false"
+                onAction="#clickOnEdit" prefHeight="25.0" prefWidth="56.0" text="Edit"/>
+        <Button fx:id="deleteButton" disable="true" layoutX="530.0" layoutY="154.0" maxHeight="-Infinity"
+                maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false"
+                onAction="#clickOnDelete" prefHeight="25.0" prefWidth="56.0" text="Delete"/>
+        <Button layoutX="300.0" layoutY="49.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+                minWidth="-Infinity" mnemonicParsing="false" onAction="#clickOnUpdate" prefHeight="25.0"
+                prefWidth="25.0" styleClass="iconButtonUpdate" stylesheets="@../css/styles.css"/>
         <TableView fx:id="tableView" layoutX="14.0" layoutY="92.0" maxHeight="-Infinity" maxWidth="-Infinity"
                    minHeight="-Infinity" minWidth="-Infinity" prefHeight="294.0" prefWidth="504.0"/>
         <Label layoutX="14.0" layoutY="51.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
                minWidth="-Infinity" prefHeight="17.0" prefWidth="112.0" text="Choose the variant:"/>
-        <ChoiceBox fx:id="choiceBoxVariant" layoutX="132.0" layoutY="49.0" maxHeight="-Infinity" maxWidth="-Infinity"
+        <ChoiceBox fx:id="choiceBoxVariants" layoutX="132.0" layoutY="49.0" maxHeight="-Infinity" maxWidth="-Infinity"
                    minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="150.0"/>
     </children>
 </AnchorPane>
