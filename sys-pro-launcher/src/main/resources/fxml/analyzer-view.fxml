@@ -27,6 +27,6 @@
                   text="semantics checking is activated"/>
         <Button layoutX="339.0" layoutY="37.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
                 minWidth="-Infinity" mnemonicParsing="false" onAction="#onClickRun" prefHeight="25.0" prefWidth="25.0"
-                styleClass="buttonRun" stylesheets="@../css/styles.css"/>
+                styleClass="iconButtonRun" stylesheets="@../css/styles.css"/>
     </children>
 </AnchorPane>
