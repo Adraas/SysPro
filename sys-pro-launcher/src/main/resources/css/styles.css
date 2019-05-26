@@ -1,6 +1,5 @@
-.buttonRun {
-    -fx-graphic: url('../images/play.png') no-repeat;
-    -fx-cursor: pointer;
-    -fx-pref-width: 0.939%;
-    -fx-pref-height: 0.939%;
+.iconButtonRun {
+    -fx-background-color: image-pattern('../images/play.png', 0, 0, 0.939%, 0.939%, true);
+    -fx-background-repeat: no-repeat;
+    -fx-cursor: hand;
 }
