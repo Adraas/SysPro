@@ -1,11 +1,10 @@
-package ru.wkn.filerw.readers;
+package ru.wkn.filerw.files;
 
 import ru.wkn.entries.IEntry;
 import ru.wkn.entries.IEntryFactory;
 import ru.wkn.entries.ParametersDelimiter;
 import ru.wkn.entries.exceptions.EntryException;
-import ru.wkn.filerw.files.EFile;
-import ru.wkn.filerw.files.FileExtension;
+import ru.wkn.filerw.readers.EntriesDelimiter;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -43,9 +42,10 @@ public class FileFactory<T extends IEntry> implements IFileFactory<T> {
             boolean fileIsReadyToRead = true;
             while (fileIsReadyToRead) {
                 String parametersLine = "";
-                while (!parametersLine.contains(entriesDelimiter.getEntryDelimiter())) {
+                int charactersNumber = 0;
+                while (charactersNumber != -1 && !parametersLine.contains(entriesDelimiter.getEntryDelimiter())) {
                     char[] buffer = new char[1];
-                    int charactersNumber = bufferedReader.read(buffer);
+                    charactersNumber = bufferedReader.read(buffer);
                     if (charactersNumber != -1) {
                         parametersLine = parametersLine.concat(new String(buffer));
                     } else {
