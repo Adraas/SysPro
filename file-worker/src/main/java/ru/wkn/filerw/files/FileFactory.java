@@ -31,8 +31,8 @@ public class FileFactory<T extends IEntry> implements IFileFactory<T> {
     public EFile<T> createEFile(String path, String charsetName, EntriesDelimiter entriesDelimiter,
                                 IEntryFactory entryFactory, ParametersDelimiter parametersDelimiter)
             throws IOException, EntryException {
-        String[] extensionGroups = path.split(".");
-        FileExtension fileExtension = FileExtension.valueOf(extensionGroups[extensionGroups.length - 1]
+        String[] extensionGroups = path.split("\\.");
+        FileExtension fileExtension = FileExtension.getInstance(extensionGroups[extensionGroups.length - 1]
                 .toLowerCase());
         List<T> entries = new ArrayList<>();
 

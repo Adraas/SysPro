@@ -30,9 +30,9 @@ public class EntryFactory implements IEntryFactory {
             throw new EntryException("parameters is incorrect");
         }
         IEntry entry = parametersDelimiter.equals(ParametersDelimiter.RESOURCE_CSV_DELIMITER)
-                ? new ResourceEntry(parameters[0], AccessMode.valueOf(parameters[1]), Date.valueOf(parameters[2]))
+                ? new ResourceEntry(parameters[0], AccessMode.getInstance(parameters[1]), Date.valueOf(parameters[2]))
                 : parametersDelimiter.equals(ParametersDelimiter.SERVER_PLAIN_TEXT_DELIMITER)
-                ? new ServerEntry(parameters[0], Integer.valueOf(parameters[1]), ProtocolType.valueOf(parameters[2]))
+                ? new ServerEntry(parameters[0], Integer.valueOf(parameters[1]), ProtocolType.getInstance(parameters[2]))
                 : parametersDelimiter.equals(ParametersDelimiter.ACCESS_BIN_DELIMITER)
                 ? new AccessEntry(parameters[0], parameters[1], parameters[2])
                 : null;

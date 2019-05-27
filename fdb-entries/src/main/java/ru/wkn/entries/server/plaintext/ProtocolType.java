@@ -1,29 +1,61 @@
 package ru.wkn.entries.server.plaintext;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The enum {@code ProtocolType} contains typical protocol types.
  *
  * @author Alexey Konev
  */
-@AllArgsConstructor
 public enum  ProtocolType {
 
     /**
-     * Transmission Control Protocol.
+     * The transmission control protocol.
      */
     TCP("tcp"),
 
     /**
-     * User Datagram Protocol
+     * The user datagram protocol.
      */
     UPD("udp");
 
     /**
-     * Protocol type as {@code String} line;
+     * The protocol type as {@code String} value.
      */
     @Getter
     private String protocolType;
+
+    /**
+     * The map contains all protocol types as {@code String} objects.
+     */
+    private static Map<String, ProtocolType> protocolTypesMap;
+
+    static {
+        protocolTypesMap = new HashMap<>();
+        for (ProtocolType protocolType : ProtocolType.values()) {
+            protocolTypesMap.put(protocolType.getProtocolType(), protocolType);
+        }
+    }
+
+    /**
+     * Initializes a newly created {@code ProtocolType} object.
+     *
+     * @param protocolType {@link #protocolType}
+     */
+    ProtocolType(String protocolType) {
+        this.protocolType = protocolType;
+    }
+
+    /**
+     * The method to receive {@code ProtocolType} enum value by {@code String} value.
+     *
+     * @param protocolType {@link #protocolType}
+     * @return {@code ProtocolType} enum value by key
+     */
+    public static ProtocolType getInstance(String protocolType) {
+        return protocolTypesMap.get(protocolType);
+    }
 }
