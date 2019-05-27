@@ -1,10 +1,10 @@
-package ru.wkn.filerw.readers;
+package ru.wkn.filerw.files;
 
 import ru.wkn.entries.IEntry;
 import ru.wkn.entries.IEntryFactory;
 import ru.wkn.entries.ParametersDelimiter;
 import ru.wkn.entries.exceptions.EntryException;
-import ru.wkn.filerw.files.EFile;
+import ru.wkn.filerw.readers.EntriesDelimiter;
 
 import java.io.IOException;
 
