@@ -24,7 +24,7 @@ public class RepositoryFacade<V, I extends Serializable> {
     /**
      * The service for the working with the repository.
      */
-    private IService service;
+    private IService<V, I> service;
 
     /**
      * The enum object represents datasource name
