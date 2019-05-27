@@ -1,29 +1,44 @@
 package ru.wkn.controllers;
 
+import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import ru.wkn.entries.resource.csv.AccessMode;
+import javafx.stage.FileChooser;
+import lombok.AllArgsConstructor;
+import ru.wkn.FileRWFacade;
+import ru.wkn.entries.EntryFactory;
+import ru.wkn.entries.IEntryFactory;
+import ru.wkn.entries.ParametersDelimiter;
+import ru.wkn.entries.exceptions.EntryException;
 import ru.wkn.entries.resource.csv.ResourceEntry;
-import ru.wkn.entries.server.plaintext.ProtocolType;
 import ru.wkn.entries.server.plaintext.ServerEntry;
-import ru.wkn.exceptions.ControllerException;
+import ru.wkn.filerw.EFileReader;
+import ru.wkn.filerw.EFileWriter;
+import ru.wkn.filerw.files.EFile;
+import ru.wkn.filerw.files.FileFactory;
+import ru.wkn.filerw.files.IFileFactory;
+import ru.wkn.filerw.readers.EntriesDelimiter;
+import ru.wkn.filerw.readers.FileReader;
+import ru.wkn.filerw.writers.FileWriter;
 import ru.wkn.repository.RepositoryFacade;
 import ru.wkn.repository.dao.EntityInstance;
 
-import java.sql.Date;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 // TODO: complete this class
 public class FileDBWindowController extends Controller {
 
     @FXML
-    private ChoiceBox choiceBoxVariants;
+    private ChoiceBox<String> choiceBoxVariants;
     @FXML
     private Button addButton;
     @FXML
@@ -31,10 +46,32 @@ public class FileDBWindowController extends Controller {
     @FXML
     private Button deleteButton;
     @FXML
-    private TableView tableView;
+    private TableView<ResourceEntry> resourceEntryTableView;
+    @FXML
+    private TableView<ServerEntry> serverEntryTableView;
+    private FileChooser fileChooser;
 
     private DatasourceType datasourceType;
-    private RepositoryFacade repositoryFacade;
+    private RepositoryFacade<ResourceEntry, Long> resourceEntryRepositoryFacade;
+    private RepositoryFacade<ServerEntry, Long> serverEntryRepositoryFacade;
+
+    private String charsetName = "windows-1251";
+    private IFileFactory<ResourceEntry> resourceEntryIFileFactory;
+    private IFileFactory<ServerEntry> serverEntryIFileFactory;
+    private FileRWFacade<ResourceEntry> resourceEntryFileRWFacade;
+    private FileRWFacade<ServerEntry> serverEntryFileRWFacade;
+
+    private EFileReader<ResourceEntry> resourceEntryEFileReader;
+    private EFileWriter<ServerEntry> serverEntryEFileWriter;
+
+    private EFileReader<ServerEntry> serverEntryEFileReader;
+    private EFileWriter<ResourceEntry> resourceEntryEFileWriter;
+
+    private EFile<ResourceEntry> resourceEntryEFile;
+    private EFile<ServerEntry> serverEntryEFile;
+
+    private List<ResourceEntry> resourceEntries;
+    private List<ServerEntry> serverEntries;
 
     public void initialize() {
         String[] variantItems = new String[]{"CSV: Network resource", "TXT: Network server"};
@@ -42,20 +79,54 @@ public class FileDBWindowController extends Controller {
                 FXCollections.observableArrayList(variantItems);
         choiceBoxVariants.setItems(variants);
         choiceBoxVariants.setValue(variantItems[0]);
+
+        // TODO: fix setting visible property for tables
+        ChangeListener<String> changeListener = (observable, oldValue, newValue) -> {
+            String variant = choiceBoxVariants.getValue();
+            if (variant.equals(choiceBoxVariants.getItems().get(0))) {
+                resourceEntryTableView.setVisible(true);
+                serverEntryTableView.setVisible(false);
+                setDisablePropertiesForButtons(false, true, true);
+            }
+            if (variant.equals(choiceBoxVariants.getItems().get(1))) {
+                resourceEntryTableView.setVisible(false);
+                serverEntryTableView.setVisible(true);
+                setDisablePropertiesForButtons(false, true, true);
+            }
+            updateTableView();
+        };
+        choiceBoxVariants.getSelectionModel().selectedItemProperty().addListener(changeListener);
+
+        datasourceType = DatasourceType.NONE;
+        resourceEntries = new ArrayList<>();
+        serverEntries = new ArrayList<>();
+
+        fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("CSV", "*.csv"),
+                new FileChooser.ExtensionFilter("Plain Text", "*.txt"));
     }
 
     @FXML
-    private void clickOnNewFile() {
+    private void clickOnNewList() {
+        clearTableView();
+        datasourceType = DatasourceType.NONE;
     }
 
     @FXML
     private void clickOnOpenFile() {
+        Platform.runLater(() -> {
+            openFile();
+            initFileRWFacade();
+            updateTableView();
+        });
     }
 
     @FXML
     private void clickOnOpenDatabase() {
-        initializeRepositoryFacade();
-        datasourceType = DatasourceType.DATABASE;
+        Platform.runLater(() -> {
+            datasourceType = DatasourceType.DATABASE;
+            updateTableView();
+        });
     }
 
     @FXML
@@ -78,81 +149,173 @@ public class FileDBWindowController extends Controller {
     private void clickOnDelete() {
     }
 
-    @FXML
-    private void clickOnUpdate() {
-        boolean addButtonVisible;
-        boolean editAndDeleteButtonsVisible;
-        try {
-            updateTableView();
-            addButtonVisible = true;
-            editAndDeleteButtonsVisible = tableView.getItems().size() > 0;
-        } catch (ControllerException e) {
-            addButtonVisible = false;
-            editAndDeleteButtonsVisible = false;
-        }
-        setVisibleProperties(addButtonVisible, editAndDeleteButtonsVisible, editAndDeleteButtonsVisible);
-    }
-
-    private void setVisibleProperties(boolean addButtonVisible, boolean editButtonVisible, boolean deleteButtonVisible) {
-        addButton.setVisible(addButtonVisible);
-        editButton.setVisible(editButtonVisible);
-        deleteButton.setVisible(deleteButtonVisible);
-    }
-
     private void clearTableView() {
-        tableView.getItems().clear();
-        tableView.getColumns().clear();
+        resourceEntryTableView.getItems().clear();
+        serverEntryTableView.getColumns().clear();
     }
 
-    // TODO: complete this method
-    private void updateTableView() throws ControllerException {
-        clearTableView();
-        String variant = (String) choiceBoxVariants.getValue();
-        if (variant.equals(choiceBoxVariants.getItems().get(0))) {
-            TableColumn<ResourceEntry, Long> idColumn = new TableColumn<>("ID");
-            TableColumn<ResourceEntry, String> urlColumn = new TableColumn<>("URL");
-            TableColumn<ResourceEntry, AccessMode> accessModeColumn = new TableColumn<>("Access mode");
-            TableColumn<ResourceEntry, Date> dateAccessColumn = new TableColumn<>("Date access");
-            tableView.getColumns().addAll(idColumn, urlColumn, accessModeColumn, dateAccessColumn);
+    private void openFile() {
+        datasourceType = DatasourceType.FILE;
+        File file = fileChooser.showOpenDialog(null);
+        String fileName = file.getName();
+        if (fileName.endsWith("csv")) {
+            choiceBoxVariants.setValue(choiceBoxVariants.getItems().get(0));
+            if (resourceEntryIFileFactory == null) {
+                resourceEntryIFileFactory = new FileFactory<>();
+            }
+        } else {
+            if (fileName.endsWith("txt")) {
+                choiceBoxVariants.setValue(choiceBoxVariants.getItems().get(1));
+                if (serverEntryIFileFactory == null) {
+                    serverEntryIFileFactory = new FileFactory<>();
+                }
+            }
+        }
+        IEntryFactory entryFactory = new EntryFactory();
+        String variant = choiceBoxVariants.getValue();
+        try {
+            if (variant.equals(choiceBoxVariants.getItems().get(0))) {
+                resourceEntryEFile = resourceEntryIFileFactory.createEFile(file.getAbsolutePath(), charsetName,
+                        EntriesDelimiter.CSV_DELIMITER, entryFactory, ParametersDelimiter.RESOURCE_CSV_DELIMITER);
+                resourceEntries = resourceEntryEFile.getEntries();
+            } else {
+                if (variant.equals(choiceBoxVariants.getItems().get(1))) {
+                    serverEntryEFile = serverEntryIFileFactory.createEFile(file.getAbsolutePath(), charsetName,
+                            EntriesDelimiter.PLAIN_TEXT_DELIMITER, entryFactory,
+                            ParametersDelimiter.SERVER_PLAIN_TEXT_DELIMITER);
+                    serverEntries = serverEntryEFile.getEntries();
+                }
+            }
+        } catch (IOException | EntryException e) {
+            e.printStackTrace();
+            showInformation("Error", e.getMessage(), Alert.AlertType.ERROR);
+        }
+    }
 
-            List<ResourceEntry> resourceEntries;
+    // TODO: simplify method, combine duplicates
+    private void initFileRWFacade() {
+        String variant = choiceBoxVariants.getValue();
+        if (variant.equals(choiceBoxVariants.getItems().get(0))) {
+            if (resourceEntryEFileReader == null) {
+                resourceEntryEFileReader = new FileReader<>(resourceEntryEFile);
+            }
+            if (resourceEntryEFileWriter == null) {
+                resourceEntryEFileWriter = new FileWriter<>(resourceEntryEFile, charsetName);
+            }
+            if (resourceEntryFileRWFacade == null) {
+                resourceEntryFileRWFacade = new FileRWFacade<>(resourceEntryEFileReader, resourceEntryEFileWriter);
+            }
+        } else {
+            if (variant.equals(choiceBoxVariants.getItems().get(1))) {
+                if (serverEntryEFileReader == null) {
+                    serverEntryEFileReader = new FileReader<>(serverEntryEFile);
+                }
+                if (serverEntryEFileWriter == null) {
+                    serverEntryEFileWriter = new FileWriter<>(serverEntryEFile, charsetName);
+                }
+                if (serverEntryFileRWFacade == null) {
+                    serverEntryFileRWFacade = new FileRWFacade<>(serverEntryEFileReader, serverEntryEFileWriter);
+                }
+            }
+        }
+    }
+
+    // TODO: simplify method, combine duplicates
+    private void updateTableView() {
+        clearTableView();
+        String variant = choiceBoxVariants.getValue();
+        if (variant.equals(choiceBoxVariants.getItems().get(0))) {
             switch (datasourceType) {
                 case FILE: {
+                    resourceEntryTableView.getItems().addAll(resourceEntries);
+                    break;
                 }
                 case DATABASE: {
-                    tableView.getItems().addAll(repositoryFacade.getService().getAll());
+                    initRepositoryFacade();
+                    resourceEntries = resourceEntryRepositoryFacade.getService().getAll();
+                    resourceEntryTableView.getItems().addAll(resourceEntries);
+                    break;
+                }
+                case NONE: {
+                    break;
                 }
                 default: {
                     showInformation("Error", "This datasource type not found!", Alert.AlertType.ERROR);
-                    throw new ControllerException("datasource not found");
                 }
             }
         } else {
             if (variant.equals(choiceBoxVariants.getItems().get(1))) {
-                TableColumn<ServerEntry, Long> idColumn = new TableColumn<>("ID");
-                TableColumn<ServerEntry, String> urlColumn = new TableColumn<>("URL");
-                TableColumn<ServerEntry, Integer> portColumn = new TableColumn<>("Port");
-                TableColumn<ServerEntry, ProtocolType> protocolTypeColumn = new TableColumn<>("Protocol type");
-                tableView.getColumns().addAll(idColumn, urlColumn, portColumn, protocolTypeColumn);
+                switch (datasourceType) {
+                    case FILE: {
+                        serverEntryTableView.getItems().addAll(serverEntries);
+                        break;
+                    }
+                    case DATABASE: {
+                        initRepositoryFacade();
+                        serverEntries = serverEntryRepositoryFacade.getService().getAll();
+                        serverEntryTableView.getItems().addAll(serverEntries);
+                        break;
+                    }
+                    case NONE: {
+                        break;
+                    }
+                    default: {
+                        showInformation("Error", "This datasource type not found!", Alert.AlertType.ERROR);
+                    }
+                }
             }
         }
+        updateButtons();
     }
 
-    private void initializeRepositoryFacade() {
-        String variant = (String) choiceBoxVariants.getValue();
-        if (variant.equals(choiceBoxVariants.getItems().get(0))
-                && !repositoryFacade.getEntityInstance().equals(EntityInstance.NETWORK_RESOURCE)) {
-            repositoryFacade = new RepositoryFacade<>(EntityInstance.NETWORK_RESOURCE);
+    private void updateButtons() {
+        boolean editAndDeleteButtonsVisible = true;
+        String variant = choiceBoxVariants.getValue();
+        if (variant.equals(choiceBoxVariants.getItems().get(0))) {
+            editAndDeleteButtonsVisible = !(resourceEntryTableView.getItems().size() > 0);
+            resourceEntryTableView.getSelectionModel().select(1);
         } else {
-            if (variant.equals(choiceBoxVariants.getItems().get(1))
-                    && !repositoryFacade.getEntityInstance().equals(EntityInstance.NETWORK_SERVER)) {
-                repositoryFacade = new RepositoryFacade<>(EntityInstance.NETWORK_SERVER);
+            if (variant.equals(choiceBoxVariants.getItems().get(1))) {
+                editAndDeleteButtonsVisible = !(serverEntryTableView.getItems().size() > 0);
+                serverEntryTableView.getSelectionModel().select(1);
+            }
+        }
+        setDisablePropertiesForButtons(false, editAndDeleteButtonsVisible, editAndDeleteButtonsVisible);
+    }
+
+    private void setDisablePropertiesForButtons(boolean addButtonDisable, boolean editButtonDisable,
+                                                boolean deleteButtonDisable) {
+        addButton.setDisable(addButtonDisable);
+        editButton.setDisable(editButtonDisable);
+        deleteButton.setDisable(deleteButtonDisable);
+    }
+
+    private void initRepositoryFacade() {
+        String variant = choiceBoxVariants.getValue();
+        if (variant.equals(choiceBoxVariants.getItems().get(1))) {
+            if (resourceEntryRepositoryFacade != null
+                    && !resourceEntryRepositoryFacade.getEntityInstance().equals(EntityInstance.NETWORK_RESOURCE)) {
+                resourceEntryRepositoryFacade.serviceReinitialize(EntityInstance.NETWORK_RESOURCE);
+            } else {
+                resourceEntryRepositoryFacade = new RepositoryFacade<>(EntityInstance.NETWORK_RESOURCE);
+            }
+        } else {
+            if (variant.equals(choiceBoxVariants.getItems().get(2))) {
+                if (serverEntryRepositoryFacade != null
+                        && !serverEntryRepositoryFacade.getEntityInstance().equals(EntityInstance.NETWORK_SERVER)) {
+                    serverEntryRepositoryFacade.serviceReinitialize(EntityInstance.NETWORK_SERVER);
+                } else {
+                    serverEntryRepositoryFacade = new RepositoryFacade<>(EntityInstance.NETWORK_SERVER);
+                }
             }
         }
     }
 
+    @AllArgsConstructor
     private enum DatasourceType {
 
-        DATABASE, FILE
+        NONE,
+        DATABASE,
+        FILE
     }
 }
