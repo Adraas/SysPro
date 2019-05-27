@@ -3,9 +3,3 @@
     -fx-background-repeat: no-repeat;
     -fx-cursor: hand;
 }
-
-.iconButtonUpdate {
-    -fx-background-color: image-pattern('../images/update.png', 0, 0, 1.5625%, 1.5625%, true);
-    -fx-background-repeat: no-repeat;
-    -fx-cursor: hand;
-}
