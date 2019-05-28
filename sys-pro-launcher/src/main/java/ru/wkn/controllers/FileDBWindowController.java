@@ -29,6 +29,7 @@ import ru.wkn.filerw.readers.FileReader;
 import ru.wkn.filerw.writers.FileWriter;
 import ru.wkn.repository.RepositoryFacade;
 import ru.wkn.repository.dao.EntityInstance;
+import ru.wkn.repository.exceptions.PersistenceException;
 
 import java.io.File;
 import java.io.IOException;
@@ -139,6 +140,24 @@ public class FileDBWindowController extends Controller {
 
     @FXML
     private void clickOnSaveAsFile() {
+        Platform.runLater(() -> {
+            File file = fileChooser.showSaveDialog(null);
+            if (file != null) {
+                String variant = choiceBoxVariants.getValue();
+                try {
+                    if (variant.equals(choiceBoxVariants.getItems().get(0))) {
+                        resourceEntryFileRWFacade.getFileWriter().saveFile(file.getAbsolutePath());
+                    } else {
+                        if (variant.equals(choiceBoxVariants.getItems().get(1))) {
+                            serverEntryFileRWFacade.getFileWriter().saveFile(file.getAbsolutePath());
+                        }
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    showInformation("Error", e.getMessage(), Alert.AlertType.ERROR);
+                }
+            }
+        });
     }
 
     @FXML
