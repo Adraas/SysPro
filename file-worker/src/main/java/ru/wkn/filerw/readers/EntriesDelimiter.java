@@ -14,17 +14,17 @@ public enum EntriesDelimiter {
     /**
      * Delimiter for a .csv file.
      */
-    CSV_DELIMITER(";\n"),
+    CSV_DELIMITER(";\r\n"),
 
     /**
      * Delimiter for a PlainText file.
      */
-    PLAIN_TEXT_DELIMITER(":\n"),
+    PLAIN_TEXT_DELIMITER(":\r\n"),
 
     /**
      * Delimiter for a .bin file.
      */
-    BIN_DELIMITER("#\n");
+    BIN_DELIMITER("#\r\n");
 
     /**
      * Delimiter as {@code String} value.
