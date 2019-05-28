@@ -1,0 +1,4 @@
+.anchorPaneBackground {
+    -fx-background-image: url('../images/main_background.jpg');
+    -fx-background-repeat: no-repeat;
+}
