@@ -116,7 +116,44 @@ public class FileDBWindowController extends Controller {
 
     @FXML
     private void clickOnNewList() {
-        clearTableView();
+        String variant = choiceBoxVariants.getValue();
+        switch (datasourceType) {
+            case FILE: {
+                if (variant.equals(choiceBoxVariants.getItems().get(0))) {
+                    resourceEntryFileRWFacade.getFileWriter().deleteSome(0, resourceEntries.size() - 1);
+                } else {
+                    if (variant.equals(choiceBoxVariants.getItems().get(1))) {
+                        serverEntryFileRWFacade.getFileWriter().deleteSome(0, resourceEntries.size() - 1);
+                    }
+                }
+                break;
+            }
+            case DATABASE: {
+                if (variant.equals(choiceBoxVariants.getItems().get(0))) {
+                    resourceEntries = resourceEntryRepositoryFacade.getService().getAll();
+                    resourceEntryTableView.getItems().addAll(resourceEntries);
+                    try {
+                        resourceEntryRepositoryFacade.getService().deleteAll();
+                    } catch (PersistenceException e) {
+                        e.printStackTrace();
+                        showInformation("Error", e.getMessage(), Alert.AlertType.ERROR);
+                    }
+                } else {
+                    if (variant.equals(choiceBoxVariants.getItems().get(1))) {
+                        serverEntries = serverEntryRepositoryFacade.getService().getAll();
+                        serverEntryTableView.getItems().addAll(serverEntries);
+                    }
+                }
+                break;
+            }
+            case NONE: {
+                break;
+            }
+            default: {
+                showInformation("Error", "This datasource type not found!", Alert.AlertType.ERROR);
+            }
+        }
+        updateTableView();
         updateButtons();
         datasourceType = DatasourceType.NONE;
     }
@@ -124,9 +161,12 @@ public class FileDBWindowController extends Controller {
     @FXML
     private void clickOnOpenFile() {
         Platform.runLater(() -> {
-            openFile();
-            initFileRWFacade();
-            updateTableView();
+            File file = openFile();
+            if (file != null) {
+                initFileRWFacade();
+                updateTableView();
+                updateButtons();
+            }
         });
     }
 
@@ -135,6 +175,7 @@ public class FileDBWindowController extends Controller {
         Platform.runLater(() -> {
             datasourceType = DatasourceType.DATABASE;
             updateTableView();
+            updateButtons();
         });
     }
 
@@ -176,12 +217,15 @@ public class FileDBWindowController extends Controller {
     private void clickOnDelete() {
         String variant = choiceBoxVariants.getValue();
         if (variant.equals(choiceBoxVariants.getItems().get(0))) {
-            resourceEntryTableView.getItems().remove(resourceEntryTableView.getSelectionModel().getSelectedItem());
+            resourceEntryFileRWFacade.getFileWriter().delete(resourceEntryTableView.getSelectionModel()
+                    .getSelectedItem());
         } else {
             if (variant.equals(choiceBoxVariants.getItems().get(1))) {
-                serverEntryTableView.getItems().remove(serverEntryTableView.getSelectionModel().getSelectedItem());
+                serverEntryFileRWFacade.getFileWriter().delete(serverEntryTableView.getSelectionModel()
+                        .getSelectedItem());
             }
         }
+        updateTableView();
         updateButtons();
     }
 
@@ -196,42 +240,45 @@ public class FileDBWindowController extends Controller {
         }
     }
 
-    private void openFile() {
+    private File openFile() {
         datasourceType = DatasourceType.FILE;
         File file = fileChooser.showOpenDialog(null);
-        String fileName = file.getName();
-        if (fileName.endsWith("csv")) {
-            choiceBoxVariants.setValue(choiceBoxVariants.getItems().get(0));
-            if (resourceEntryIFileFactory == null) {
-                resourceEntryIFileFactory = new FileFactory<>();
-            }
-        } else {
-            if (fileName.endsWith("txt")) {
-                choiceBoxVariants.setValue(choiceBoxVariants.getItems().get(1));
-                if (serverEntryIFileFactory == null) {
-                    serverEntryIFileFactory = new FileFactory<>();
+        if (file != null) {
+            String fileName = file.getName();
+            if (fileName.endsWith("csv")) {
+                choiceBoxVariants.setValue(choiceBoxVariants.getItems().get(0));
+                if (resourceEntryIFileFactory == null) {
+                    resourceEntryIFileFactory = new FileFactory<>();
                 }
-            }
-        }
-        IEntryFactory entryFactory = new EntryFactory();
-        String variant = choiceBoxVariants.getValue();
-        try {
-            if (variant.equals(choiceBoxVariants.getItems().get(0))) {
-                resourceEntryEFile = resourceEntryIFileFactory.createEFile(file.getAbsolutePath(), charsetName,
-                        EntriesDelimiter.CSV_DELIMITER, entryFactory, ParametersDelimiter.RESOURCE_CSV_DELIMITER);
-                resourceEntries = resourceEntryEFile.getEntries();
             } else {
-                if (variant.equals(choiceBoxVariants.getItems().get(1))) {
-                    serverEntryEFile = serverEntryIFileFactory.createEFile(file.getAbsolutePath(), charsetName,
-                            EntriesDelimiter.PLAIN_TEXT_DELIMITER, entryFactory,
-                            ParametersDelimiter.SERVER_PLAIN_TEXT_DELIMITER);
-                    serverEntries = serverEntryEFile.getEntries();
+                if (fileName.endsWith("txt")) {
+                    choiceBoxVariants.setValue(choiceBoxVariants.getItems().get(1));
+                    if (serverEntryIFileFactory == null) {
+                        serverEntryIFileFactory = new FileFactory<>();
+                    }
                 }
             }
-        } catch (IOException | EntryException e) {
-            e.printStackTrace();
-            showInformation("Error", e.getMessage(), Alert.AlertType.ERROR);
+            IEntryFactory entryFactory = new EntryFactory();
+            String variant = choiceBoxVariants.getValue();
+            try {
+                if (variant.equals(choiceBoxVariants.getItems().get(0))) {
+                    resourceEntryEFile = resourceEntryIFileFactory.createEFile(file.getAbsolutePath(), charsetName,
+                            EntriesDelimiter.CSV_DELIMITER, entryFactory, ParametersDelimiter.RESOURCE_CSV_DELIMITER);
+                    resourceEntries = resourceEntryEFile.getEntries();
+                } else {
+                    if (variant.equals(choiceBoxVariants.getItems().get(1))) {
+                        serverEntryEFile = serverEntryIFileFactory.createEFile(file.getAbsolutePath(), charsetName,
+                                EntriesDelimiter.PLAIN_TEXT_DELIMITER, entryFactory,
+                                ParametersDelimiter.SERVER_PLAIN_TEXT_DELIMITER);
+                        serverEntries = serverEntryEFile.getEntries();
+                    }
+                }
+            } catch (IOException | EntryException e) {
+                e.printStackTrace();
+                showInformation("Error", e.getMessage(), Alert.AlertType.ERROR);
+            }
         }
+        return file;
     }
 
     private void initFileRWFacade() {
@@ -290,7 +337,6 @@ public class FileDBWindowController extends Controller {
                 showInformation("Error", "This datasource type not found!", Alert.AlertType.ERROR);
             }
         }
-        updateButtons();
     }
 
     private void updateButtons() {
