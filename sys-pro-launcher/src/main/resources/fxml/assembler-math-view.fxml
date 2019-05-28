@@ -28,6 +28,6 @@
         <Label layoutX="14.0" layoutY="223.0" prefHeight="17.0" prefWidth="82.0" text="Message log:"/>
         <Button layoutX="96.0" layoutY="151.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
                 minWidth="-Infinity" mnemonicParsing="false" onAction="#onClickRun" prefHeight="25.0" prefWidth="25.0"
-                styleClass="iconButtonRun" stylesheets="@../css/styles.css"/>
+                styleClass="iconButtonRun" stylesheets="@../css/button-styles.css"/>
     </children>
 </AnchorPane>
