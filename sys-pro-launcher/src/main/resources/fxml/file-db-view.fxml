@@ -14,7 +14,7 @@
             fx:controller="ru.wkn.controllers.FileDBWindowController">
     <children>
         <MenuBar maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0"
-                 prefWidth="600.0">
+                 prefWidth="610.0">
             <menus>
                 <Menu mnemonicParsing="false" text="File">
                     <items>
