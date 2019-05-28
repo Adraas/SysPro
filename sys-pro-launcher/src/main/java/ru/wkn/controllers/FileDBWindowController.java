@@ -155,6 +155,15 @@ public class FileDBWindowController extends Controller {
 
     @FXML
     private void clickOnDelete() {
+        String variant = choiceBoxVariants.getValue();
+        if (variant.equals(choiceBoxVariants.getItems().get(0))) {
+            resourceEntryTableView.getItems().remove(resourceEntryTableView.getSelectionModel().getSelectedItem());
+        } else {
+            if (variant.equals(choiceBoxVariants.getItems().get(1))) {
+                serverEntryTableView.getItems().remove(serverEntryTableView.getSelectionModel().getSelectedItem());
+            }
+        }
+        updateButtons();
     }
 
     private void clearTableView() {
