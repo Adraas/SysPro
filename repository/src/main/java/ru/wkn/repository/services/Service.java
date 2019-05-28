@@ -56,6 +56,20 @@ public class Service<V, I extends Serializable> implements IService<V, I> {
     }
 
     /**
+     * @see IService#deleteAll()
+     */
+    @Override
+    public boolean deleteAll() throws PersistenceException {
+        List<V> persistenceObjects = getAll();
+        for (V persistenceObject : persistenceObjects) {
+            if (!delete(persistenceObject)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
      * @see IService#getAll()
      */
     @Override

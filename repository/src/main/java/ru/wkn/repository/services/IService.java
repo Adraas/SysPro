@@ -52,6 +52,14 @@ public interface IService<V, I extends Serializable> {
     boolean delete(V transientInstance) throws PersistenceException;
 
     /**
+     * The method for the deleting all persistence objects from the repository.
+     *
+     * @return {@code true} if objects was deleted success from the repository, else - {@code false}
+     * @throws PersistenceException thrown if some problems with DAO layout
+     */
+    boolean deleteAll() throws PersistenceException;
+
+    /**
      * The method for the full sample statement executing.
      *
      * @return collection of the {@code List} type, contains all persistence objects from the repository
