@@ -94,9 +94,17 @@ public class FileWriter<T extends IEntry> extends EFileWriter<T> {
      */
     @Override
     public boolean saveFile() throws IOException {
+        return saveFile(getEFile().getPath());
+    }
+
+    /**
+     * @see EFileWriter#saveFile(String)
+     */
+    @Override
+    public boolean saveFile(String filename) throws IOException {
         EFile<T> eFile = getEFile();
         EntriesDelimiter entriesDelimiter = getEntriesDelimiter(eFile);
-        Path path = Paths.get(eFile.getPath());
+        Path path = Paths.get(filename);
         if (Files.exists(path)) {
             Files.delete(path);
             Files.createFile(path);

@@ -95,4 +95,13 @@ public abstract class EFileWriter<T extends IEntry> {
      * @throws IOException thrown if some problems with specific file
      */
     public abstract boolean saveFile() throws IOException;
+
+    /**
+     * The method for saving entries from temporary collection to new file.
+     *
+     * @param filename path indicated new absolute file name
+     * @return {@code true} if saving is success, {@code false} - else
+     * @throws IOException thrown if some problems with specific file
+     */
+    public abstract boolean saveFile(String filename) throws IOException;
 }
