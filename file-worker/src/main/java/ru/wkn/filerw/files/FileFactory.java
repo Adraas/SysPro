@@ -52,7 +52,10 @@ public class FileFactory<T extends IEntry> implements IFileFactory<T> {
                         fileIsReadyToRead = false;
                     }
                 }
-                entries.add((T) entryFactory.createEntry(parametersLine, parametersDelimiter));
+                if (!parametersLine.trim().isEmpty()) {
+                    entries.add((T) entryFactory.createEntry(parametersLine
+                            .replaceAll(entriesDelimiter.getEntryDelimiter(), ""), parametersDelimiter));
+                }
             }
             bufferedReader.close();
         } else {

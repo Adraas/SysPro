@@ -97,6 +97,10 @@ public class FileWriter<T extends IEntry> extends EFileWriter<T> {
         EFile<T> eFile = getEFile();
         EntriesDelimiter entriesDelimiter = getEntriesDelimiter(eFile);
         Path path = Paths.get(eFile.getPath());
+        if (Files.exists(path)) {
+            Files.delete(path);
+            Files.createFile(path);
+        }
         BufferedWriter bufferedWriter = Files.newBufferedWriter(path, Charset.forName(getCharsetName()));
         List<T> entries = eFile.getEntries();
         for (IEntry entry : entries) {
