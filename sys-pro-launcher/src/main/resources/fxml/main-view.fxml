@@ -15,9 +15,11 @@
         <MenuBar maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0"
                  prefWidth="600.0" useSystemMenuBar="true">
             <menus>
-                <Menu mnemonicParsing="false" onAction="#clickOnFile" text="File worker"/>
-                <Menu mnemonicParsing="false" onAction="#clickOnAnalyzer" text="Expression analyzer"/>
-                <Menu mnemonicParsing="false" onAction="#clickOnAssembler" text="Assembler math"/>
+                <Menu mnemonicParsing="false" text="Modules">
+                    <MenuItem mnemonicParsing="false" onAction="#clickOnFile" text="File worker"/>
+                    <MenuItem mnemonicParsing="false" onAction="#clickOnAnalyzer" text="Expression analyzer"/>
+                    <MenuItem mnemonicParsing="false" onAction="#clickOnAssembler" text="Assembler math"/>
+                </Menu>
                 <Menu mnemonicParsing="false" text="Info">
                     <items>
                         <MenuItem mnemonicParsing="false" onAction="#clickOnAbout" text="About"/>
