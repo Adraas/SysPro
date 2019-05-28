@@ -1,6 +1,7 @@
 package ru.wkn.entries.server.plaintext;
 
 import lombok.Getter;
+import ru.wkn.entries.exceptions.EntryException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -55,7 +56,11 @@ public enum  ProtocolType {
      * @param protocolType {@link #protocolType}
      * @return {@code ProtocolType} enum value by key
      */
-    public static ProtocolType getInstance(String protocolType) {
-        return protocolTypesMap.get(protocolType);
+    public static ProtocolType getInstance(String protocolType) throws EntryException {
+        ProtocolType result = protocolTypesMap.get(protocolType);
+        if (result == null) {
+            throw new EntryException("unknown protocol type");
+        }
+        return result;
     }
 }

@@ -1,6 +1,7 @@
 package ru.wkn.entries.resource.csv;
 
 import lombok.Getter;
+import ru.wkn.entries.exceptions.EntryException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -55,7 +56,11 @@ public enum AccessMode {
      * @param accessMode {@link #accessMode}
      * @return {@code ProtocolType} enum value by key
      */
-    public static AccessMode getInstance(String accessMode) {
-        return accessModesMap.get(accessMode);
+    public static AccessMode getInstance(String accessMode) throws EntryException {
+        AccessMode result = accessModesMap.get(accessMode);
+        if (result == null) {
+            throw new EntryException("unknown access mode");
+        }
+        return result;
     }
 }
