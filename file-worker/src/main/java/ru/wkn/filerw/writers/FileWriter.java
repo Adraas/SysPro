@@ -69,12 +69,13 @@ public class FileWriter<T extends IEntry> extends EFileWriter<T> {
      */
     @Override
     public boolean deleteSome(List<T> entries) {
-        boolean isDeleted = true;
         int i = 0;
-        while (i < entries.size() && isDeleted) {
-            isDeleted = delete(i);
+        while (i < entries.size()) {
+            if (!delete(i)) {
+                return false;
+            }
         }
-        return isDeleted;
+        return true;
     }
 
     /**
@@ -82,11 +83,12 @@ public class FileWriter<T extends IEntry> extends EFileWriter<T> {
      */
     @Override
     public boolean deleteSome(int startEntry, int endEntry) {
-        boolean isDeleted = true;
-        for (int i = startEntry; i <= endEntry && isDeleted; i++) {
-            isDeleted = delete(i);
+        for (int i = startEntry; i <= endEntry; i++) {
+            if (!delete(startEntry)) {
+                return false;
+            }
         }
-        return isDeleted;
+        return true;
     }
 
     /**
