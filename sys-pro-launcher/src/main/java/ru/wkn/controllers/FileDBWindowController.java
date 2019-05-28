@@ -9,6 +9,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.FileChooser;
 import lombok.AllArgsConstructor;
 import ru.wkn.FileRWFacade;
@@ -61,14 +62,15 @@ public class FileDBWindowController extends Controller {
     private FileRWFacade<ResourceEntry> resourceEntryFileRWFacade;
     private FileRWFacade<ServerEntry> serverEntryFileRWFacade;
 
-    private EFileReader<ResourceEntry> resourceEntryEFileReader;
-    private EFileWriter<ServerEntry> serverEntryEFileWriter;
-
-    private EFileReader<ServerEntry> serverEntryEFileReader;
-    private EFileWriter<ResourceEntry> resourceEntryEFileWriter;
-
     private EFile<ResourceEntry> resourceEntryEFile;
     private EFile<ServerEntry> serverEntryEFile;
+
+    private EFileReader<ResourceEntry> resourceEntryEFileReader;
+    private EFileWriter<ResourceEntry> resourceEntryEFileWriter;
+
+    private EFileReader<ServerEntry> serverEntryEFileReader;
+    private EFileWriter<ServerEntry> serverEntryEFileWriter;
+
 
     private List<ResourceEntry> resourceEntries;
     private List<ServerEntry> serverEntries;
@@ -80,20 +82,25 @@ public class FileDBWindowController extends Controller {
         choiceBoxVariants.setItems(variants);
         choiceBoxVariants.setValue(variantItems[0]);
 
-        // TODO: fix setting visible property for tables
+        resourceEntryTableView.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("url"));
+        resourceEntryTableView.getColumns().get(1).setCellValueFactory(new PropertyValueFactory<>("accessMode"));
+        resourceEntryTableView.getColumns().get(2).setCellValueFactory(new PropertyValueFactory<>("accessDate"));
+
+        serverEntryTableView.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("url"));
+        serverEntryTableView.getColumns().get(1).setCellValueFactory(new PropertyValueFactory<>("port"));
+        serverEntryTableView.getColumns().get(2).setCellValueFactory(new PropertyValueFactory<>("protocolType"));
+
         ChangeListener<String> changeListener = (observable, oldValue, newValue) -> {
             String variant = choiceBoxVariants.getValue();
             if (variant.equals(choiceBoxVariants.getItems().get(0))) {
                 resourceEntryTableView.setVisible(true);
                 serverEntryTableView.setVisible(false);
-                setDisablePropertiesForButtons(false, true, true);
             }
             if (variant.equals(choiceBoxVariants.getItems().get(1))) {
                 resourceEntryTableView.setVisible(false);
                 serverEntryTableView.setVisible(true);
-                setDisablePropertiesForButtons(false, true, true);
             }
-            updateTableView();
+            updateButtons();
         };
         choiceBoxVariants.getSelectionModel().selectedItemProperty().addListener(changeListener);
 
@@ -109,6 +116,7 @@ public class FileDBWindowController extends Controller {
     @FXML
     private void clickOnNewList() {
         clearTableView();
+        updateButtons();
         datasourceType = DatasourceType.NONE;
     }
 
@@ -150,8 +158,14 @@ public class FileDBWindowController extends Controller {
     }
 
     private void clearTableView() {
-        resourceEntryTableView.getItems().clear();
-        serverEntryTableView.getColumns().clear();
+        String variant = choiceBoxVariants.getValue();
+        if (variant.equals(choiceBoxVariants.getItems().get(0))) {
+            resourceEntryTableView.getItems().clear();
+        } else {
+            if (variant.equals(choiceBoxVariants.getItems().get(1))) {
+                serverEntryTableView.getItems().clear();
+            }
+        }
     }
 
     private void openFile() {
@@ -192,77 +206,60 @@ public class FileDBWindowController extends Controller {
         }
     }
 
-    // TODO: simplify method, combine duplicates
     private void initFileRWFacade() {
+        resourceEntryEFileReader = (resourceEntryEFileReader == null) ? new FileReader<>(resourceEntryEFile)
+                : resourceEntryEFileReader;
+        resourceEntryEFileWriter = (resourceEntryEFileWriter == null)
+                ? new FileWriter<>(resourceEntryEFile, charsetName) : resourceEntryEFileWriter;
+        serverEntryEFileReader = (serverEntryEFileReader == null) ? new FileReader<>(serverEntryEFile)
+                : serverEntryEFileReader;
+        serverEntryEFileWriter = (serverEntryEFileWriter == null)
+                ? new FileWriter<>(serverEntryEFile, charsetName) : serverEntryEFileWriter;
         String variant = choiceBoxVariants.getValue();
         if (variant.equals(choiceBoxVariants.getItems().get(0))) {
-            if (resourceEntryEFileReader == null) {
-                resourceEntryEFileReader = new FileReader<>(resourceEntryEFile);
-            }
-            if (resourceEntryEFileWriter == null) {
-                resourceEntryEFileWriter = new FileWriter<>(resourceEntryEFile, charsetName);
-            }
-            if (resourceEntryFileRWFacade == null) {
-                resourceEntryFileRWFacade = new FileRWFacade<>(resourceEntryEFileReader, resourceEntryEFileWriter);
-            }
+            resourceEntryFileRWFacade = (resourceEntryFileRWFacade == null)
+                    ? new FileRWFacade<>(resourceEntryEFileReader, resourceEntryEFileWriter) : resourceEntryFileRWFacade;
         } else {
             if (variant.equals(choiceBoxVariants.getItems().get(1))) {
-                if (serverEntryEFileReader == null) {
-                    serverEntryEFileReader = new FileReader<>(serverEntryEFile);
-                }
-                if (serverEntryEFileWriter == null) {
-                    serverEntryEFileWriter = new FileWriter<>(serverEntryEFile, charsetName);
-                }
-                if (serverEntryFileRWFacade == null) {
-                    serverEntryFileRWFacade = new FileRWFacade<>(serverEntryEFileReader, serverEntryEFileWriter);
-                }
+                serverEntryFileRWFacade = (serverEntryFileRWFacade == null)
+                        ? new FileRWFacade<>(serverEntryEFileReader, serverEntryEFileWriter) : serverEntryFileRWFacade;
             }
         }
     }
 
-    // TODO: simplify method, combine duplicates
     private void updateTableView() {
         clearTableView();
         String variant = choiceBoxVariants.getValue();
-        if (variant.equals(choiceBoxVariants.getItems().get(0))) {
-            switch (datasourceType) {
-                case FILE: {
+        switch (datasourceType) {
+            case FILE: {
+                if (variant.equals(choiceBoxVariants.getItems().get(0))) {
                     resourceEntryTableView.getItems().addAll(resourceEntries);
-                    break;
+                } else {
+                    if (variant.equals(choiceBoxVariants.getItems().get(1))) {
+                        serverEntryTableView.getItems().addAll(serverEntries);
+                    }
                 }
-                case DATABASE: {
+                break;
+            }
+            case DATABASE: {
+                if (variant.equals(choiceBoxVariants.getItems().get(0))) {
                     initRepositoryFacade();
                     resourceEntries = resourceEntryRepositoryFacade.getService().getAll();
                     resourceEntryTableView.getItems().addAll(resourceEntries);
-                    break;
-                }
-                case NONE: {
-                    break;
-                }
-                default: {
-                    showInformation("Error", "This datasource type not found!", Alert.AlertType.ERROR);
-                }
-            }
-        } else {
-            if (variant.equals(choiceBoxVariants.getItems().get(1))) {
-                switch (datasourceType) {
-                    case FILE: {
-                        serverEntryTableView.getItems().addAll(serverEntries);
-                        break;
-                    }
-                    case DATABASE: {
+                } else {
+                    if (variant.equals(choiceBoxVariants.getItems().get(1))) {
                         initRepositoryFacade();
                         serverEntries = serverEntryRepositoryFacade.getService().getAll();
                         serverEntryTableView.getItems().addAll(serverEntries);
-                        break;
-                    }
-                    case NONE: {
-                        break;
-                    }
-                    default: {
-                        showInformation("Error", "This datasource type not found!", Alert.AlertType.ERROR);
                     }
                 }
+                break;
+            }
+            case NONE: {
+                break;
+            }
+            default: {
+                showInformation("Error", "This datasource type not found!", Alert.AlertType.ERROR);
             }
         }
         updateButtons();
@@ -273,11 +270,11 @@ public class FileDBWindowController extends Controller {
         String variant = choiceBoxVariants.getValue();
         if (variant.equals(choiceBoxVariants.getItems().get(0))) {
             editAndDeleteButtonsVisible = !(resourceEntryTableView.getItems().size() > 0);
-            resourceEntryTableView.getSelectionModel().select(1);
+            resourceEntryTableView.getSelectionModel().select(0);
         } else {
             if (variant.equals(choiceBoxVariants.getItems().get(1))) {
                 editAndDeleteButtonsVisible = !(serverEntryTableView.getItems().size() > 0);
-                serverEntryTableView.getSelectionModel().select(1);
+                serverEntryTableView.getSelectionModel().select(0);
             }
         }
         setDisablePropertiesForButtons(false, editAndDeleteButtonsVisible, editAndDeleteButtonsVisible);
@@ -292,7 +289,7 @@ public class FileDBWindowController extends Controller {
 
     private void initRepositoryFacade() {
         String variant = choiceBoxVariants.getValue();
-        if (variant.equals(choiceBoxVariants.getItems().get(1))) {
+        if (variant.equals(choiceBoxVariants.getItems().get(0))) {
             if (resourceEntryRepositoryFacade != null
                     && !resourceEntryRepositoryFacade.getEntityInstance().equals(EntityInstance.NETWORK_RESOURCE)) {
                 resourceEntryRepositoryFacade.serviceReinitialize(EntityInstance.NETWORK_RESOURCE);
@@ -300,7 +297,7 @@ public class FileDBWindowController extends Controller {
                 resourceEntryRepositoryFacade = new RepositoryFacade<>(EntityInstance.NETWORK_RESOURCE);
             }
         } else {
-            if (variant.equals(choiceBoxVariants.getItems().get(2))) {
+            if (variant.equals(choiceBoxVariants.getItems().get(1))) {
                 if (serverEntryRepositoryFacade != null
                         && !serverEntryRepositoryFacade.getEntityInstance().equals(EntityInstance.NETWORK_SERVER)) {
                     serverEntryRepositoryFacade.serviceReinitialize(EntityInstance.NETWORK_SERVER);
