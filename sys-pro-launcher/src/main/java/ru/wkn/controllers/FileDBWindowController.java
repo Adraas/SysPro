@@ -111,15 +111,7 @@ public class FileDBWindowController extends Controller {
         String variant = choiceBoxVariants.getValue();
         switch (datasourceType) {
             case FILE: {
-                if (variant.equals(choiceBoxVariants.getItems().get(0))) {
-                    resourceEntryFileRWFacade.getFileWriter().deleteSome(0, resourceEntryFileRWFacade.getFileReader()
-                            .getEFile().getEntries().size() - 1);
-                } else {
-                    if (variant.equals(choiceBoxVariants.getItems().get(1))) {
-                        serverEntryFileRWFacade.getFileWriter().deleteSome(0, serverEntryFileRWFacade.getFileReader()
-                                .getEFile().getEntries().size() - 1);
-                    }
-                }
+                clearFileWithoutSaving(variant);
                 break;
             }
             case DATABASE: {
@@ -193,10 +185,6 @@ public class FileDBWindowController extends Controller {
     }
 
     @FXML
-    private void clickOnSaveToDatabase() {
-    }
-
-    @FXML
     private void clickOnAdd() {
     }
 
@@ -218,6 +206,18 @@ public class FileDBWindowController extends Controller {
         }
         updateTableView();
         updateButtons();
+    }
+
+    private void clearFileWithoutSaving(String variant) {
+        if (variant.equals(choiceBoxVariants.getItems().get(0))) {
+            resourceEntryFileRWFacade.getFileWriter().deleteSome(0, resourceEntryFileRWFacade.getFileReader()
+                    .getEFile().getEntries().size() - 1);
+        } else {
+            if (variant.equals(choiceBoxVariants.getItems().get(1))) {
+                serverEntryFileRWFacade.getFileWriter().deleteSome(0, serverEntryFileRWFacade.getFileReader()
+                        .getEFile().getEntries().size() - 1);
+            }
+        }
     }
 
     private void clearTableView() {
@@ -249,25 +249,29 @@ public class FileDBWindowController extends Controller {
                     }
                 }
             }
-            IEntryFactory entryFactory = new EntryFactory();
-            String variant = choiceBoxVariants.getValue();
             try {
-                if (variant.equals(choiceBoxVariants.getItems().get(0))) {
-                    resourceEntryEFile = resourceEntryIFileFactory.createEFile(file.getAbsolutePath(), charsetName,
-                            EntriesDelimiter.CSV_DELIMITER, entryFactory, ParametersDelimiter.RESOURCE_CSV_DELIMITER);
-                } else {
-                    if (variant.equals(choiceBoxVariants.getItems().get(1))) {
-                        serverEntryEFile = serverEntryIFileFactory.createEFile(file.getAbsolutePath(), charsetName,
-                                EntriesDelimiter.PLAIN_TEXT_DELIMITER, entryFactory,
-                                ParametersDelimiter.SERVER_PLAIN_TEXT_DELIMITER);
-                    }
-                }
+                initEntryEFile(file.getAbsolutePath());
             } catch (IOException | EntryException e) {
                 e.printStackTrace();
                 showInformation("Error", e.getMessage(), Alert.AlertType.ERROR);
             }
         }
         return file;
+    }
+
+    private void initEntryEFile(String absolutePath) throws IOException, EntryException {
+        IEntryFactory entryFactory = new EntryFactory();
+        String variant = choiceBoxVariants.getValue();
+        if (variant.equals(choiceBoxVariants.getItems().get(0))) {
+            resourceEntryEFile = resourceEntryIFileFactory.createEFile(absolutePath, charsetName,
+                    EntriesDelimiter.CSV_DELIMITER, entryFactory, ParametersDelimiter.RESOURCE_CSV_DELIMITER);
+        } else {
+            if (variant.equals(choiceBoxVariants.getItems().get(1))) {
+                serverEntryEFile = serverEntryIFileFactory.createEFile(absolutePath, charsetName,
+                        EntriesDelimiter.PLAIN_TEXT_DELIMITER, entryFactory,
+                        ParametersDelimiter.SERVER_PLAIN_TEXT_DELIMITER);
+            }
+        }
     }
 
     private void initFileRWFacade() {
