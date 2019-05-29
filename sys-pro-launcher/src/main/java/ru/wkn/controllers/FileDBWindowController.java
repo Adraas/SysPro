@@ -274,15 +274,28 @@ public class FileDBWindowController extends Controller {
         }
     }
 
+    // TODO: simplify method, delete duplicates
     private void initFileRWFacade() {
-        resourceEntryEFileReader = (resourceEntryEFileReader == null) ? new FileReader<>(resourceEntryEFile)
-                : resourceEntryEFileReader;
-        resourceEntryEFileWriter = (resourceEntryEFileWriter == null)
-                ? new FileWriter<>(resourceEntryEFile, charsetName) : resourceEntryEFileWriter;
-        serverEntryEFileReader = (serverEntryEFileReader == null) ? new FileReader<>(serverEntryEFile)
-                : serverEntryEFileReader;
-        serverEntryEFileWriter = (serverEntryEFileWriter == null)
-                ? new FileWriter<>(serverEntryEFile, charsetName) : serverEntryEFileWriter;
+        if (resourceEntryEFileReader == null) {
+            resourceEntryEFileReader = new FileReader<>(resourceEntryEFile);
+        } else {
+            resourceEntryEFileReader.setEFile(resourceEntryEFile);
+        }
+        if (resourceEntryEFileWriter == null) {
+            resourceEntryEFileWriter = new FileWriter<>(resourceEntryEFile, charsetName);
+        } else {
+            resourceEntryEFileWriter.setEFile(resourceEntryEFile);
+        }
+        if (serverEntryEFileReader == null) {
+            serverEntryEFileReader = new FileReader<>(serverEntryEFile);
+        } else {
+            serverEntryEFileReader.setEFile(serverEntryEFile);
+        }
+        if (serverEntryEFileWriter == null) {
+            serverEntryEFileWriter = new FileWriter<>(serverEntryEFile, charsetName);
+        } else {
+            serverEntryEFileWriter.setEFile(serverEntryEFile);
+        }
         String variant = choiceBoxVariants.getValue();
         if (variant.equals(choiceBoxVariants.getItems().get(0))) {
             resourceEntryFileRWFacade = (resourceEntryFileRWFacade == null)
