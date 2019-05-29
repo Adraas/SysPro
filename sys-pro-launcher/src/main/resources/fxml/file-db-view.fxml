@@ -26,10 +26,9 @@
                                 <MenuItem mnemonicParsing="false" onAction="#clickOnOpenDatabase" text="database"/>
                             </items>
                         </Menu>
-                        <Menu mnemonicParsing="false" text="Save as/to">
+                        <Menu mnemonicParsing="false" text="Save to">
                             <items>
                                 <MenuItem mnemonicParsing="false" onAction="#clickOnSaveAsFile" text="file"/>
-                                <MenuItem mnemonicParsing="false" onAction="#clickOnSaveToDatabase" text="database"/>
                             </items>
                         </Menu>
                     </items>
