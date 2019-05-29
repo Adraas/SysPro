@@ -8,9 +8,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
-            prefWidth="600.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
-            fx:controller="ru.wkn.controllers.MainWindowController"
-            styleClass="anchorPaneBackground" stylesheets="@../css/window-styles.css">
+            prefWidth="600.0" styleClass="anchorPaneBackground" stylesheets="@../css/window-styles.css"
+            xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+            fx:controller="ru.wkn.controllers.MainWindowController">
     <children>
         <MenuBar maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0"
                  prefWidth="610.0" useSystemMenuBar="true">

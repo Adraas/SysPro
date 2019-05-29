@@ -10,9 +10,9 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
-            prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="ru.wkn.controllers.FileDBWindowController"
-            styleClass="anchorPaneBackground" stylesheets="@../css/window-styles.css">
+            prefWidth="600.0" styleClass="anchorPaneBackground" stylesheets="@../css/window-styles.css"
+            xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="ru.wkn.controllers.FileDBWindowController">
     <children>
         <MenuBar maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0"
                  prefWidth="610.0">
