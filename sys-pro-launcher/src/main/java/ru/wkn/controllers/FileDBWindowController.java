@@ -33,8 +33,6 @@ import ru.wkn.repository.exceptions.PersistenceException;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 // TODO: complete this class
 public class FileDBWindowController extends Controller {
@@ -72,10 +70,6 @@ public class FileDBWindowController extends Controller {
     private EFileReader<ServerEntry> serverEntryEFileReader;
     private EFileWriter<ServerEntry> serverEntryEFileWriter;
 
-
-    private List<ResourceEntry> resourceEntries;
-    private List<ServerEntry> serverEntries;
-
     public void initialize() {
         String[] variantItems = new String[]{"CSV: Network resource", "TXT: Network server"};
         ObservableList<String> variants =
@@ -106,8 +100,6 @@ public class FileDBWindowController extends Controller {
         choiceBoxVariants.getSelectionModel().selectedItemProperty().addListener(changeListener);
 
         datasourceType = DatasourceType.NONE;
-        resourceEntries = new ArrayList<>();
-        serverEntries = new ArrayList<>();
 
         fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("CSV", "*.csv"),
@@ -120,29 +112,28 @@ public class FileDBWindowController extends Controller {
         switch (datasourceType) {
             case FILE: {
                 if (variant.equals(choiceBoxVariants.getItems().get(0))) {
-                    resourceEntryFileRWFacade.getFileWriter().deleteSome(0, resourceEntries.size() - 1);
+                    resourceEntryFileRWFacade.getFileWriter().deleteSome(0, resourceEntryFileRWFacade.getFileReader()
+                            .getEFile().getEntries().size() - 1);
                 } else {
                     if (variant.equals(choiceBoxVariants.getItems().get(1))) {
-                        serverEntryFileRWFacade.getFileWriter().deleteSome(0, resourceEntries.size() - 1);
+                        serverEntryFileRWFacade.getFileWriter().deleteSome(0, serverEntryFileRWFacade.getFileReader()
+                                .getEFile().getEntries().size() - 1);
                     }
                 }
                 break;
             }
             case DATABASE: {
-                if (variant.equals(choiceBoxVariants.getItems().get(0))) {
-                    resourceEntries = resourceEntryRepositoryFacade.getService().getAll();
-                    resourceEntryTableView.getItems().addAll(resourceEntries);
-                    try {
+                try {
+                    if (variant.equals(choiceBoxVariants.getItems().get(0))) {
                         resourceEntryRepositoryFacade.getService().deleteAll();
-                    } catch (PersistenceException e) {
-                        e.printStackTrace();
-                        showInformation("Error", e.getMessage(), Alert.AlertType.ERROR);
+                    } else {
+                        if (variant.equals(choiceBoxVariants.getItems().get(1))) {
+                            serverEntryRepositoryFacade.getService().deleteAll();
+                        }
                     }
-                } else {
-                    if (variant.equals(choiceBoxVariants.getItems().get(1))) {
-                        serverEntries = serverEntryRepositoryFacade.getService().getAll();
-                        serverEntryTableView.getItems().addAll(serverEntries);
-                    }
+                } catch (PersistenceException e) {
+                    e.printStackTrace();
+                    showInformation("Error", e.getMessage(), Alert.AlertType.ERROR);
                 }
                 break;
             }
@@ -264,13 +255,11 @@ public class FileDBWindowController extends Controller {
                 if (variant.equals(choiceBoxVariants.getItems().get(0))) {
                     resourceEntryEFile = resourceEntryIFileFactory.createEFile(file.getAbsolutePath(), charsetName,
                             EntriesDelimiter.CSV_DELIMITER, entryFactory, ParametersDelimiter.RESOURCE_CSV_DELIMITER);
-                    resourceEntries = resourceEntryEFile.getEntries();
                 } else {
                     if (variant.equals(choiceBoxVariants.getItems().get(1))) {
                         serverEntryEFile = serverEntryIFileFactory.createEFile(file.getAbsolutePath(), charsetName,
                                 EntriesDelimiter.PLAIN_TEXT_DELIMITER, entryFactory,
                                 ParametersDelimiter.SERVER_PLAIN_TEXT_DELIMITER);
-                        serverEntries = serverEntryEFile.getEntries();
                     }
                 }
             } catch (IOException | EntryException e) {
@@ -308,24 +297,23 @@ public class FileDBWindowController extends Controller {
         switch (datasourceType) {
             case FILE: {
                 if (variant.equals(choiceBoxVariants.getItems().get(0))) {
-                    resourceEntryTableView.getItems().addAll(resourceEntries);
+                    resourceEntryTableView.getItems().addAll(resourceEntryFileRWFacade.getFileReader().getEFile()
+                            .getEntries());
                 } else {
                     if (variant.equals(choiceBoxVariants.getItems().get(1))) {
-                        serverEntryTableView.getItems().addAll(serverEntries);
+                        serverEntryTableView.getItems().addAll(serverEntryFileRWFacade.getFileReader().getEFile()
+                                .getEntries());
                     }
                 }
                 break;
             }
             case DATABASE: {
+                initRepositoryFacade();
                 if (variant.equals(choiceBoxVariants.getItems().get(0))) {
-                    initRepositoryFacade();
-                    resourceEntries = resourceEntryRepositoryFacade.getService().getAll();
-                    resourceEntryTableView.getItems().addAll(resourceEntries);
+                    resourceEntryTableView.getItems().addAll(resourceEntryRepositoryFacade.getService().getAll());
                 } else {
                     if (variant.equals(choiceBoxVariants.getItems().get(1))) {
-                        initRepositoryFacade();
-                        serverEntries = serverEntryRepositoryFacade.getService().getAll();
-                        serverEntryTableView.getItems().addAll(serverEntries);
+                        serverEntryTableView.getItems().addAll(serverEntryRepositoryFacade.getService().getAll());
                     }
                 }
                 break;
