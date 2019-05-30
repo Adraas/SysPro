@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.FileChooser;
@@ -40,6 +41,8 @@ public class FileDBWindowController extends Controller {
     @FXML
     private ChoiceBox<String> choiceBoxVariants;
     @FXML
+    private MenuItem saveMenuButton;
+    @FXML
     private Button addButton;
     @FXML
     private Button editButton;
@@ -61,6 +64,7 @@ public class FileDBWindowController extends Controller {
     private FileRWFacade<ResourceEntry> resourceEntryFileRWFacade;
     private FileRWFacade<ServerEntry> serverEntryFileRWFacade;
 
+    private IEntryFactory entryFactory;
     private EFile<ResourceEntry> resourceEntryEFile;
     private EFile<ServerEntry> serverEntryEFile;
 
@@ -69,6 +73,8 @@ public class FileDBWindowController extends Controller {
 
     private EFileReader<ServerEntry> serverEntryEFileReader;
     private EFileWriter<ServerEntry> serverEntryEFileWriter;
+
+    private boolean isCollectionActivated = false;
 
     public void initialize() {
         String[] variantItems = new String[]{"CSV: Network resource", "TXT: Network server"};
@@ -108,6 +114,7 @@ public class FileDBWindowController extends Controller {
 
     @FXML
     private void clickOnNewList() {
+        isCollectionActivated = true;
         String variant = choiceBoxVariants.getValue();
         switch (datasourceType) {
             case FILE: {
@@ -144,6 +151,7 @@ public class FileDBWindowController extends Controller {
     @FXML
     private void clickOnOpenFile() {
         Platform.runLater(() -> {
+            isCollectionActivated = true;
             File file = openFile();
             if (file != null) {
                 initFileRWFacade();
@@ -156,6 +164,7 @@ public class FileDBWindowController extends Controller {
     @FXML
     private void clickOnOpenDatabase() {
         Platform.runLater(() -> {
+            isCollectionActivated = true;
             datasourceType = DatasourceType.DATABASE;
             updateTableView();
             updateButtons();
@@ -250,7 +259,7 @@ public class FileDBWindowController extends Controller {
                 }
             }
             try {
-                initEntryEFile(file.getAbsolutePath());
+                initEntryFile(file.getAbsolutePath());
             } catch (IOException | EntryException e) {
                 e.printStackTrace();
                 showInformation("Error", e.getMessage(), Alert.AlertType.ERROR);
@@ -259,43 +268,37 @@ public class FileDBWindowController extends Controller {
         return file;
     }
 
-    private void initEntryEFile(String absolutePath) throws IOException, EntryException {
-        IEntryFactory entryFactory = new EntryFactory();
+    private void initEntryFile(String absolutePath) throws IOException, EntryException {
+        entryFactory = (entryFactory == null) ? new EntryFactory() : entryFactory;
         String variant = choiceBoxVariants.getValue();
         if (variant.equals(choiceBoxVariants.getItems().get(0))) {
-            resourceEntryEFile = resourceEntryIFileFactory.createEFile(absolutePath, charsetName,
-                    EntriesDelimiter.CSV_DELIMITER, entryFactory, ParametersDelimiter.RESOURCE_CSV_DELIMITER);
+            resourceEntryEFile = (resourceEntryEFile == null)
+                    ? resourceEntryIFileFactory.createEFile(absolutePath, charsetName,
+                    EntriesDelimiter.CSV_DELIMITER, entryFactory, ParametersDelimiter.RESOURCE_CSV_DELIMITER)
+                    : resourceEntryEFile.copyFrom(resourceEntryIFileFactory.createEFile(absolutePath, charsetName,
+                    EntriesDelimiter.CSV_DELIMITER, entryFactory, ParametersDelimiter.RESOURCE_CSV_DELIMITER));
         } else {
             if (variant.equals(choiceBoxVariants.getItems().get(1))) {
-                serverEntryEFile = serverEntryIFileFactory.createEFile(absolutePath, charsetName,
+                serverEntryEFile = (serverEntryEFile == null)
+                        ? serverEntryIFileFactory.createEFile(absolutePath, charsetName,
                         EntriesDelimiter.PLAIN_TEXT_DELIMITER, entryFactory,
-                        ParametersDelimiter.SERVER_PLAIN_TEXT_DELIMITER);
+                        ParametersDelimiter.SERVER_PLAIN_TEXT_DELIMITER)
+                        : serverEntryEFile.copyFrom(serverEntryIFileFactory.createEFile(absolutePath, charsetName,
+                        EntriesDelimiter.PLAIN_TEXT_DELIMITER, entryFactory,
+                        ParametersDelimiter.SERVER_PLAIN_TEXT_DELIMITER));
             }
         }
     }
 
-    // TODO: simplify method, delete duplicates
     private void initFileRWFacade() {
-        if (resourceEntryEFileReader == null) {
-            resourceEntryEFileReader = new FileReader<>(resourceEntryEFile);
-        } else {
-            resourceEntryEFileReader.setEFile(resourceEntryEFile);
-        }
-        if (resourceEntryEFileWriter == null) {
-            resourceEntryEFileWriter = new FileWriter<>(resourceEntryEFile, charsetName);
-        } else {
-            resourceEntryEFileWriter.setEFile(resourceEntryEFile);
-        }
-        if (serverEntryEFileReader == null) {
-            serverEntryEFileReader = new FileReader<>(serverEntryEFile);
-        } else {
-            serverEntryEFileReader.setEFile(serverEntryEFile);
-        }
-        if (serverEntryEFileWriter == null) {
-            serverEntryEFileWriter = new FileWriter<>(serverEntryEFile, charsetName);
-        } else {
-            serverEntryEFileWriter.setEFile(serverEntryEFile);
-        }
+        resourceEntryEFileReader = (resourceEntryEFileReader == null) ? new FileReader<>(resourceEntryEFile)
+                : resourceEntryEFileReader;
+        resourceEntryEFileWriter = (resourceEntryEFileWriter == null)
+                ? new FileWriter<>(resourceEntryEFile, charsetName) : resourceEntryEFileWriter;
+        serverEntryEFileReader = (serverEntryEFileReader == null) ? new FileReader<>(serverEntryEFile)
+                : serverEntryEFileReader;
+        serverEntryEFileWriter = (serverEntryEFileWriter == null)
+                ? new FileWriter<>(serverEntryEFile, charsetName) : serverEntryEFileWriter;
         String variant = choiceBoxVariants.getValue();
         if (variant.equals(choiceBoxVariants.getItems().get(0))) {
             resourceEntryFileRWFacade = (resourceEntryFileRWFacade == null)
@@ -356,14 +359,16 @@ public class FileDBWindowController extends Controller {
                 serverEntryTableView.getSelectionModel().select(0);
             }
         }
-        setDisablePropertiesForButtons(false, editAndDeleteButtonsVisible, editAndDeleteButtonsVisible);
+        setDisablePropertiesForButtons(!isCollectionActivated, editAndDeleteButtonsVisible, editAndDeleteButtonsVisible,
+                !isCollectionActivated);
     }
 
     private void setDisablePropertiesForButtons(boolean addButtonDisable, boolean editButtonDisable,
-                                                boolean deleteButtonDisable) {
+                                                boolean deleteButtonDisable, boolean saveMenuButtonDisable) {
         addButton.setDisable(addButtonDisable);
         editButton.setDisable(editButtonDisable);
         deleteButton.setDisable(deleteButtonDisable);
+        saveMenuButton.setDisable(saveMenuButtonDisable);
     }
 
     private void initRepositoryFacade() {
