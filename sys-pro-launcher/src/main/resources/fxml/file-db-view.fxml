@@ -19,14 +19,14 @@
             <menus>
                 <Menu mnemonicParsing="false" text="File">
                     <items>
-                        <MenuItem mnemonicParsing="false" onAction="#clickOnNewList" text="New list"/>
+                        <MenuItem mnemonicParsing="false" onAction="#clickOnNewList" text="New data table"/>
                         <Menu mnemonicParsing="false" text="Open">
                             <items>
                                 <MenuItem mnemonicParsing="false" onAction="#clickOnOpenFile" text="file"/>
                                 <MenuItem mnemonicParsing="false" onAction="#clickOnOpenDatabase" text="database"/>
                             </items>
                         </Menu>
-                        <Menu mnemonicParsing="false" text="Save to">
+                        <Menu fx:id="saveMenuButton" disable="true" mnemonicParsing="false" text="Save to">
                             <items>
                                 <MenuItem mnemonicParsing="false" onAction="#clickOnSaveAsFile" text="file"/>
                             </items>
@@ -35,7 +35,8 @@
                 </Menu>
             </menus>
         </MenuBar>
-        <Button fx:id="addButton" layoutX="530.0" layoutY="92.0" maxHeight="-Infinity" maxWidth="-Infinity"
+        <Button fx:id="addButton" disable="true" layoutX="530.0" layoutY="92.0" maxHeight="-Infinity"
+                maxWidth="-Infinity"
                 minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#clickOnAdd"
                 prefHeight="25.0" prefWidth="56.0" text="Add"/>
         <Button fx:id="editButton" disable="true" layoutX="530.0" layoutY="123.0" maxHeight="-Infinity"
