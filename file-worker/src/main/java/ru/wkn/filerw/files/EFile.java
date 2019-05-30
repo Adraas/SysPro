@@ -32,4 +32,18 @@ public class EFile<T extends IEntry> {
      * Extension of the real file as enum value.
      */
     private FileExtension fileExtension;
+
+    /**
+     * The method for the copying values from new {@code EFile} object to this object without reference updating
+     * of this object.
+     *
+     * @param eFile the new {@code EFile} object for the copying values from it
+     * @return this {@code EFile} objects after updating
+     */
+    public EFile<T> copyFrom(EFile<T> eFile) {
+        setPath(eFile.getPath());
+        setEntries(eFile.getEntries());
+        setFileExtension(eFile.getFileExtension());
+        return this;
+    }
 }
