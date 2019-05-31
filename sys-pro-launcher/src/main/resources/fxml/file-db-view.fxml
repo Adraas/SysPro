@@ -36,29 +36,27 @@
             </menus>
         </MenuBar>
         <Button fx:id="addButton" disable="true" layoutX="530.0" layoutY="92.0" maxHeight="-Infinity"
-                maxWidth="-Infinity"
-                minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#clickOnAdd"
-                prefHeight="25.0" prefWidth="56.0" text="Add"/>
-        <Button fx:id="editButton" disable="true" layoutX="530.0" layoutY="123.0" maxHeight="-Infinity"
                 maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false"
-                onAction="#clickOnEdit" prefHeight="25.0" prefWidth="56.0" text="Edit"/>
-        <Button fx:id="deleteButton" disable="true" layoutX="530.0" layoutY="154.0" maxHeight="-Infinity"
+                onAction="#clickOnAdd" prefHeight="25.0" prefWidth="56.0" text="Add"/>
+        <Button fx:id="deleteButton" disable="true" layoutX="530.0" layoutY="124.0" maxHeight="-Infinity"
                 maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false"
                 onAction="#clickOnDelete" prefHeight="25.0" prefWidth="56.0" text="Delete"/>
-        <TableView fx:id="resourceEntryTableView" layoutX="14.0" layoutY="92.0" maxHeight="-Infinity"
-                   maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="294.0" prefWidth="504.0">
+        <TableView fx:id="resourceEntryTableView" editable="true" layoutX="14.0" layoutY="92.0" maxHeight="-Infinity"
+                   maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="294.0" prefWidth="504.0"
+                   tableMenuButtonVisible="true">
             <columns>
-                <TableColumn prefWidth="110.0" text="URL"/>
-                <TableColumn prefWidth="110.0" text="Access mode"/>
-                <TableColumn prefWidth="110.0" text="Access date"/>
+                <TableColumn fx:id="resourceEntryUrlColumn" prefWidth="110.0" text="URL"/>
+                <TableColumn fx:id="resourceEntryAccessModeColumn" prefWidth="110.0" text="Access mode"/>
+                <TableColumn fx:id="resourceEntryAccessDateColumn" prefWidth="110.0" text="Access date"/>
             </columns>
         </TableView>
-        <TableView fx:id="serverEntryTableView" layoutX="14.0" layoutY="92.0" maxHeight="-Infinity" maxWidth="-Infinity"
-                   minHeight="-Infinity" minWidth="-Infinity" prefHeight="294.0" prefWidth="504.0" visible="false">
+        <TableView fx:id="serverEntryTableView" editable="true" layoutX="14.0" layoutY="92.0" maxHeight="-Infinity"
+                   maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="294.0" prefWidth="504.0"
+                   tableMenuButtonVisible="true" visible="false">
             <columns>
-                <TableColumn prefWidth="110.0" text="URL"/>
-                <TableColumn prefWidth="110.0" text="Port"/>
-                <TableColumn prefWidth="110.0" text="Protocol type"/>
+                <TableColumn fx:id="serverEntryUrlColumn" prefWidth="110.0" text="URL"/>
+                <TableColumn fx:id="serverEntryPortColumn" prefWidth="110.0" text="Port"/>
+                <TableColumn fx:id="serverEntryProtocolTypeColumn" prefWidth="110.0" text="Protocol type"/>
             </columns>
         </TableView>
         <Label layoutX="14.0" layoutY="51.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"

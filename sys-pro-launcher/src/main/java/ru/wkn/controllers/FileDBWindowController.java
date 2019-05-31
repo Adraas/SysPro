@@ -9,8 +9,11 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.FileChooser;
 import lombok.AllArgsConstructor;
 import ru.wkn.FileRWFacade;
@@ -18,7 +21,9 @@ import ru.wkn.entries.EntryFactory;
 import ru.wkn.entries.IEntryFactory;
 import ru.wkn.entries.ParametersDelimiter;
 import ru.wkn.entries.exceptions.EntryException;
+import ru.wkn.entries.resource.csv.AccessMode;
 import ru.wkn.entries.resource.csv.ResourceEntry;
+import ru.wkn.entries.server.plaintext.ProtocolType;
 import ru.wkn.entries.server.plaintext.ServerEntry;
 import ru.wkn.filerw.EFileReader;
 import ru.wkn.filerw.EFileWriter;
@@ -34,6 +39,7 @@ import ru.wkn.repository.exceptions.PersistenceException;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.Date;
 
 // TODO: complete this class
 public class FileDBWindowController extends Controller {
@@ -45,13 +51,26 @@ public class FileDBWindowController extends Controller {
     @FXML
     private Button addButton;
     @FXML
-    private Button editButton;
-    @FXML
     private Button deleteButton;
+
     @FXML
     private TableView<ResourceEntry> resourceEntryTableView;
     @FXML
+    private TableColumn<ResourceEntry, String> resourceEntryUrlColumn;
+    @FXML
+    private TableColumn<ResourceEntry, AccessMode> resourceEntryAccessModeColumn;
+    @FXML
+    private TableColumn<ResourceEntry, Date> resourceEntryAccessDateColumn;
+
+    @FXML
     private TableView<ServerEntry> serverEntryTableView;
+    @FXML
+    private TableColumn<ServerEntry, String> serverEntryUrlColumn;
+    @FXML
+    private TableColumn<ServerEntry, String> serverEntryPortColumn;
+    @FXML
+    private TableColumn<ServerEntry, ProtocolType> serverEntryProtocolTypeColumn;
+
     private FileChooser fileChooser;
 
     private DatasourceType datasourceType;
@@ -77,20 +96,73 @@ public class FileDBWindowController extends Controller {
     private boolean isCollectionActivated = false;
 
     public void initialize() {
+        initTablesCellValuesFactories();
+        initColumnsEditEventHandlers();
+        initChoiceBox();
+        initChoiceBoxEventHandlers();
+
+        datasourceType = DatasourceType.NONE;
+
+        fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("CSV", "*.csv"),
+                new FileChooser.ExtensionFilter("Plain Text", "*.txt"));
+    }
+
+    private void initTablesCellValuesFactories() {
+        resourceEntryUrlColumn.setCellValueFactory(new PropertyValueFactory<>("url"));
+        resourceEntryAccessModeColumn.setCellValueFactory(new PropertyValueFactory<>("accessMode"));
+        resourceEntryAccessDateColumn.setCellValueFactory(new PropertyValueFactory<>("accessDate"));
+
+        serverEntryUrlColumn.setCellValueFactory(new PropertyValueFactory<>("url"));
+        serverEntryPortColumn.setCellValueFactory(new PropertyValueFactory<>("port"));
+        serverEntryProtocolTypeColumn.setCellValueFactory(new PropertyValueFactory<>("protocolType"));
+    }
+
+    private void initColumnsEditEventHandlers() {
+        resourceEntryUrlColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        resourceEntryUrlColumn.setOnEditCommit(event -> {
+            String url = event.getNewValue();
+            int row = event.getTablePosition().getRow();
+            ResourceEntry resourceEntry = event.getTableView().getItems().get(row);
+            resourceEntry.setUrl(url);
+        });
+
+        ObservableList<AccessMode> accessModes = FXCollections.observableArrayList(AccessMode.values());
+        resourceEntryAccessModeColumn.setCellFactory(ComboBoxTableCell.forTableColumn(accessModes));
+        resourceEntryAccessModeColumn.setOnEditCommit((TableColumn.CellEditEvent<ResourceEntry, AccessMode> event) -> {
+            AccessMode newAccessMode = event.getNewValue();
+            int row = event.getTablePosition().getRow();
+            ResourceEntry resourceEntry = event.getTableView().getItems().get(row);
+            resourceEntry.setAccessMode(newAccessMode);
+        });
+
+        serverEntryUrlColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        serverEntryUrlColumn.setOnEditCommit(event -> {
+            String url = event.getNewValue();
+            int row = event.getTablePosition().getRow();
+            ServerEntry serverEntry = event.getTableView().getItems().get(row);
+            serverEntry.setUrl(url);
+        });
+
+        ObservableList<ProtocolType> protocolTypes = FXCollections.observableArrayList(ProtocolType.values());
+        serverEntryProtocolTypeColumn.setCellFactory(ComboBoxTableCell.forTableColumn(protocolTypes));
+        serverEntryProtocolTypeColumn.setOnEditCommit((TableColumn.CellEditEvent<ServerEntry, ProtocolType> event) -> {
+            ProtocolType newProtocolType = event.getNewValue();
+            int row = event.getTablePosition().getRow();
+            ServerEntry serverEntry = event.getTableView().getItems().get(row);
+            serverEntry.setProtocolType(newProtocolType);
+        });
+    }
+
+    private void initChoiceBox() {
         String[] variantItems = new String[]{"CSV: Network resource", "TXT: Network server"};
         ObservableList<String> variants =
                 FXCollections.observableArrayList(variantItems);
         choiceBoxVariants.setItems(variants);
         choiceBoxVariants.setValue(variantItems[0]);
+    }
 
-        resourceEntryTableView.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("url"));
-        resourceEntryTableView.getColumns().get(1).setCellValueFactory(new PropertyValueFactory<>("accessMode"));
-        resourceEntryTableView.getColumns().get(2).setCellValueFactory(new PropertyValueFactory<>("accessDate"));
-
-        serverEntryTableView.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("url"));
-        serverEntryTableView.getColumns().get(1).setCellValueFactory(new PropertyValueFactory<>("port"));
-        serverEntryTableView.getColumns().get(2).setCellValueFactory(new PropertyValueFactory<>("protocolType"));
-
+    private void initChoiceBoxEventHandlers() {
         ChangeListener<String> changeListener = (observable, oldValue, newValue) -> {
             String variant = choiceBoxVariants.getValue();
             if (variant.equals(choiceBoxVariants.getItems().get(0))) {
@@ -104,12 +176,6 @@ public class FileDBWindowController extends Controller {
             updateButtons();
         };
         choiceBoxVariants.getSelectionModel().selectedItemProperty().addListener(changeListener);
-
-        datasourceType = DatasourceType.NONE;
-
-        fileChooser = new FileChooser();
-        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("CSV", "*.csv"),
-                new FileChooser.ExtensionFilter("Plain Text", "*.txt"));
     }
 
     @FXML
@@ -195,10 +261,6 @@ public class FileDBWindowController extends Controller {
 
     @FXML
     private void clickOnAdd() {
-    }
-
-    @FXML
-    private void clickOnEdit() {
     }
 
     @FXML
@@ -290,21 +352,22 @@ public class FileDBWindowController extends Controller {
         }
     }
 
+    // TODO: simplify method, delete duplicates
     private void initFileRWFacade() {
-        resourceEntryEFileReader = (resourceEntryEFileReader == null) ? new FileReader<>(resourceEntryEFile)
-                : resourceEntryEFileReader;
-        resourceEntryEFileWriter = (resourceEntryEFileWriter == null)
-                ? new FileWriter<>(resourceEntryEFile, charsetName) : resourceEntryEFileWriter;
-        serverEntryEFileReader = (serverEntryEFileReader == null) ? new FileReader<>(serverEntryEFile)
-                : serverEntryEFileReader;
-        serverEntryEFileWriter = (serverEntryEFileWriter == null)
-                ? new FileWriter<>(serverEntryEFile, charsetName) : serverEntryEFileWriter;
         String variant = choiceBoxVariants.getValue();
         if (variant.equals(choiceBoxVariants.getItems().get(0))) {
+            resourceEntryEFileReader = (resourceEntryEFileReader == null) ? new FileReader<>(resourceEntryEFile)
+                    : resourceEntryEFileReader;
+            resourceEntryEFileWriter = (resourceEntryEFileWriter == null)
+                    ? new FileWriter<>(resourceEntryEFile, charsetName) : resourceEntryEFileWriter;
             resourceEntryFileRWFacade = (resourceEntryFileRWFacade == null)
                     ? new FileRWFacade<>(resourceEntryEFileReader, resourceEntryEFileWriter) : resourceEntryFileRWFacade;
         } else {
             if (variant.equals(choiceBoxVariants.getItems().get(1))) {
+                serverEntryEFileReader = (serverEntryEFileReader == null) ? new FileReader<>(serverEntryEFile)
+                        : serverEntryEFileReader;
+                serverEntryEFileWriter = (serverEntryEFileWriter == null)
+                        ? new FileWriter<>(serverEntryEFile, charsetName) : serverEntryEFileWriter;
                 serverEntryFileRWFacade = (serverEntryFileRWFacade == null)
                         ? new FileRWFacade<>(serverEntryEFileReader, serverEntryEFileWriter) : serverEntryFileRWFacade;
             }
@@ -348,25 +411,24 @@ public class FileDBWindowController extends Controller {
     }
 
     private void updateButtons() {
-        boolean editAndDeleteButtonsVisible = true;
+        boolean deleteButtonDisable = true;
         String variant = choiceBoxVariants.getValue();
         if (variant.equals(choiceBoxVariants.getItems().get(0))) {
-            editAndDeleteButtonsVisible = !(resourceEntryTableView.getItems().size() > 0);
+            deleteButtonDisable = !(resourceEntryTableView.getItems().size() > 0);
             resourceEntryTableView.getSelectionModel().select(0);
         } else {
             if (variant.equals(choiceBoxVariants.getItems().get(1))) {
-                editAndDeleteButtonsVisible = !(serverEntryTableView.getItems().size() > 0);
+                deleteButtonDisable = !(serverEntryTableView.getItems().size() > 0);
                 serverEntryTableView.getSelectionModel().select(0);
             }
         }
-        setDisablePropertiesForButtons(!isCollectionActivated, editAndDeleteButtonsVisible, editAndDeleteButtonsVisible,
+        setDisablePropertiesForButtons(!isCollectionActivated, deleteButtonDisable,
                 !isCollectionActivated);
     }
 
-    private void setDisablePropertiesForButtons(boolean addButtonDisable, boolean editButtonDisable,
-                                                boolean deleteButtonDisable, boolean saveMenuButtonDisable) {
+    private void setDisablePropertiesForButtons(boolean addButtonDisable, boolean deleteButtonDisable,
+                                                boolean saveMenuButtonDisable) {
         addButton.setDisable(addButtonDisable);
-        editButton.setDisable(editButtonDisable);
         deleteButton.setDisable(deleteButtonDisable);
         saveMenuButton.setDisable(saveMenuButtonDisable);
     }
