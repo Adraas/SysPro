@@ -7,6 +7,8 @@ import lombok.ToString;
 import ru.wkn.entries.IEntry;
 import ru.wkn.entries.ParametersDelimiter;
 
+import java.io.Serializable;
+
 /**
  * The class {@code AccessEntry} represents access information.
  *
@@ -17,7 +19,7 @@ import ru.wkn.entries.ParametersDelimiter;
 @Getter
 @ToString(exclude = "id")
 @EqualsAndHashCode(exclude = "id")
-public class AccessEntry implements IEntry {
+public class AccessEntry implements IEntry, Serializable {
 
     /**
      * Access ID.

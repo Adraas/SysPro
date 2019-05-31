@@ -8,6 +8,8 @@ import lombok.ToString;
 import ru.wkn.entries.IEntry;
 import ru.wkn.entries.ParametersDelimiter;
 
+import java.io.Serializable;
+
 /**
  * The class {@code ServerEntry} represents network server information.
  *
@@ -18,7 +20,7 @@ import ru.wkn.entries.ParametersDelimiter;
 @Getter
 @ToString(exclude = "id")
 @EqualsAndHashCode(exclude = "id")
-public class ServerEntry implements IEntry {
+public class ServerEntry implements IEntry, Serializable {
 
     /**
      * Network server ID.
