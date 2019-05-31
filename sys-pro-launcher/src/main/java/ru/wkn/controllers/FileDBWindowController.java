@@ -74,24 +74,24 @@ public class FileDBWindowController extends Controller {
     private FileChooser fileChooser;
 
     private DatasourceType datasourceType;
-    private RepositoryFacade<ResourceEntry, Long> resourceEntryRepositoryFacade;
-    private RepositoryFacade<ServerEntry, Long> serverEntryRepositoryFacade;
+    private RepositoryFacade<ResourceEntry, Long> resourceERepositoryFacade;
+    private RepositoryFacade<ServerEntry, Long> serverERepositoryFacade;
 
     private String charsetName = "windows-1251";
-    private IFileFactory<ResourceEntry> resourceEntryIFileFactory;
-    private IFileFactory<ServerEntry> serverEntryIFileFactory;
-    private FileRWFacade<ResourceEntry> resourceEntryFileRWFacade;
-    private FileRWFacade<ServerEntry> serverEntryFileRWFacade;
+    private IFileFactory<ResourceEntry> resourceEFileFactory;
+    private IFileFactory<ServerEntry> serverEFileFactory;
+    private FileRWFacade<ResourceEntry> resourceEFileRWFacade;
+    private FileRWFacade<ServerEntry> serverEFileRWFacade;
 
     private IEntryFactory entryFactory;
-    private EFile<ResourceEntry> resourceEntryEFile;
-    private EFile<ServerEntry> serverEntryEFile;
+    private EFile<ResourceEntry> resourceEFile;
+    private EFile<ServerEntry> serverEFile;
 
-    private EFileReader<ResourceEntry> resourceEntryEFileReader;
-    private EFileWriter<ResourceEntry> resourceEntryEFileWriter;
+    private EFileReader<ResourceEntry> resourceEFileReader;
+    private EFileWriter<ResourceEntry> resourceEFileWriter;
 
-    private EFileReader<ServerEntry> serverEntryEFileReader;
-    private EFileWriter<ServerEntry> serverEntryEFileWriter;
+    private EFileReader<ServerEntry> serverEFileReader;
+    private EFileWriter<ServerEntry> serverEFileWriter;
 
     private boolean isCollectionActivated = false;
 
@@ -190,10 +190,10 @@ public class FileDBWindowController extends Controller {
             case DATABASE: {
                 try {
                     if (variant.equals(choiceBoxVariants.getItems().get(0))) {
-                        resourceEntryRepositoryFacade.getService().deleteAll();
+                        resourceERepositoryFacade.getService().deleteAll();
                     } else {
                         if (variant.equals(choiceBoxVariants.getItems().get(1))) {
-                            serverEntryRepositoryFacade.getService().deleteAll();
+                            serverERepositoryFacade.getService().deleteAll();
                         }
                     }
                 } catch (PersistenceException e) {
@@ -245,10 +245,10 @@ public class FileDBWindowController extends Controller {
                 String variant = choiceBoxVariants.getValue();
                 try {
                     if (variant.equals(choiceBoxVariants.getItems().get(0))) {
-                        resourceEntryFileRWFacade.getFileWriter().saveFile(file.getAbsolutePath());
+                        resourceEFileRWFacade.getFileWriter().saveFile(file.getAbsolutePath());
                     } else {
                         if (variant.equals(choiceBoxVariants.getItems().get(1))) {
-                            serverEntryFileRWFacade.getFileWriter().saveFile(file.getAbsolutePath());
+                            serverEFileRWFacade.getFileWriter().saveFile(file.getAbsolutePath());
                         }
                     }
                 } catch (IOException e) {
@@ -267,11 +267,11 @@ public class FileDBWindowController extends Controller {
     private void clickOnDelete() {
         String variant = choiceBoxVariants.getValue();
         if (variant.equals(choiceBoxVariants.getItems().get(0))) {
-            resourceEntryFileRWFacade.getFileWriter().delete(resourceEntryTableView.getSelectionModel()
+            resourceEFileRWFacade.getFileWriter().delete(resourceEntryTableView.getSelectionModel()
                     .getSelectedItem());
         } else {
             if (variant.equals(choiceBoxVariants.getItems().get(1))) {
-                serverEntryFileRWFacade.getFileWriter().delete(serverEntryTableView.getSelectionModel()
+                serverEFileRWFacade.getFileWriter().delete(serverEntryTableView.getSelectionModel()
                         .getSelectedItem());
             }
         }
@@ -281,11 +281,11 @@ public class FileDBWindowController extends Controller {
 
     private void clearFileWithoutSaving(String variant) {
         if (variant.equals(choiceBoxVariants.getItems().get(0))) {
-            resourceEntryFileRWFacade.getFileWriter().deleteSome(0, resourceEntryFileRWFacade.getFileReader()
+            resourceEFileRWFacade.getFileWriter().deleteSome(0, resourceEFileRWFacade.getFileReader()
                     .getEFile().getEntries().size() - 1);
         } else {
             if (variant.equals(choiceBoxVariants.getItems().get(1))) {
-                serverEntryFileRWFacade.getFileWriter().deleteSome(0, serverEntryFileRWFacade.getFileReader()
+                serverEFileRWFacade.getFileWriter().deleteSome(0, serverEFileRWFacade.getFileReader()
                         .getEFile().getEntries().size() - 1);
             }
         }
@@ -309,14 +309,14 @@ public class FileDBWindowController extends Controller {
             String fileName = file.getName();
             if (fileName.endsWith("csv")) {
                 choiceBoxVariants.setValue(choiceBoxVariants.getItems().get(0));
-                if (resourceEntryIFileFactory == null) {
-                    resourceEntryIFileFactory = new FileFactory<>();
+                if (resourceEFileFactory == null) {
+                    resourceEFileFactory = new FileFactory<>();
                 }
             } else {
                 if (fileName.endsWith("txt")) {
                     choiceBoxVariants.setValue(choiceBoxVariants.getItems().get(1));
-                    if (serverEntryIFileFactory == null) {
-                        serverEntryIFileFactory = new FileFactory<>();
+                    if (serverEFileFactory == null) {
+                        serverEFileFactory = new FileFactory<>();
                     }
                 }
             }
@@ -334,18 +334,18 @@ public class FileDBWindowController extends Controller {
         entryFactory = (entryFactory == null) ? new EntryFactory() : entryFactory;
         String variant = choiceBoxVariants.getValue();
         if (variant.equals(choiceBoxVariants.getItems().get(0))) {
-            resourceEntryEFile = (resourceEntryEFile == null)
-                    ? resourceEntryIFileFactory.createEFile(absolutePath, charsetName,
+            resourceEFile = (resourceEFile == null)
+                    ? resourceEFileFactory.createEFile(absolutePath, charsetName,
                     EntriesDelimiter.CSV_DELIMITER, entryFactory, ParametersDelimiter.RESOURCE_CSV_DELIMITER)
-                    : resourceEntryEFile.copyFrom(resourceEntryIFileFactory.createEFile(absolutePath, charsetName,
+                    : resourceEFile.copyFrom(resourceEFileFactory.createEFile(absolutePath, charsetName,
                     EntriesDelimiter.CSV_DELIMITER, entryFactory, ParametersDelimiter.RESOURCE_CSV_DELIMITER));
         } else {
             if (variant.equals(choiceBoxVariants.getItems().get(1))) {
-                serverEntryEFile = (serverEntryEFile == null)
-                        ? serverEntryIFileFactory.createEFile(absolutePath, charsetName,
+                serverEFile = (serverEFile == null)
+                        ? serverEFileFactory.createEFile(absolutePath, charsetName,
                         EntriesDelimiter.PLAIN_TEXT_DELIMITER, entryFactory,
                         ParametersDelimiter.SERVER_PLAIN_TEXT_DELIMITER)
-                        : serverEntryEFile.copyFrom(serverEntryIFileFactory.createEFile(absolutePath, charsetName,
+                        : serverEFile.copyFrom(serverEFileFactory.createEFile(absolutePath, charsetName,
                         EntriesDelimiter.PLAIN_TEXT_DELIMITER, entryFactory,
                         ParametersDelimiter.SERVER_PLAIN_TEXT_DELIMITER));
             }
@@ -356,20 +356,20 @@ public class FileDBWindowController extends Controller {
     private void initFileRWFacade() {
         String variant = choiceBoxVariants.getValue();
         if (variant.equals(choiceBoxVariants.getItems().get(0))) {
-            resourceEntryEFileReader = (resourceEntryEFileReader == null) ? new FileReader<>(resourceEntryEFile)
-                    : resourceEntryEFileReader;
-            resourceEntryEFileWriter = (resourceEntryEFileWriter == null)
-                    ? new FileWriter<>(resourceEntryEFile, charsetName) : resourceEntryEFileWriter;
-            resourceEntryFileRWFacade = (resourceEntryFileRWFacade == null)
-                    ? new FileRWFacade<>(resourceEntryEFileReader, resourceEntryEFileWriter) : resourceEntryFileRWFacade;
+            resourceEFileReader = (resourceEFileReader == null) ? new FileReader<>(resourceEFile)
+                    : resourceEFileReader;
+            resourceEFileWriter = (resourceEFileWriter == null)
+                    ? new FileWriter<>(resourceEFile, charsetName) : resourceEFileWriter;
+            resourceEFileRWFacade = (resourceEFileRWFacade == null)
+                    ? new FileRWFacade<>(resourceEFileReader, resourceEFileWriter) : resourceEFileRWFacade;
         } else {
             if (variant.equals(choiceBoxVariants.getItems().get(1))) {
-                serverEntryEFileReader = (serverEntryEFileReader == null) ? new FileReader<>(serverEntryEFile)
-                        : serverEntryEFileReader;
-                serverEntryEFileWriter = (serverEntryEFileWriter == null)
-                        ? new FileWriter<>(serverEntryEFile, charsetName) : serverEntryEFileWriter;
-                serverEntryFileRWFacade = (serverEntryFileRWFacade == null)
-                        ? new FileRWFacade<>(serverEntryEFileReader, serverEntryEFileWriter) : serverEntryFileRWFacade;
+                serverEFileReader = (serverEFileReader == null) ? new FileReader<>(serverEFile)
+                        : serverEFileReader;
+                serverEFileWriter = (serverEFileWriter == null)
+                        ? new FileWriter<>(serverEFile, charsetName) : serverEFileWriter;
+                serverEFileRWFacade = (serverEFileRWFacade == null)
+                        ? new FileRWFacade<>(serverEFileReader, serverEFileWriter) : serverEFileRWFacade;
             }
         }
     }
@@ -380,11 +380,11 @@ public class FileDBWindowController extends Controller {
         switch (datasourceType) {
             case FILE: {
                 if (variant.equals(choiceBoxVariants.getItems().get(0))) {
-                    resourceEntryTableView.getItems().addAll(resourceEntryFileRWFacade.getFileReader().getEFile()
+                    resourceEntryTableView.getItems().addAll(resourceEFileRWFacade.getFileReader().getEFile()
                             .getEntries());
                 } else {
                     if (variant.equals(choiceBoxVariants.getItems().get(1))) {
-                        serverEntryTableView.getItems().addAll(serverEntryFileRWFacade.getFileReader().getEFile()
+                        serverEntryTableView.getItems().addAll(serverEFileRWFacade.getFileReader().getEFile()
                                 .getEntries());
                     }
                 }
@@ -393,10 +393,10 @@ public class FileDBWindowController extends Controller {
             case DATABASE: {
                 initRepositoryFacade();
                 if (variant.equals(choiceBoxVariants.getItems().get(0))) {
-                    resourceEntryTableView.getItems().addAll(resourceEntryRepositoryFacade.getService().getAll());
+                    resourceEntryTableView.getItems().addAll(resourceERepositoryFacade.getService().getAll());
                 } else {
                     if (variant.equals(choiceBoxVariants.getItems().get(1))) {
-                        serverEntryTableView.getItems().addAll(serverEntryRepositoryFacade.getService().getAll());
+                        serverEntryTableView.getItems().addAll(serverERepositoryFacade.getService().getAll());
                     }
                 }
                 break;
@@ -436,19 +436,19 @@ public class FileDBWindowController extends Controller {
     private void initRepositoryFacade() {
         String variant = choiceBoxVariants.getValue();
         if (variant.equals(choiceBoxVariants.getItems().get(0))) {
-            if (resourceEntryRepositoryFacade != null
-                    && !resourceEntryRepositoryFacade.getEntityInstance().equals(EntityInstance.NETWORK_RESOURCE)) {
-                resourceEntryRepositoryFacade.serviceReinitialize(EntityInstance.NETWORK_RESOURCE);
+            if (resourceERepositoryFacade != null
+                    && !resourceERepositoryFacade.getEntityInstance().equals(EntityInstance.NETWORK_RESOURCE)) {
+                resourceERepositoryFacade.serviceReinitialize(EntityInstance.NETWORK_RESOURCE);
             } else {
-                resourceEntryRepositoryFacade = new RepositoryFacade<>(EntityInstance.NETWORK_RESOURCE);
+                resourceERepositoryFacade = new RepositoryFacade<>(EntityInstance.NETWORK_RESOURCE);
             }
         } else {
             if (variant.equals(choiceBoxVariants.getItems().get(1))) {
-                if (serverEntryRepositoryFacade != null
-                        && !serverEntryRepositoryFacade.getEntityInstance().equals(EntityInstance.NETWORK_SERVER)) {
-                    serverEntryRepositoryFacade.serviceReinitialize(EntityInstance.NETWORK_SERVER);
+                if (serverERepositoryFacade != null
+                        && !serverERepositoryFacade.getEntityInstance().equals(EntityInstance.NETWORK_SERVER)) {
+                    serverERepositoryFacade.serviceReinitialize(EntityInstance.NETWORK_SERVER);
                 } else {
-                    serverEntryRepositoryFacade = new RepositoryFacade<>(EntityInstance.NETWORK_SERVER);
+                    serverERepositoryFacade = new RepositoryFacade<>(EntityInstance.NETWORK_SERVER);
                 }
             }
         }
