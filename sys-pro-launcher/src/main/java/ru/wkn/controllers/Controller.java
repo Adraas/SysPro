@@ -40,4 +40,8 @@ public abstract class Controller {
             e.printStackTrace();
         }
     }
+
+    protected static void hideCurrentWindow(WindowType currentWindowType) {
+        windowRepository.getWindow(currentWindowType).hide();
+    }
 }
