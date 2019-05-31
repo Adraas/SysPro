@@ -1,5 +1,6 @@
 package ru.wkn.views;
 
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import ru.wkn.exceptions.WindowTypeException;
 import ru.wkn.views.events.SwitchingEvent;
@@ -57,6 +58,7 @@ public class WindowFactory implements IWindowFactory {
                 height = 200;
                 stage.setOnCloseRequest(event -> switchingEvent
                         .executeSwitch(WindowType.NETWORK_RESOURCE_WINDOW, WindowType.FILE_DB_WINDOW));
+                stage.initModality(Modality.WINDOW_MODAL);
                 break;
             }
             case SERVER_INFORMATION_WINDOW: {
@@ -66,6 +68,7 @@ public class WindowFactory implements IWindowFactory {
                 height = 200;
                 stage.setOnCloseRequest(event -> switchingEvent
                         .executeSwitch(WindowType.SERVER_INFORMATION_WINDOW, WindowType.FILE_DB_WINDOW));
+                stage.initModality(Modality.WINDOW_MODAL);
                 break;
             }
             case NETWORK_ACCESS_WINDOW: {
@@ -75,6 +78,7 @@ public class WindowFactory implements IWindowFactory {
                 height = 200;
                 stage.setOnCloseRequest(event -> switchingEvent
                         .executeSwitch(WindowType.NETWORK_ACCESS_WINDOW, WindowType.FILE_DB_WINDOW));
+                stage.initModality(Modality.WINDOW_MODAL);
                 break;
             }
             default: {
