@@ -18,6 +18,7 @@ import javafx.stage.FileChooser;
 import lombok.AllArgsConstructor;
 import ru.wkn.FileRWFacade;
 import ru.wkn.entries.EntryFactory;
+import ru.wkn.entries.IEntry;
 import ru.wkn.entries.IEntryFactory;
 import ru.wkn.entries.ParametersDelimiter;
 import ru.wkn.entries.exceptions.EntryException;
@@ -36,13 +37,17 @@ import ru.wkn.filerw.writers.FileWriter;
 import ru.wkn.repository.RepositoryFacade;
 import ru.wkn.repository.dao.EntityInstance;
 import ru.wkn.repository.exceptions.PersistenceException;
+import ru.wkn.util.ObservableType;
+import ru.wkn.util.Observer;
+import ru.wkn.util.OperationType;
+import ru.wkn.views.WindowType;
 
 import java.io.File;
 import java.io.IOException;
 import java.sql.Date;
 
 // TODO: complete this class
-public class FileDBWindowController extends Controller {
+public class FileDBWindowController extends Controller implements Observer<IEntry> {
 
     @FXML
     private ChoiceBox<String> choiceBoxVariants;
@@ -96,6 +101,8 @@ public class FileDBWindowController extends Controller {
     private boolean isCollectionActivated = false;
 
     public void initialize() {
+        getObservablesRepository().getObservable(ObservableType.OBERVABLE_INTERWINDOW_REPOSITORY)
+                .addObserver(OperationType.WAITING_VALUE, this);
         initTablesCellValuesFactories();
         initColumnsEditEventHandlers();
         initChoiceBox();
@@ -180,38 +187,35 @@ public class FileDBWindowController extends Controller {
 
     @FXML
     private void clickOnNewList() {
-        isCollectionActivated = true;
-        String variant = choiceBoxVariants.getValue();
-        switch (datasourceType) {
-            case FILE: {
-                clearFileWithoutSaving(variant);
-                break;
-            }
-            case DATABASE: {
+        Platform.runLater(() -> {
+            if (!isCollectionActivated) {
+                String variant = choiceBoxVariants.getValue();
                 try {
+                    String fileExtensionWithoutFullName;
                     if (variant.equals(choiceBoxVariants.getItems().get(0))) {
-                        resourceERepositoryFacade.getService().deleteAll();
+                        fileExtensionWithoutFullName = ".csv";
+                        initEFileFactory(fileExtensionWithoutFullName);
+                        initEntryFile(fileExtensionWithoutFullName);
                     } else {
                         if (variant.equals(choiceBoxVariants.getItems().get(1))) {
-                            serverERepositoryFacade.getService().deleteAll();
+                            fileExtensionWithoutFullName = ".txt";
+                            initEFileFactory(fileExtensionWithoutFullName);
+                            initEntryFile(fileExtensionWithoutFullName);
                         }
                     }
-                } catch (PersistenceException e) {
+                } catch (IOException | EntryException e) {
                     e.printStackTrace();
-                    showInformation("Error", e.getMessage(), Alert.AlertType.ERROR);
+                    showInformation(e.getClass().getSimpleName(), e.getMessage(), Alert.AlertType.ERROR);
                 }
-                break;
+                initFileRWFacade();
+                isCollectionActivated = true;
             }
-            case NONE: {
-                break;
-            }
-            default: {
-                showInformation("Error", "This datasource type not found!", Alert.AlertType.ERROR);
-            }
-        }
-        updateTableView();
-        updateButtons();
-        datasourceType = DatasourceType.NONE;
+            String variant = choiceBoxVariants.getValue();
+            clearFileWithoutSaving(variant);
+            updateTableView();
+            updateButtons();
+            datasourceType = DatasourceType.FILE;
+        });
     }
 
     @FXML
@@ -253,7 +257,7 @@ public class FileDBWindowController extends Controller {
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
-                    showInformation("Error", e.getMessage(), Alert.AlertType.ERROR);
+                    showInformation(e.getClass().getSimpleName(), e.getMessage(), Alert.AlertType.ERROR);
                 }
             }
         });
@@ -261,22 +265,75 @@ public class FileDBWindowController extends Controller {
 
     @FXML
     private void clickOnAdd() {
+        Platform.runLater(() -> {
+            String variant = choiceBoxVariants.getValue();
+            if (variant.equals(choiceBoxVariants.getItems().get(0))) {
+                openNewWindow(WindowType.FILE_DB_WINDOW, WindowType.NETWORK_RESOURCE_WINDOW);
+            } else {
+                if (variant.equals(choiceBoxVariants.getItems().get(1))) {
+                    openNewWindow(WindowType.FILE_DB_WINDOW, WindowType.SERVER_INFORMATION_WINDOW);
+                }
+            }
+        });
     }
 
     @FXML
     private void clickOnDelete() {
-        String variant = choiceBoxVariants.getValue();
-        if (variant.equals(choiceBoxVariants.getItems().get(0))) {
-            resourceEFileRWFacade.getFileWriter().delete(resourceEntryTableView.getSelectionModel()
-                    .getSelectedItem());
-        } else {
-            if (variant.equals(choiceBoxVariants.getItems().get(1))) {
-                serverEFileRWFacade.getFileWriter().delete(serverEntryTableView.getSelectionModel()
+        Platform.runLater(() -> {
+            String variant = choiceBoxVariants.getValue();
+            if (variant.equals(choiceBoxVariants.getItems().get(0))) {
+                resourceEFileRWFacade.getFileWriter().delete(resourceEntryTableView.getSelectionModel()
                         .getSelectedItem());
+            } else {
+                if (variant.equals(choiceBoxVariants.getItems().get(1))) {
+                    serverEFileRWFacade.getFileWriter().delete(serverEntryTableView.getSelectionModel()
+                            .getSelectedItem());
+                }
             }
-        }
-        updateTableView();
-        updateButtons();
+            updateTableView();
+            updateButtons();
+        });
+    }
+
+    @Override
+    public void update(IEntry dataObject) {
+        Platform.runLater(() -> {
+            String variant = choiceBoxVariants.getValue();
+            switch (datasourceType) {
+                case FILE: {
+                    if (variant.equals(choiceBoxVariants.getItems().get(0))) {
+                        resourceEFileRWFacade.getFileWriter().append((ResourceEntry) dataObject);
+                    } else {
+                        if (variant.equals(choiceBoxVariants.getItems().get(1))) {
+                            serverEFileRWFacade.getFileWriter().append((ServerEntry) dataObject);
+                        }
+                    }
+                    break;
+                }
+                case DATABASE: {
+                    try {
+                        if (variant.equals(choiceBoxVariants.getItems().get(0))) {
+                            resourceERepositoryFacade.getService().create((ResourceEntry) dataObject);
+                        } else {
+                            if (variant.equals(choiceBoxVariants.getItems().get(1))) {
+                                serverERepositoryFacade.getService().create((ServerEntry) dataObject);
+                            }
+                        }
+                    } catch (PersistenceException e) {
+                        e.printStackTrace();
+                        showInformation(e.getClass().getSimpleName(), e.getMessage(), Alert.AlertType.ERROR);
+                    }
+                    break;
+                }
+                case NONE: {
+                    break;
+                }
+                default: {
+                    showInformation("Datasource error", "This datasource type not found!", Alert.AlertType.ERROR);
+                }
+            }
+            updateTableView();
+        });
     }
 
     private void clearFileWithoutSaving(String variant) {
@@ -306,28 +363,32 @@ public class FileDBWindowController extends Controller {
         datasourceType = DatasourceType.FILE;
         File file = fileChooser.showOpenDialog(null);
         if (file != null) {
-            String fileName = file.getName();
-            if (fileName.endsWith("csv")) {
-                choiceBoxVariants.setValue(choiceBoxVariants.getItems().get(0));
-                if (resourceEFileFactory == null) {
-                    resourceEFileFactory = new FileFactory<>();
-                }
-            } else {
-                if (fileName.endsWith("txt")) {
-                    choiceBoxVariants.setValue(choiceBoxVariants.getItems().get(1));
-                    if (serverEFileFactory == null) {
-                        serverEFileFactory = new FileFactory<>();
-                    }
-                }
-            }
+            String filename = file.getName();
+            initEFileFactory(filename);
             try {
                 initEntryFile(file.getAbsolutePath());
             } catch (IOException | EntryException e) {
                 e.printStackTrace();
-                showInformation("Error", e.getMessage(), Alert.AlertType.ERROR);
+                showInformation(e.getClass().getSimpleName(), e.getMessage(), Alert.AlertType.ERROR);
             }
         }
         return file;
+    }
+
+    private void initEFileFactory(String filename) {
+        if (filename.endsWith("csv")) {
+            choiceBoxVariants.setValue(choiceBoxVariants.getItems().get(0));
+            if (resourceEFileFactory == null) {
+                resourceEFileFactory = new FileFactory<>();
+            }
+        } else {
+            if (filename.endsWith("txt")) {
+                choiceBoxVariants.setValue(choiceBoxVariants.getItems().get(1));
+                if (serverEFileFactory == null) {
+                    serverEFileFactory = new FileFactory<>();
+                }
+            }
+        }
     }
 
     private void initEntryFile(String absolutePath) throws IOException, EntryException {
@@ -405,7 +466,7 @@ public class FileDBWindowController extends Controller {
                 break;
             }
             default: {
-                showInformation("Error", "This datasource type not found!", Alert.AlertType.ERROR);
+                showInformation("Datasource error", "This datasource type not found!", Alert.AlertType.ERROR);
             }
         }
     }

@@ -2,6 +2,8 @@ package ru.wkn.controllers;
 
 import javafx.scene.control.Alert;
 import lombok.Getter;
+import ru.wkn.entries.IEntry;
+import ru.wkn.util.ObservablesRepository;
 import ru.wkn.views.IWindow;
 import ru.wkn.views.IWindowFactory;
 import ru.wkn.views.WindowFactory;
@@ -17,10 +19,13 @@ public abstract class Controller {
     private static WindowRepository windowRepository;
     @Getter
     private static SwitchingEvent<WindowType> switchingEvent = Controller::openNewWindow;
+    @Getter
+    public static ObservablesRepository<IEntry> observablesRepository;
 
     static {
         IWindowFactory windowFactory = new WindowFactory();
         windowRepository = new WindowRepository(windowFactory);
+        observablesRepository = new ObservablesRepository<>();
     }
 
     protected static void showInformation(String title, String message, Alert.AlertType alertType) {
