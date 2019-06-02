@@ -46,7 +46,6 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.Date;
 
-// TODO: complete this class
 public class FileDBWindowController extends Controller implements Observer<IEntry> {
 
     @FXML
