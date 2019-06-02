@@ -58,8 +58,6 @@ public class FileFactory<T extends IEntry> implements IFileFactory<T> {
                 }
             }
             bufferedReader.close();
-        } else {
-            Files.createFile(aPath);
         }
         return new EFile<>(path, entries, fileExtension);
     }
