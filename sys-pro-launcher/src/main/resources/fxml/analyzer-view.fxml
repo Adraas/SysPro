@@ -11,21 +11,22 @@
             xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
             fx:controller="ru.wkn.controllers.AnalyzerWindowController">
     <children>
-        <TextArea fx:id="inputArea" layoutX="150.0" layoutY="69.0" maxHeight="-Infinity" maxWidth="-Infinity"
+        <TextArea fx:id="inputExpressionField" layoutX="150.0" layoutY="69.0" maxHeight="-Infinity" maxWidth="-Infinity"
                   minHeight="-Infinity" minWidth="-Infinity" prefHeight="164.0" prefWidth="428.0"/>
         <Label layoutX="23.0" layoutY="69.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
                minWidth="-Infinity" prefHeight="17.0" prefWidth="121.0" text="Input the construction:"/>
-        <TextArea fx:id="messageLogArea" editable="false" layoutX="150.0" layoutY="240.0" maxHeight="-Infinity"
-                  maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="164.0" prefWidth="428.0"/>
+        <TextArea fx:id="expressionAnalyzerMessageLogArea" editable="false" layoutX="150.0" layoutY="240.0"
+                  maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+                  prefHeight="164.0" prefWidth="428.0"/>
         <Label layoutX="73.0" layoutY="240.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
                minWidth="-Infinity" prefHeight="17.0" prefWidth="71.0" text="Message log:"/>
         <Label layoutX="41.0" layoutY="41.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
                minWidth="-Infinity" prefHeight="17.0" prefWidth="103.0" text="Choose the variant:"/>
-        <ChoiceBox fx:id="variantChoseBox" layoutX="150.0" layoutY="37.0" maxHeight="-Infinity" maxWidth="-Infinity"
+        <ChoiceBox fx:id="choiceBoxVariants" layoutX="150.0" layoutY="37.0" maxHeight="-Infinity" maxWidth="-Infinity"
                    minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="150.0"/>
-        <CheckBox layoutX="392.0" layoutY="41.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-                  minWidth="-Infinity" mnemonicParsing="false" prefHeight="17.0" prefWidth="190.0"
-                  text="semantics checking is activated"/>
+        <CheckBox fx:id="isSemanticsActivatedCheckBox" layoutX="392.0" layoutY="41.0" maxHeight="-Infinity"
+                  maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false"
+                  prefHeight="17.0" prefWidth="190.0" text="semantics checking is activated"/>
         <Button layoutX="339.0" layoutY="37.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
                 minWidth="-Infinity" mnemonicParsing="false" onAction="#onClickRun" prefHeight="25.0" prefWidth="25.0"
                 styleClass="iconButtonRun" stylesheets="@../css/button-styles.css"/>

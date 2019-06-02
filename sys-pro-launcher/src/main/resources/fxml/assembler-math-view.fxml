@@ -13,7 +13,7 @@
     <children>
         <Label layoutX="14.0" layoutY="36.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
                minWidth="-Infinity" prefHeight="17.0" prefWidth="112.0" text="Choose the variant:"/>
-        <ChoiceBox fx:id="assemblerVariantChoiceBox" layoutX="132.0" layoutY="34.0" maxHeight="-Infinity"
+        <ChoiceBox fx:id="choiceBoxVariants" layoutX="132.0" layoutY="34.0" maxHeight="-Infinity"
                    maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="165.0"/>
         <Label layoutX="14.0" layoutY="84.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
                minWidth="-Infinity" prefHeight="17.0" prefWidth="46.0" text="Input a:"/>
@@ -23,9 +23,8 @@
                    minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="200"/>
         <TextField fx:id="inputBField" layoutX="96.0" layoutY="116.0" maxHeight="-Infinity" maxWidth="-Infinity"
                    minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="200"/>
-        <TextArea id="messageLogArea" fx:id="assemblerMessageLog" editable="false" layoutX="96.0" layoutY="223.0"
-                  maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-                  prefHeight="164.0" prefWidth="490.0"/>
+        <TextArea fx:id="assemblerMessageLogArea" editable="false" layoutX="96.0" layoutY="223.0" maxHeight="-Infinity"
+                  maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="164.0" prefWidth="490.0"/>
         <Label layoutX="14.0" layoutY="223.0" prefHeight="17.0" prefWidth="82.0" text="Message log:"/>
         <Button layoutX="96.0" layoutY="151.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
                 minWidth="-Infinity" mnemonicParsing="false" onAction="#onClickRun" prefHeight="25.0" prefWidth="25.0"
