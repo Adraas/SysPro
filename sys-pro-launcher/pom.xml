@@ -31,7 +31,7 @@
             <groupId>ru.wkn</groupId>
             <artifactId>jni-worker</artifactId>
             <version>1.0-SNAPSHOT</version>
-            <type>nar</type>
+            <scope>install</scope>
         </dependency>
         <dependency>
             <groupId>ru.wkn</groupId>
