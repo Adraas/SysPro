@@ -162,8 +162,7 @@ public class FileDBWindowController extends Controller implements Observer<IEntr
 
     private void initChoiceBox() {
         String[] variantItems = new String[]{"CSV: Network resource", "TXT: Network server"};
-        ObservableList<String> variants =
-                FXCollections.observableArrayList(variantItems);
+        ObservableList<String> variants = FXCollections.observableArrayList(variantItems);
         choiceBoxVariants.setItems(variants);
         choiceBoxVariants.setValue(variantItems[0]);
     }
@@ -174,10 +173,11 @@ public class FileDBWindowController extends Controller implements Observer<IEntr
             if (variant.equals(choiceBoxVariants.getItems().get(0))) {
                 resourceEntryTableView.setVisible(true);
                 serverEntryTableView.setVisible(false);
-            }
-            if (variant.equals(choiceBoxVariants.getItems().get(1))) {
-                resourceEntryTableView.setVisible(false);
-                serverEntryTableView.setVisible(true);
+            } else {
+                if (variant.equals(choiceBoxVariants.getItems().get(1))) {
+                    resourceEntryTableView.setVisible(false);
+                    serverEntryTableView.setVisible(true);
+                }
             }
             updateButtons();
         };
