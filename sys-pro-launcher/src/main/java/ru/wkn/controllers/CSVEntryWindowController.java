@@ -1,5 +1,6 @@
 package ru.wkn.controllers;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
@@ -25,18 +26,23 @@ public class CSVEntryWindowController extends Controller {
 
     @FXML
     private void onClickAccept() {
-        ResourceEntry resourceEntry = null;
-        try {
-            resourceEntry = new ResourceEntry(urlTextField.getText(),
-                    AccessMode.getInstance(accessModeTextField.getText().toLowerCase()),
-                    Date.valueOf(dateTextField.getText()));
-        } catch (EntryException e) {
-            e.printStackTrace();
-            showInformation(e.getClass().getSimpleName(), e.getMessage(), Alert.AlertType.ERROR);
-        }
-        Observable<IEntry> observable = getObservablesRepository()
-                .getObservable(ObservableType.OBERVABLE_INTERWINDOW_REPOSITORY);
-        openNewWindow(WindowType.NETWORK_RESOURCE_WINDOW, WindowType.FILE_DB_WINDOW);
-        observable.update(OperationType.WAITING_VALUE, resourceEntry);
+        Platform.runLater(() -> {
+            ResourceEntry resourceEntry = null;
+            try {
+                resourceEntry = new ResourceEntry(urlTextField.getText(),
+                        AccessMode.getInstance(accessModeTextField.getText().toLowerCase()),
+                        Date.valueOf(dateTextField.getText()));
+                urlTextField.clear();
+                accessModeTextField.clear();
+                dateTextField.clear();
+            } catch (EntryException e) {
+                e.printStackTrace();
+                showInformation(e.getClass().getSimpleName(), e.getMessage(), Alert.AlertType.ERROR);
+            }
+            Observable<IEntry> observable = getObservablesRepository()
+                    .getObservable(ObservableType.OBERVABLE_INTERWINDOW_REPOSITORY);
+            openNewWindow(WindowType.NETWORK_RESOURCE_WINDOW, WindowType.FILE_DB_WINDOW);
+            observable.update(OperationType.WAITING_VALUE, resourceEntry);
+        });
     }
 }

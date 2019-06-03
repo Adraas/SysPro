@@ -221,6 +221,7 @@ public class FileDBWindowController extends Controller implements Observer<IEntr
     private void clickOnOpenFile() {
         Platform.runLater(() -> {
             isCollectionActivated = true;
+            datasourceType = DatasourceType.FILE;
             File file = openFile();
             if (file != null) {
                 initFileRWFacade();
@@ -235,6 +236,7 @@ public class FileDBWindowController extends Controller implements Observer<IEntr
         Platform.runLater(() -> {
             isCollectionActivated = true;
             datasourceType = DatasourceType.DATABASE;
+            initRepositoryFacade();
             updateTableView();
             updateButtons();
         });
@@ -332,6 +334,7 @@ public class FileDBWindowController extends Controller implements Observer<IEntr
                 }
             }
             updateTableView();
+            updateButtons();
         });
     }
 
@@ -434,65 +437,6 @@ public class FileDBWindowController extends Controller implements Observer<IEntr
         }
     }
 
-    private void updateTableView() {
-        clearTableView();
-        String variant = choiceBoxVariants.getValue();
-        switch (datasourceType) {
-            case FILE: {
-                if (variant.equals(choiceBoxVariants.getItems().get(0))) {
-                    resourceEntryTableView.getItems().addAll(resourceEFileRWFacade.getFileReader().getEFile()
-                            .getEntries());
-                } else {
-                    if (variant.equals(choiceBoxVariants.getItems().get(1))) {
-                        serverEntryTableView.getItems().addAll(serverEFileRWFacade.getFileReader().getEFile()
-                                .getEntries());
-                    }
-                }
-                break;
-            }
-            case DATABASE: {
-                initRepositoryFacade();
-                if (variant.equals(choiceBoxVariants.getItems().get(0))) {
-                    resourceEntryTableView.getItems().addAll(resourceERepositoryFacade.getService().getAll());
-                } else {
-                    if (variant.equals(choiceBoxVariants.getItems().get(1))) {
-                        serverEntryTableView.getItems().addAll(serverERepositoryFacade.getService().getAll());
-                    }
-                }
-                break;
-            }
-            case NONE: {
-                break;
-            }
-            default: {
-                showInformation("Datasource error", "This datasource type not found!", Alert.AlertType.ERROR);
-            }
-        }
-    }
-
-    private void updateButtons() {
-        boolean deleteButtonDisable = true;
-        String variant = choiceBoxVariants.getValue();
-        if (variant.equals(choiceBoxVariants.getItems().get(0))) {
-            deleteButtonDisable = !(resourceEntryTableView.getItems().size() > 0);
-            resourceEntryTableView.getSelectionModel().select(0);
-        } else {
-            if (variant.equals(choiceBoxVariants.getItems().get(1))) {
-                deleteButtonDisable = !(serverEntryTableView.getItems().size() > 0);
-                serverEntryTableView.getSelectionModel().select(0);
-            }
-        }
-        setDisablePropertiesForButtons(!isCollectionActivated, deleteButtonDisable,
-                !isCollectionActivated);
-    }
-
-    private void setDisablePropertiesForButtons(boolean addButtonDisable, boolean deleteButtonDisable,
-                                                boolean saveMenuButtonDisable) {
-        addButton.setDisable(addButtonDisable);
-        deleteButton.setDisable(deleteButtonDisable);
-        saveMenuButton.setDisable(saveMenuButtonDisable);
-    }
-
     private void initRepositoryFacade() {
         String variant = choiceBoxVariants.getValue();
         if (variant.equals(choiceBoxVariants.getItems().get(0))) {
@@ -512,6 +456,67 @@ public class FileDBWindowController extends Controller implements Observer<IEntr
                 }
             }
         }
+    }
+
+    private void updateTableView() {
+        Platform.runLater(() -> {
+            clearTableView();
+            String variant = choiceBoxVariants.getValue();
+            switch (datasourceType) {
+                case FILE: {
+                    if (variant.equals(choiceBoxVariants.getItems().get(0))) {
+                        resourceEntryTableView.getItems().addAll(resourceEFileRWFacade.getFileReader().getEFile()
+                                .getEntries());
+                    } else {
+                        if (variant.equals(choiceBoxVariants.getItems().get(1))) {
+                            serverEntryTableView.getItems().addAll(serverEFileRWFacade.getFileReader().getEFile()
+                                    .getEntries());
+                        }
+                    }
+                    break;
+                }
+                case DATABASE: {
+                    if (variant.equals(choiceBoxVariants.getItems().get(0))) {
+                        resourceEntryTableView.getItems().addAll(resourceERepositoryFacade.getService().getAll());
+                    } else {
+                        if (variant.equals(choiceBoxVariants.getItems().get(1))) {
+                            serverEntryTableView.getItems().addAll(serverERepositoryFacade.getService().getAll());
+                        }
+                    }
+                    break;
+                }
+                case NONE: {
+                    break;
+                }
+                default: {
+                    showInformation("Datasource error", "This datasource type not found!", Alert.AlertType.ERROR);
+                }
+            }
+        });
+    }
+
+    private void updateButtons() {
+        Platform.runLater(() -> {
+            boolean deleteButtonDisable = true;
+            String variant = choiceBoxVariants.getValue();
+            if (variant.equals(choiceBoxVariants.getItems().get(0))) {
+                deleteButtonDisable = !(resourceEntryTableView.getItems().size() > 0);
+                resourceEntryTableView.getSelectionModel().select(0);
+            } else {
+                if (variant.equals(choiceBoxVariants.getItems().get(1))) {
+                    deleteButtonDisable = !(serverEntryTableView.getItems().size() > 0);
+                    serverEntryTableView.getSelectionModel().select(0);
+                }
+            }
+            setDisablePropertiesForButtons(!isCollectionActivated, deleteButtonDisable, !isCollectionActivated);
+        });
+    }
+
+    private void setDisablePropertiesForButtons(boolean addButtonDisable, boolean deleteButtonDisable,
+                                                boolean saveMenuButtonDisable) {
+        addButton.setDisable(addButtonDisable);
+        deleteButton.setDisable(deleteButtonDisable);
+        saveMenuButton.setDisable(saveMenuButtonDisable);
     }
 
     @AllArgsConstructor

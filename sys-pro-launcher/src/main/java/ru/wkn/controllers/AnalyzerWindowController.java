@@ -1,5 +1,6 @@
 package ru.wkn.controllers;
 
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -39,6 +40,16 @@ public class AnalyzerWindowController extends Controller {
         initChoiceBoxEventHandlers();
         initCheckBoxEventHandlers();
         expressionAnalyzerFactory = new ExpressionAnalyzerFactory();
+        ExpressionAnalyzer expressionAnalyzer = null;
+        try {
+            expressionAnalyzer = expressionAnalyzerFactory
+                    .createExpressionAnalyzer(ExpressionAnalyzerType.CYCLE_WHILE_WITH_PRECONDITION,
+                            Language.C_SHARPE, isSemanticsActivatedCheckBox.isSelected());
+        } catch (LanguageException | AnalyzerException e) {
+            informAboutExceptionCause(e);
+        }
+        expressionAnalyzerFacade = new ExpressionAnalyzerFacade(expressionAnalyzer,
+                expressionAnalyzerFactory);
     }
 
     private void initChoiceBox() {
@@ -56,8 +67,7 @@ public class AnalyzerWindowController extends Controller {
                     ExpressionAnalyzer expressionAnalyzer = expressionAnalyzerFactory
                             .createExpressionAnalyzer(ExpressionAnalyzerType.CYCLE_WHILE_WITH_PRECONDITION,
                                     Language.C_SHARPE, isSemanticsActivatedCheckBox.isSelected());
-                    expressionAnalyzerFacade = new ExpressionAnalyzerFacade(expressionAnalyzer,
-                            expressionAnalyzerFactory);
+                    expressionAnalyzerFacade.setExpressionAnalyzer(expressionAnalyzer);
                 } catch (LanguageException | AnalyzerException e) {
                     informAboutExceptionCause(e);
                 }
@@ -76,17 +86,19 @@ public class AnalyzerWindowController extends Controller {
 
     @FXML
     private void onClickRun() {
-        String variant = choiceBoxVariants.getValue();
-        if (variant.equals(choiceBoxVariants.getItems().get(0))) {
-            try {
-                expressionAnalyzerMessageLogArea.setText(expressionAnalyzerMessageLogArea.getText()
-                        .concat("\nExpression is correct: ")
-                        .concat(String.valueOf(expressionAnalyzerFacade
-                                .getExpressionAnalyzer().isSyntaxCorrect(inputExpressionField.getText()))));
-            } catch (ExpressionException | SemanticsException e) {
-                informAboutExceptionCause(e);
+        Platform.runLater(() -> {
+            String variant = choiceBoxVariants.getValue();
+            if (variant.equals(choiceBoxVariants.getItems().get(0))) {
+                try {
+                    expressionAnalyzerMessageLogArea.setText(expressionAnalyzerMessageLogArea.getText()
+                            .concat("\nExpression is correct: ")
+                            .concat(String.valueOf(expressionAnalyzerFacade
+                                    .getExpressionAnalyzer().isSyntaxCorrect(inputExpressionField.getText()))));
+                } catch (ExpressionException | SemanticsException e) {
+                    informAboutExceptionCause(e);
+                }
             }
-        }
+        });
     }
 
     private void informAboutExceptionCause(Exception e) {

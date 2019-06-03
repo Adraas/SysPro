@@ -1,5 +1,6 @@
 package ru.wkn.controllers;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
@@ -23,18 +24,23 @@ public class PlainTextEntryWindowController extends Controller {
 
     @FXML
     private void clickOnAccept() {
-        ServerEntry serverEntry = null;
-        try {
-            serverEntry = new ServerEntry(urlTextField.getText(),
-                    Integer.valueOf(portTextField.getText()),
-                    ProtocolType.getInstance(protocolTypeTextField.getText().toLowerCase()));
-        } catch (EntryException e) {
-            e.printStackTrace();
-            showInformation(e.getClass().getSimpleName(), e.getMessage(), Alert.AlertType.ERROR);
-        }
-        Observable<IEntry> observable = getObservablesRepository()
-                .getObservable(ObservableType.OBERVABLE_INTERWINDOW_REPOSITORY);
-        openNewWindow(WindowType.NETWORK_RESOURCE_WINDOW, WindowType.FILE_DB_WINDOW);
-        observable.update(OperationType.WAITING_VALUE, serverEntry);
+        Platform.runLater(() -> {
+            ServerEntry serverEntry = null;
+            try {
+                serverEntry = new ServerEntry(urlTextField.getText(),
+                        Integer.valueOf(portTextField.getText()),
+                        ProtocolType.getInstance(protocolTypeTextField.getText().toLowerCase()));
+                urlTextField.clear();
+                portTextField.clear();
+                protocolTypeTextField.clear();
+            } catch (EntryException e) {
+                e.printStackTrace();
+                showInformation(e.getClass().getSimpleName(), e.getMessage(), Alert.AlertType.ERROR);
+            }
+            Observable<IEntry> observable = getObservablesRepository()
+                    .getObservable(ObservableType.OBERVABLE_INTERWINDOW_REPOSITORY);
+            openNewWindow(WindowType.NETWORK_RESOURCE_WINDOW, WindowType.FILE_DB_WINDOW);
+            observable.update(OperationType.WAITING_VALUE, serverEntry);
+        });
     }
 }
