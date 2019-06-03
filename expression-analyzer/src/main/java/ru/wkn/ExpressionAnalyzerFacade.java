@@ -2,6 +2,7 @@ package ru.wkn;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 import ru.wkn.analyzers.IExpressionAnalyzerFactory;
 import ru.wkn.analyzers.syntax.ExpressionAnalyzer;
 
@@ -12,6 +13,7 @@ import ru.wkn.analyzers.syntax.ExpressionAnalyzer;
  */
 @AllArgsConstructor
 @Getter
+@Setter
 public class ExpressionAnalyzerFacade {
 
     /**
