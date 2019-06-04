@@ -46,8 +46,6 @@
                         <options>
                             <option>-I${env.JAVA_HOME}/include</option>
                             <option>-I${env.JAVA_HOME}/include/win32</option>
-                            <option>-DWIN64</option>
-                            <option>-DWIN32</option>
                             <option>-c</option>
                             <option>-shared</option>
                             <option>-o jni-worker-1.0-SNAPSHOT.dll</option>
