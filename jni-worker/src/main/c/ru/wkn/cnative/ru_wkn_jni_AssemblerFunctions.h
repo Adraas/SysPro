@@ -8,27 +8,27 @@
 extern "C" {
     #endif
     /*
-     * Class:     ru_wkn_jni_AssemblerFunctions
+     * Class:     ru_wkn_jni_functions_AssemblerFunctions
      * Method:    dividingFunction
      * Signature: (DD)D
      */
-    __declspec(dllexport) JNIEXPORT jdouble JNICALL Java_ru_wkn_jni_AssemblerFunctions_dividingFunction
+    __declspec(dllexport) JNIEXPORT jdouble JNICALL Java_ru_wkn_jni_functions_AssemblerFunctions_dividingFunction
       (JNIEnv *, jobject, jdouble, jdouble);
 
     /*
-     * Class:     ru_wkn_jni_AssemblerFunctions
+     * Class:     ru_wkn_jni_functions_AssemblerFunctions
      * Method:    xorFunction
      * Signature: (II)I
      */
-    __declspec(dllexport) JNIEXPORT jint JNICALL Java_ru_wkn_jni_AssemblerFunctions_xorFunction
+    __declspec(dllexport) JNIEXPORT jint JNICALL Java_ru_wkn_jni_functions_AssemblerFunctions_xorFunction
       (JNIEnv *, jobject, jint, jint);
 
     /*
-     * Class:     ru_wkn_jni_AssemblerFunctions
+     * Class:     ru_wkn_jni_functions_AssemblerFunctions
      * Method:    multiplicationOperation
      * Signature: (II)I
      */
-    __declspec(dllexport) JNIEXPORT jint JNICALL Java_ru_wkn_jni_AssemblerFunctions_multiplicationOperation
+    __declspec(dllexport) JNIEXPORT jint JNICALL Java_ru_wkn_jni_functions_AssemblerFunctions_multiplicationFunction
       (JNIEnv *, jobject, jint, jint);
 
     #ifdef __cplusplus
