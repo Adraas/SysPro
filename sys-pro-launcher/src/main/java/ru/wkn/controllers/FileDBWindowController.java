@@ -45,6 +45,7 @@ import ru.wkn.views.WindowType;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Date;
+import java.util.List;
 
 public class FileDBWindowController extends Controller implements Observer<IEntry> {
 
@@ -185,10 +186,11 @@ public class FileDBWindowController extends Controller implements Observer<IEntr
     }
 
     @FXML
-    private void clickOnNewList() {
+    private void clickOnNewFileTable() {
         Platform.runLater(() -> {
+            datasourceType = DatasourceType.FILE;
+            String variant = choiceBoxVariants.getValue();
             if (!isCollectionActivated) {
-                String variant = choiceBoxVariants.getValue();
                 try {
                     String fileExtensionWithoutFullName;
                     if (variant.equals(choiceBoxVariants.getItems().get(0))) {
@@ -209,11 +211,30 @@ public class FileDBWindowController extends Controller implements Observer<IEntr
                 initFileRWFacade();
                 isCollectionActivated = true;
             }
-            String variant = choiceBoxVariants.getValue();
             clearFileWithoutSaving(variant);
             updateTableView();
             updateButtons();
-            datasourceType = DatasourceType.FILE;
+        });
+    }
+
+    @FXML
+    private void clickOnNewDatabaseTable() {
+        Platform.runLater(() -> {
+            datasourceType = DatasourceType.DATABASE;
+            String variant = choiceBoxVariants.getValue();
+            openDatabase();
+            try {
+                if (variant.equals(choiceBoxVariants.getItems().get(0))) {
+                    resourceERepositoryFacade.getService().deleteAll();
+                } else {
+                    if (variant.equals(choiceBoxVariants.getItems().get(1))) {
+                        serverERepositoryFacade.getService().deleteAll();
+                    }
+                }
+            } catch (PersistenceException e) {
+                e.printStackTrace();
+                showInformation(e.getClass().getSimpleName(), e.getMessage(), Alert.AlertType.ERROR);
+            }
         });
     }
 
@@ -234,16 +255,14 @@ public class FileDBWindowController extends Controller implements Observer<IEntr
     @FXML
     private void clickOnOpenDatabase() {
         Platform.runLater(() -> {
-            isCollectionActivated = true;
-            datasourceType = DatasourceType.DATABASE;
-            initRepositoryFacade();
+            openDatabase();
             updateTableView();
             updateButtons();
         });
     }
 
     @FXML
-    private void clickOnSaveAsFile() {
+    private void clickOnSaveToFile() {
         Platform.runLater(() -> {
             File file = fileChooser.showSaveDialog(null);
             if (file != null) {
@@ -261,6 +280,31 @@ public class FileDBWindowController extends Controller implements Observer<IEntr
                     showInformation(e.getClass().getSimpleName(), e.getMessage(), Alert.AlertType.ERROR);
                 }
             }
+            datasourceType = DatasourceType.FILE;
+        });
+    }
+
+    @FXML
+    private void clickOnSaveToDatabase() {
+        Platform.runLater(() -> {
+            String variant = choiceBoxVariants.getValue();
+            try {
+                if (variant.equals(choiceBoxVariants.getItems().get(0))) {
+                    List<ResourceEntry> entries = resourceEntryTableView.getItems();
+                    resourceERepositoryFacade.getService().deleteAll();
+                    resourceERepositoryFacade.getService().create(entries);
+                } else {
+                    if (variant.equals(choiceBoxVariants.getItems().get(1))) {
+                        List<ServerEntry> entries = serverEntryTableView.getItems();
+                        serverERepositoryFacade.getService().deleteAll();
+                        serverERepositoryFacade.getService().create(entries);
+                    }
+                }
+            } catch (PersistenceException e) {
+                e.printStackTrace();
+                showInformation(e.getClass().getSimpleName(), e.getMessage(), Alert.AlertType.ERROR);
+            }
+            datasourceType = DatasourceType.FILE;
         });
     }
 
@@ -282,13 +326,33 @@ public class FileDBWindowController extends Controller implements Observer<IEntr
     private void clickOnDelete() {
         Platform.runLater(() -> {
             String variant = choiceBoxVariants.getValue();
-            if (variant.equals(choiceBoxVariants.getItems().get(0))) {
-                resourceEFileRWFacade.getFileWriter().delete(resourceEntryTableView.getSelectionModel()
-                        .getSelectedItem());
-            } else {
-                if (variant.equals(choiceBoxVariants.getItems().get(1))) {
-                    serverEFileRWFacade.getFileWriter().delete(serverEntryTableView.getSelectionModel()
-                            .getSelectedItem());
+            switch (datasourceType) {
+                case FILE: {
+                    if (variant.equals(choiceBoxVariants.getItems().get(0))) {
+                        resourceEFileRWFacade.getFileWriter().delete(resourceEntryTableView.getSelectionModel()
+                                .getSelectedItem());
+                    } else {
+                        if (variant.equals(choiceBoxVariants.getItems().get(1))) {
+                            serverEFileRWFacade.getFileWriter().delete(serverEntryTableView.getSelectionModel()
+                                    .getSelectedItem());
+                        }
+                    }
+                    break;
+                }
+                case DATABASE: {
+                    try {
+                        if (variant.equals(choiceBoxVariants.getItems().get(0))) {
+                            resourceERepositoryFacade.getService().delete(resourceEntryTableView.getSelectionModel()
+                                    .getSelectedItem());
+                        } else {
+                            if (variant.equals(choiceBoxVariants.getItems().get(1))) {
+                                serverERepositoryFacade.getService().delete(serverEntryTableView.getSelectionModel()
+                                        .getSelectedItem());
+                            }
+                        }
+                    } catch (PersistenceException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
             updateTableView();
@@ -432,6 +496,14 @@ public class FileDBWindowController extends Controller implements Observer<IEntr
                         ? new FileRWFacade<>(serverEFileReader, serverEFileWriter) : serverEFileRWFacade;
             }
         }
+    }
+
+    private void openDatabase() {
+        isCollectionActivated = true;
+        datasourceType = DatasourceType.DATABASE;
+        initRepositoryFacade();
+        updateTableView();
+        updateButtons();
     }
 
     private void initRepositoryFacade() {
