@@ -107,7 +107,7 @@ public class FileDBWindowController extends Controller implements Observer<IEntr
         initChoiceBox();
         initChoiceBoxEventHandlers();
 
-        datasourceType = DatasourceType.NONE;
+        datasourceType = DatasourceType.FILE;
 
         fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("CSV", "*.csv"),
@@ -326,9 +326,6 @@ public class FileDBWindowController extends Controller implements Observer<IEntr
                     }
                     break;
                 }
-                case NONE: {
-                    break;
-                }
                 default: {
                     showInformation("Datasource error", "This datasource type not found!", Alert.AlertType.ERROR);
                 }
@@ -485,9 +482,6 @@ public class FileDBWindowController extends Controller implements Observer<IEntr
                     }
                     break;
                 }
-                case NONE: {
-                    break;
-                }
                 default: {
                     showInformation("Datasource error", "This datasource type not found!", Alert.AlertType.ERROR);
                 }
@@ -522,7 +516,6 @@ public class FileDBWindowController extends Controller implements Observer<IEntr
     @AllArgsConstructor
     private enum DatasourceType {
 
-        NONE,
         DATABASE,
         FILE
     }
