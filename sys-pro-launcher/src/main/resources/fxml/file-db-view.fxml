@@ -19,16 +19,22 @@
             <menus>
                 <Menu mnemonicParsing="false" text="File">
                     <items>
-                        <MenuItem mnemonicParsing="false" onAction="#clickOnNewList" text="New data table"/>
+                        <Menu mnemonicParsing="false" text="New data table for...">
+                            <items>
+                                <MenuItem mnemonicParsing="false" onAction="#clickOnNewFileTable" text="file"/>
+                                <MenuItem mnemonicParsing="false" onAction="#clickOnNewDatabaseTable" text="database"/>
+                            </items>
+                        </Menu>
                         <Menu mnemonicParsing="false" text="Open">
                             <items>
                                 <MenuItem mnemonicParsing="false" onAction="#clickOnOpenFile" text="file"/>
                                 <MenuItem mnemonicParsing="false" onAction="#clickOnOpenDatabase" text="database"/>
                             </items>
                         </Menu>
-                        <Menu fx:id="saveMenuButton" disable="true" mnemonicParsing="false" text="Save to">
+                        <Menu fx:id="saveMenuButton" disable="true" mnemonicParsing="false" text="Save to...">
                             <items>
-                                <MenuItem mnemonicParsing="false" onAction="#clickOnSaveAsFile" text="file"/>
+                                <MenuItem mnemonicParsing="false" onAction="#clickOnSaveToFile" text="file"/>
+                                <MenuItem mnemonicParsing="false" onAction="#clickOnSaveToDatabase" text="database"/>
                             </items>
                         </Menu>
                     </items>
