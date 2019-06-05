@@ -34,7 +34,7 @@
                 <version>3.6.0</version>
                 <extensions>true</extensions>
                 <configuration>
-                    <!-- add Cygwin to PATH environment variable -->
+                    <!-- add MinGW64 to PATH environment variable -->
 
                     <output>jni-assembler-math</output>
                     <gnuUseOnWindows>true</gnuUseOnWindows>
