@@ -5,6 +5,7 @@ import ru.wkn.repository.dao.IDao;
 import ru.wkn.repository.exceptions.PersistenceException;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -29,6 +30,19 @@ public class Service<V, I extends Serializable> implements IService<V, I> {
     @Override
     public boolean create(V newInstance) throws PersistenceException {
         return dao.create(newInstance);
+    }
+
+    /**
+     * @see IService#create(Collection)
+     */
+    @Override
+    public boolean create(Collection<V> newInstances) throws PersistenceException {
+        for (V instance : newInstances) {
+            if (create(instance)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**

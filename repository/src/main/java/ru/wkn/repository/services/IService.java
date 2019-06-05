@@ -3,6 +3,7 @@ package ru.wkn.repository.services;
 import ru.wkn.repository.exceptions.PersistenceException;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -24,6 +25,15 @@ public interface IService<V, I extends Serializable> {
      * @throws PersistenceException thrown if some problems with DAO layout
      */
     boolean create(V newInstance) throws PersistenceException;
+
+    /**
+     * The method for the creating new persistence objects in the repository.
+     *
+     * @param newInstances collections of the instances of the persistence objects
+     * @return {@code true} if objects was created success in the repository, else - {@code false}
+     * @throws PersistenceException thrown if some problems with DAO layout
+     */
+    boolean create(Collection<V> newInstances) throws PersistenceException;
 
     /**
      * The method for the reading persistence object by key (index) from repository.
