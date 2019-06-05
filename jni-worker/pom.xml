@@ -36,6 +36,7 @@
                 <configuration>
                     <!-- add Cygwin to PATH environment variable -->
 
+                    <output>jni-assembler-math</output>
                     <gnuUseOnWindows>true</gnuUseOnWindows>
 
                     <cpp>
@@ -48,7 +49,6 @@
                             <option>-I${env.JAVA_HOME}/include/win32</option>
                             <option>-c</option>
                             <option>-shared</option>
-                            <option>-o jni-worker-1.0-SNAPSHOT.dll</option>
                         </options>
                     </cpp>
 
