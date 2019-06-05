@@ -41,7 +41,7 @@ public abstract class Controller {
             IWindow newWindow = windowRepository.getWindow(newWindowType);
             newWindow.show();
         } catch (IOException e) {
-            showInformation("Error", e.getMessage(), Alert.AlertType.ERROR);
+            showInformation(e.getClass().getSimpleName(), e.getMessage(), Alert.AlertType.ERROR);
             e.printStackTrace();
         }
     }

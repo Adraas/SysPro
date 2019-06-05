@@ -34,7 +34,7 @@ public class MainWindowController extends Controller {
         try {
             properties.load(reader);
         } catch (IOException e) {
-            showInformation("Error", e.getMessage(), Alert.AlertType.ERROR);
+            showInformation(e.getClass().getSimpleName(), e.getMessage(), Alert.AlertType.ERROR);
             e.printStackTrace();
         }
         showInformation(properties.getProperty("title"), properties.getProperty("message"),
