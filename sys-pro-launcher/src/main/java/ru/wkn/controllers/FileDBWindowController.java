@@ -99,6 +99,7 @@ public class FileDBWindowController extends Controller implements Observer<IEntr
     private EFileWriter<ServerEntry> serverEFileWriter;
 
     private boolean isCollectionActivated = false;
+    private boolean isConnectedToDatabaseSuccess = false;
 
     public void initialize() {
         getObservablesRepository().getObservable(ObservableType.OBERVABLE_INTERWINDOW_REPOSITORY)
@@ -235,6 +236,10 @@ public class FileDBWindowController extends Controller implements Observer<IEntr
                 e.printStackTrace();
                 showInformation(e.getClass().getSimpleName(), e.getMessage(), Alert.AlertType.ERROR);
             }
+            if (isConnectedToDatabaseSuccess) {
+                updateTableView();
+                updateButtons();
+            }
         });
     }
 
@@ -256,8 +261,10 @@ public class FileDBWindowController extends Controller implements Observer<IEntr
     private void clickOnOpenDatabase() {
         Platform.runLater(() -> {
             openDatabase();
-            updateTableView();
-            updateButtons();
+            if (isConnectedToDatabaseSuccess) {
+                updateTableView();
+                updateButtons();
+            }
         });
     }
 
@@ -499,11 +506,11 @@ public class FileDBWindowController extends Controller implements Observer<IEntr
     }
 
     private void openDatabase() {
-        isCollectionActivated = true;
         datasourceType = DatasourceType.DATABASE;
-        initRepositoryFacade();
-        updateTableView();
-        updateButtons();
+        if (!isConnectedToDatabaseSuccess) {
+            initRepositoryFacade();
+        }
+        isCollectionActivated = isConnectedToDatabaseSuccess;
     }
 
     private void initRepositoryFacade() {
@@ -515,6 +522,8 @@ public class FileDBWindowController extends Controller implements Observer<IEntr
             } else {
                 resourceERepositoryFacade = new RepositoryFacade<>(EntityInstance.NETWORK_RESOURCE);
             }
+            isConnectedToDatabaseSuccess = resourceERepositoryFacade != null
+                    && resourceERepositoryFacade.getService() != null;
         } else {
             if (variant.equals(choiceBoxVariants.getItems().get(1))) {
                 if (serverERepositoryFacade != null
@@ -523,6 +532,8 @@ public class FileDBWindowController extends Controller implements Observer<IEntr
                 } else {
                     serverERepositoryFacade = new RepositoryFacade<>(EntityInstance.NETWORK_SERVER);
                 }
+                isConnectedToDatabaseSuccess = serverERepositoryFacade != null
+                        && serverERepositoryFacade.getService() != null;
             }
         }
     }
