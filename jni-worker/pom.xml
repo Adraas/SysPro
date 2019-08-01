@@ -16,15 +16,6 @@
     <name>Assembler worker</name>
     <description>Assembler worker plugin</description>
 
-    <dependencies>
-        <!-- https://mvnrepository.com/artifact/org.scijava/native-lib-loader -->
-        <dependency>
-            <groupId>org.scijava</groupId>
-            <artifactId>native-lib-loader</artifactId>
-            <version>2.1.3</version>
-        </dependency>
-    </dependencies>
-
     <build>
         <plugins>
             <!-- https://mvnrepository.com/artifact/com.github.maven-nar/nar-maven-plugin -->
