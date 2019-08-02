@@ -54,9 +54,7 @@
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>
-                                ${basedir}/target/resources
-                            </outputDirectory>
+                            <outputDirectory>${project.build.outputDirectory}/resources</outputDirectory>
                             <resources>
                                 <resource>
                                     <directory>src/main/resources/fxml</directory>
@@ -77,21 +75,23 @@
                 <artifactId>maven-dependency-plugin</artifactId>
                 <version>2.10</version>
                 <configuration>
-                    <outputDirectory>${project.build.directory}/dependencies</outputDirectory>
+                    <outputDirectory>${project.build.outputDirectory}/dependencies</outputDirectory>
                     <overWriteReleases>false</overWriteReleases>
                     <overWriteSnapshots>false</overWriteSnapshots>
                     <overWriteIfNewer>true</overWriteIfNewer>
                 </configuration>
                 <executions>
                     <execution>
-                        <phase>validate</phase>
+                        <phase>prepare-package</phase>
                         <goals>
                             <goal>copy-dependencies</goal>
+                            <goal>unpack-dependencies</goal>
                         </goals>
                     </execution>
                 </executions>
             </plugin>
 
+            <!-- TODO: change target classpath for the manifest.mf -->
             <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-assembly-plugin -->
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
