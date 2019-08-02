@@ -25,4 +25,9 @@ class AssemblerFunctionsTest {
     void testNativeXorFunction() {
         assertEquals(6, assemblerFunctions.xorFunction(10, 12));
     }
+
+    @Test
+    void testNativeMultiplicationFunction() {
+        assertEquals(6, assemblerFunctions.multiplicationFunction(2, 3));
+    }
 }
