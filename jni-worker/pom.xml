@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+         http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>system-programming</artifactId>
         <groupId>ru.wkn</groupId>
@@ -15,6 +16,10 @@
 
     <name>Assembler worker</name>
     <description>Assembler worker plugin</description>
+
+    <properties>
+        <dynamicLibrary.name>jni-assembler-math</dynamicLibrary.name>
+    </properties>
 
     <dependencies>
         <!-- https://mvnrepository.com/artifact/org.scijava/native-lib-loader -->
@@ -36,7 +41,7 @@
                 <configuration>
                     <!-- add MinGW64 to PATH environment variable -->
 
-                    <output>jni-assembler-math</output>
+                    <output>${dynamicLibrary.name}</output>
                     <gnuUseOnWindows>true</gnuUseOnWindows>
 
                     <cpp>
@@ -47,6 +52,7 @@
                         <options>
                             <option>-I${env.JAVA_HOME}/include</option>
                             <option>-I${env.JAVA_HOME}/include/win32</option>
+                            <option>-o C:/Windows/System32/${dynamicLibrary.name}.dll</option>
                             <option>-c</option>
                             <option>-shared</option>
                         </options>
