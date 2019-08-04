@@ -46,13 +46,13 @@
 
                     <cpp>
                         <name>gcc</name>
+                        <sourceDirectory>${basedir}/src/main/c/</sourceDirectory>
                         <includes>
                             <include>**/*.cpp</include>
                         </includes>
                         <options>
                             <option>-I${env.JAVA_HOME}/include</option>
                             <option>-I${env.JAVA_HOME}/include/win32</option>
-                            <option>-o C:/Windows/System32/${dynamicLibrary.name}.dll</option>
                             <option>-c</option>
                             <option>-shared</option>
                         </options>
@@ -68,7 +68,7 @@
 
                     <libraries>
                         <library>
-                            <type>jni</type>
+                            <type>shared</type>
                             <narSystemPackage>ru.wkn.jni.functions</narSystemPackage>
                         </library>
                     </libraries>
@@ -89,9 +89,32 @@
                         </goals>
                         <configuration>
                             <sources>
-                                <source>${project.build.outputDirectory}/nar/nar-generated/</source>
+                                <source>${project.build.directory}/nar/nar-generated/</source>
                             </sources>
                         </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- TODO: copy file with the admin rights -->
+            <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-antrun-plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.8</version>
+                <executions>
+                    <execution>
+                        <id>copy</id>
+                        <phase>process-test-resources</phase>
+                        <configuration>
+                            <target>
+                                <copy file="${project.build.directory}/nar/jni-worker-1.0-SNAPSHOT-amd64-Windows-gcc-shared/lib/amd64-Windows-gcc/shared/jni-assembler-math.dll"
+                                      tofile="C:/Windows/System32/jni-assembler-math.dll"/>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
                     </execution>
                 </executions>
             </plugin>
