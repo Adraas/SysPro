@@ -1,5 +1,9 @@
 .iconButtonRun {
-    -fx-background-color: image-pattern('../images/play.png', 0, 0, 0.939%, 0.939%, true);
+    -fx-background-image: url("../images/play.png");
+    -fx-background-size: stretch;
     -fx-background-repeat: no-repeat;
     -fx-cursor: hand;
+    -fx-background-insets: 0, 1, 2;
+    -fx-background-radius: 3, 2, 1;
+    -fx-padding: 3 30 3 30;
 }
