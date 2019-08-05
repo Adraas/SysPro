@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class TestCycleWhileWithPreconditionAnalyzer {
+class CycleWhileWithPreconditionAnalyzerTest {
 
     private static CycleWhileWithPreconditionAnalyzer cycleWhileWithPreconditionAnalyzer;
     private static String correctExpressionForAnalysis = "";
@@ -34,7 +34,7 @@ class TestCycleWhileWithPreconditionAnalyzer {
 
     @BeforeAll
     static void initFields() throws URISyntaxException, IOException {
-        ClassLoader classLoader = TestCycleWhileWithPreconditionAnalyzer.class.getClassLoader();
+        ClassLoader classLoader = CycleWhileWithPreconditionAnalyzerTest.class.getClassLoader();
         CSharpeSemanticsAnalyzer cSharpeSemanticsAnalyzer = new CSharpeSemanticsAnalyzer();
         cycleWhileWithPreconditionAnalyzer = new CycleWhileWithPreconditionAnalyzer(cSharpeSemanticsAnalyzer, false);
         if (correctExpressionForAnalysis.trim().isEmpty()) {
