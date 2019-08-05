@@ -83,6 +83,13 @@
             <version>5.5.0-M1</version>
             <scope>test</scope>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-engine -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.3.1</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -106,11 +113,11 @@
                 <version>3.0.0-M3</version>
                 <configuration>
                     <additionalClasspathElements>
-                        <additionalClasspathElement>expression-analyzer</additionalClasspathElement>
-                        <additionalClasspathElement>jni-worker</additionalClasspathElement>
+                        <additionalClasspathElement>${project.basedir}/expression-analyzer/</additionalClasspathElement>
+                        <additionalClasspathElement>${project.basedir}/jni-worker/</additionalClasspathElement>
                     </additionalClasspathElements>
                     <includes>
-                        <include>**/Test*.java</include>
+                        <include>**/*Test.java</include>
                     </includes>
                 </configuration>
             </plugin>

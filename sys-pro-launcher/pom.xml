@@ -58,7 +58,7 @@
                             <outputDirectory>${project.build.directory}/resources</outputDirectory>
                             <resources>
                                 <resource>
-                                    <directory>${basedir}/src/main/resources/fxml</directory>
+                                    <directory>${project.basedir}/src/main/resources/fxml</directory>
                                     <includes>
                                         <include>**/*.fxml</include>
                                     </includes>
