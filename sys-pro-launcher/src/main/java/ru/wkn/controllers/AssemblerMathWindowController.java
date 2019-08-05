@@ -58,7 +58,7 @@ public class AssemblerMathWindowController extends Controller {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            String message = e.getMessage();
+            String message = e.getClass().getSimpleName().concat(": ").concat(e.getMessage());
             assemblerMessageLogArea.setText(assemblerMessageLogArea.getText().concat("\n").concat(message));
             showInformation(e.getCause().getClass().getSimpleName(), message, Alert.AlertType.ERROR);
         }
