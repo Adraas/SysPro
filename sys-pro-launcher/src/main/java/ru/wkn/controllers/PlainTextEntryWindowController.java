@@ -25,7 +25,7 @@ public class PlainTextEntryWindowController extends Controller {
     @FXML
     private void clickOnAccept() {
         Platform.runLater(() -> {
-            ServerEntry serverEntry = null;
+            ServerEntry serverEntry;
             try {
                 serverEntry = new ServerEntry(urlTextField.getText(),
                         Integer.valueOf(portTextField.getText()),
@@ -33,14 +33,14 @@ public class PlainTextEntryWindowController extends Controller {
                 urlTextField.clear();
                 portTextField.clear();
                 protocolTypeTextField.clear();
+                Observable<IEntry> observable = getObservablesRepository()
+                        .getObservable(ObservableType.OBSERVABLE_INTERWINDOW_REPOSITORY);
+                openNewWindow(WindowType.NETWORK_RESOURCE_WINDOW, WindowType.FILE_DB_WINDOW);
+                observable.update(OperationType.WAITING_VALUE, serverEntry);
             } catch (EntryException e) {
                 e.printStackTrace();
                 showInformation(e.getClass().getSimpleName(), e.getMessage(), Alert.AlertType.ERROR);
             }
-            Observable<IEntry> observable = getObservablesRepository()
-                    .getObservable(ObservableType.OBERVABLE_INTERWINDOW_REPOSITORY);
-            openNewWindow(WindowType.NETWORK_RESOURCE_WINDOW, WindowType.FILE_DB_WINDOW);
-            observable.update(OperationType.WAITING_VALUE, serverEntry);
         });
     }
 }

@@ -27,7 +27,7 @@ public class CSVEntryWindowController extends Controller {
     @FXML
     private void onClickAccept() {
         Platform.runLater(() -> {
-            ResourceEntry resourceEntry = null;
+            ResourceEntry resourceEntry;
             try {
                 resourceEntry = new ResourceEntry(urlTextField.getText(),
                         AccessMode.getInstance(accessModeTextField.getText().toLowerCase()),
@@ -35,14 +35,14 @@ public class CSVEntryWindowController extends Controller {
                 urlTextField.clear();
                 accessModeTextField.clear();
                 dateTextField.clear();
+                Observable<IEntry> observable = getObservablesRepository()
+                        .getObservable(ObservableType.OBSERVABLE_INTERWINDOW_REPOSITORY);
+                openNewWindow(WindowType.NETWORK_RESOURCE_WINDOW, WindowType.FILE_DB_WINDOW);
+                observable.update(OperationType.WAITING_VALUE, resourceEntry);
             } catch (EntryException e) {
                 e.printStackTrace();
                 showInformation(e.getClass().getSimpleName(), e.getMessage(), Alert.AlertType.ERROR);
             }
-            Observable<IEntry> observable = getObservablesRepository()
-                    .getObservable(ObservableType.OBERVABLE_INTERWINDOW_REPOSITORY);
-            openNewWindow(WindowType.NETWORK_RESOURCE_WINDOW, WindowType.FILE_DB_WINDOW);
-            observable.update(OperationType.WAITING_VALUE, resourceEntry);
         });
     }
 }
