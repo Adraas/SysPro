@@ -26,9 +26,6 @@ public class EntryFactory implements IEntryFactory {
             throw new EntryException("parameters is absent");
         }
         String[] parameters = parametersLine.split(parametersDelimiter.getParametersDelimiter());
-        if (parameters.length < 3) {
-            throw new EntryException("parameters is incorrect");
-        }
         IEntry entry = parametersDelimiter.equals(ParametersDelimiter.RESOURCE_CSV_DELIMITER)
                 ? new ResourceEntry(parameters[0], AccessMode.getInstance(parameters[1]), Date.valueOf(parameters[2]))
                 : parametersDelimiter.equals(ParametersDelimiter.SERVER_PLAIN_TEXT_DELIMITER)
