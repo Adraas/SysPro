@@ -7,6 +7,7 @@ import javafx.scene.control.TextField;
 import ru.wkn.entries.exceptions.EntryException;
 import ru.wkn.entries.resource.csv.AccessMode;
 import ru.wkn.entries.resource.csv.ResourceEntry;
+import ru.wkn.views.WindowType;
 
 import java.sql.Date;
 
@@ -30,7 +31,7 @@ public class CSVEntryWindowController extends Controller {
                 urlTextField.clear();
                 accessModeTextField.clear();
                 dateTextField.clear();
-                updateEntriesTable(resourceEntry);
+                updateEntriesTable(WindowType.NETWORK_RESOURCE_WINDOW, resourceEntry);
             } catch (EntryException e) {
                 e.printStackTrace();
                 showInformation(e.getClass().getSimpleName(), e.getMessage(), Alert.AlertType.ERROR);

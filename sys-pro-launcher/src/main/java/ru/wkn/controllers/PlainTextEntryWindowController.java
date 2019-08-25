@@ -7,6 +7,7 @@ import javafx.scene.control.TextField;
 import ru.wkn.entries.exceptions.EntryException;
 import ru.wkn.entries.server.plaintext.ProtocolType;
 import ru.wkn.entries.server.plaintext.ServerEntry;
+import ru.wkn.views.WindowType;
 
 public class PlainTextEntryWindowController extends Controller {
 
@@ -28,7 +29,7 @@ public class PlainTextEntryWindowController extends Controller {
                 urlTextField.clear();
                 portTextField.clear();
                 protocolTypeTextField.clear();
-                updateEntriesTable(serverEntry);
+                updateEntriesTable(WindowType.SERVER_INFORMATION_WINDOW, serverEntry);
             } catch (EntryException e) {
                 e.printStackTrace();
                 showInformation(e.getClass().getSimpleName(), e.getMessage(), Alert.AlertType.ERROR);

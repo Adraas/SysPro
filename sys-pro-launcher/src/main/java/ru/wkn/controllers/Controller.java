@@ -53,10 +53,10 @@ public abstract class Controller {
         windowRepository.getWindow(currentWindowType).hide();
     }
 
-    protected void updateEntriesTable(IEntry entry) {
+    protected void updateEntriesTable(WindowType currentWindowType, IEntry entry) {
         Observable<IEntry> observable = getObservablesRepository()
                 .getObservable(ObservableType.OBSERVABLE_INTERWINDOW_REPOSITORY);
-        openNewWindow(WindowType.NETWORK_RESOURCE_WINDOW, WindowType.FILE_DB_WINDOW);
+        openNewWindow(currentWindowType, WindowType.FILE_DB_WINDOW);
         observable.update(OperationType.WAITING_VALUE, entry);
     }
 }
