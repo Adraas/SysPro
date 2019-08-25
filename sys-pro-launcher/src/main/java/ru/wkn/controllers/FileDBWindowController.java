@@ -370,39 +370,41 @@ public class FileDBWindowController extends Controller implements Observer<IEntr
     @Override
     public void update(IEntry dataObject) {
         Platform.runLater(() -> {
-            String variant = choiceBoxVariants.getValue();
-            switch (datasourceType) {
-                case FILE: {
-                    if (variant.equals(choiceBoxVariants.getItems().get(0))) {
-                        resourceEFileRWFacade.getFileWriter().append((ResourceEntry) dataObject);
-                    } else {
-                        if (variant.equals(choiceBoxVariants.getItems().get(1))) {
-                            serverEFileRWFacade.getFileWriter().append((ServerEntry) dataObject);
-                        }
-                    }
-                    break;
-                }
-                case DATABASE: {
-                    try {
+            if (dataObject != null) {
+                String variant = choiceBoxVariants.getValue();
+                switch (datasourceType) {
+                    case FILE: {
                         if (variant.equals(choiceBoxVariants.getItems().get(0))) {
-                            resourceERepositoryFacade.getService().create((ResourceEntry) dataObject);
+                            resourceEFileRWFacade.getFileWriter().append((ResourceEntry) dataObject);
                         } else {
                             if (variant.equals(choiceBoxVariants.getItems().get(1))) {
-                                serverERepositoryFacade.getService().create((ServerEntry) dataObject);
+                                serverEFileRWFacade.getFileWriter().append((ServerEntry) dataObject);
                             }
                         }
-                    } catch (PersistenceException e) {
-                        e.printStackTrace();
-                        showInformation(e.getClass().getSimpleName(), e.getMessage(), Alert.AlertType.ERROR);
+                        break;
                     }
-                    break;
+                    case DATABASE: {
+                        try {
+                            if (variant.equals(choiceBoxVariants.getItems().get(0))) {
+                                resourceERepositoryFacade.getService().create((ResourceEntry) dataObject);
+                            } else {
+                                if (variant.equals(choiceBoxVariants.getItems().get(1))) {
+                                    serverERepositoryFacade.getService().create((ServerEntry) dataObject);
+                                }
+                            }
+                        } catch (PersistenceException e) {
+                            e.printStackTrace();
+                            showInformation(e.getClass().getSimpleName(), e.getMessage(), Alert.AlertType.ERROR);
+                        }
+                        break;
+                    }
+                    default: {
+                        showInformation("Datasource error", "This datasource type not found!", Alert.AlertType.ERROR);
+                    }
                 }
-                default: {
-                    showInformation("Datasource error", "This datasource type not found!", Alert.AlertType.ERROR);
-                }
+                updateTableView();
+                updateButtons();
             }
-            updateTableView();
-            updateButtons();
         });
     }
 
