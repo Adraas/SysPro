@@ -26,6 +26,7 @@ public class FileFactory<T extends IEntry> implements IFileFactory<T> {
     /**
      * @see IFileFactory#createEFile(String, String, EntriesDelimiter, IEntryFactory, ParametersDelimiter)
      */
+    @SuppressWarnings(value = {"unchecked"})
     @Override
     public EFile<T> createEFile(String path, String charsetName, EntriesDelimiter entriesDelimiter,
                                 IEntryFactory entryFactory, ParametersDelimiter parametersDelimiter)
