@@ -3,7 +3,10 @@ package ru.wkn.controllers;
 import javafx.scene.control.Alert;
 import lombok.Getter;
 import ru.wkn.entries.IEntry;
+import ru.wkn.util.Observable;
+import ru.wkn.util.ObservableType;
 import ru.wkn.util.ObservablesRepository;
+import ru.wkn.util.OperationType;
 import ru.wkn.views.IWindow;
 import ru.wkn.views.IWindowFactory;
 import ru.wkn.views.WindowFactory;
@@ -48,5 +51,12 @@ public abstract class Controller {
 
     protected static void hideCurrentWindow(WindowType currentWindowType) {
         windowRepository.getWindow(currentWindowType).hide();
+    }
+
+    protected void updateEntriesTable(IEntry entry) {
+        Observable<IEntry> observable = getObservablesRepository()
+                .getObservable(ObservableType.OBSERVABLE_INTERWINDOW_REPOSITORY);
+        openNewWindow(WindowType.NETWORK_RESOURCE_WINDOW, WindowType.FILE_DB_WINDOW);
+        observable.update(OperationType.WAITING_VALUE, entry);
     }
 }
