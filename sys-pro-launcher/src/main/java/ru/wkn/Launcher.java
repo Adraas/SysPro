@@ -38,7 +38,7 @@ public class Launcher extends Application {
             window = windowRepository.addWindow(WindowType.MAIN_WINDOW, switchingEvent);
 
             Observable<IEntry> observableInterwindowRepository = new InterwindowEntryRepository<>();
-            Controller.getObservablesRepository().addObservable(ObservableType.OBERVABLE_INTERWINDOW_REPOSITORY,
+            Controller.getObservablesRepository().addObservable(ObservableType.OBSERVABLE_INTERWINDOW_REPOSITORY,
                     observableInterwindowRepository);
             window.show();
         } catch (IOException | WindowTypeException e) {

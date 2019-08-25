@@ -102,7 +102,7 @@ public class FileDBWindowController extends Controller implements Observer<IEntr
     private boolean isConnectedToDatabaseSuccess = false;
 
     public void initialize() {
-        getObservablesRepository().getObservable(ObservableType.OBERVABLE_INTERWINDOW_REPOSITORY)
+        getObservablesRepository().getObservable(ObservableType.OBSERVABLE_INTERWINDOW_REPOSITORY)
                 .addObserver(OperationType.WAITING_VALUE, this);
         initTablesCellValuesFactories();
         initColumnsEditEventHandlers();
