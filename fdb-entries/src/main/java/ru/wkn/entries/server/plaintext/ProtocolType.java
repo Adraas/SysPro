@@ -57,7 +57,7 @@ public enum  ProtocolType {
      * @return {@code ProtocolType} enum value by key
      */
     public static ProtocolType getInstance(String protocolType) throws EntryException {
-        ProtocolType result = protocolTypesMap.get(protocolType);
+        ProtocolType result = protocolTypesMap.get(protocolType.toLowerCase());
         if (result == null) {
             throw new EntryException("unknown protocol type");
         }

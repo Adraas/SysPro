@@ -57,7 +57,7 @@ public enum AccessMode {
      * @return {@code ProtocolType} enum value by key
      */
     public static AccessMode getInstance(String accessMode) throws EntryException {
-        AccessMode result = accessModesMap.get(accessMode);
+        AccessMode result = accessModesMap.get(accessMode.toLowerCase());
         if (result == null) {
             throw new EntryException("unknown access mode");
         }
