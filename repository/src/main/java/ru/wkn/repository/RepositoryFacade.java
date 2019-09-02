@@ -6,7 +6,7 @@ import ru.wkn.repository.dao.DaoFactory;
 import ru.wkn.repository.dao.EntityInstance;
 import ru.wkn.repository.dao.IDao;
 import ru.wkn.repository.dao.IDaoFactory;
-import ru.wkn.repository.jpa.HibernateUtil;
+import ru.wkn.repository.util.HibernateUtil;
 import ru.wkn.repository.services.IService;
 import ru.wkn.repository.services.IServiceFactory;
 import ru.wkn.repository.services.ServiceFactory;
