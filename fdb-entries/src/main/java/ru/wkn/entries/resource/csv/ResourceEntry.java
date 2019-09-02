@@ -9,7 +9,7 @@ import ru.wkn.entries.IEntry;
 import ru.wkn.entries.ParametersDelimiter;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 
 /**
  * The class {@code ResourceEntry} represents network resource information.
@@ -31,7 +31,6 @@ public class ResourceEntry implements IEntry, Serializable {
     /**
      * Network resource URL.
      */
-    @Setter
     private String url;
 
     /**
