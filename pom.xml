@@ -115,10 +115,14 @@
                     <additionalClasspathElements>
                         <additionalClasspathElement>${project.basedir}/expression-analyzer/</additionalClasspathElement>
                         <additionalClasspathElement>${project.basedir}/jni-worker/</additionalClasspathElement>
+                        <additionalClasspathElement>${project.basedir}/repository</additionalClasspathElement>
                     </additionalClasspathElements>
                     <includes>
                         <include>**/*Test.java</include>
                     </includes>
+                    <excludes>
+                        <exclude>**/*DatabaseConnectionTest.java</exclude>
+                    </excludes>
                 </configuration>
             </plugin>
         </plugins>
