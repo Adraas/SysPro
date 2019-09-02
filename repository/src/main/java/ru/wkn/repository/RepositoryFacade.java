@@ -36,6 +36,7 @@ public class RepositoryFacade<V, I extends Serializable> {
      * @param entityInstance {@link #entityInstance}
      */
     public RepositoryFacade(EntityInstance entityInstance) {
+        this.entityInstance = entityInstance;
         serviceReinitialize(entityInstance);
     }
 
