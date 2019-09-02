@@ -9,7 +9,7 @@ import ru.wkn.entries.resource.csv.AccessMode;
 import ru.wkn.entries.resource.csv.ResourceEntry;
 import ru.wkn.views.WindowType;
 
-import java.sql.Date;
+import java.util.Date;
 
 public class CSVEntryWindowController extends Controller {
 
@@ -27,7 +27,7 @@ public class CSVEntryWindowController extends Controller {
             try {
                 resourceEntry = new ResourceEntry(urlTextField.getText(),
                         AccessMode.getInstance(accessModeTextField.getText().toLowerCase()),
-                        Date.valueOf(dateTextField.getText()));
+                        new Date(dateTextField.getText()));
                 urlTextField.clear();
                 accessModeTextField.clear();
                 dateTextField.clear();
