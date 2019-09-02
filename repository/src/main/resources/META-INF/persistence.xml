@@ -10,9 +10,6 @@
         <mapping-file>/orm/file-entries-mapping.xml</mapping-file>
 
         <properties>
-            <!-- SQL dialect -->
-            <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>
-
             <!-- DB Schema -->
             <property name="hibernate.hbm2ddl.auto" value="update"/>
 
