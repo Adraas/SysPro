@@ -59,7 +59,7 @@
                 <column name="password_hash_code" nullable="false"/>
             </basic>
             <basic name="email">
-                <column name="login" nullable="false"/>
+                <column name="email" nullable="false"/>
             </basic>
         </attributes>
     </entity>
