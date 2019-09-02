@@ -110,7 +110,7 @@ public class H2Dao<V, I extends Serializable> implements IDao<V, I> {
     @Override
     public List<V> getAll() {
         List<V> vList;
-        Query query = session.createQuery("SELECT * FROM ".concat(entityInstance.getEntityInstance()));
+        Query query = session.createNativeQuery("SELECT * FROM ".concat(entityInstance.getEntityInstance()));
         vList = (List<V>) query.getResultList();
         return vList;
     }
