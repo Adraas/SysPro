@@ -19,7 +19,7 @@
             <!-- Hikari connection pool configuration -->
             <property name="hibernate.connection.provider_class"
                       value="org.hibernate.hikaricp.internal.HikariCPConnectionProvider"/>
-            <property name="hibernate.hikari.maximumPoolSize" value="20"/>
+            <property name="hibernate.hikari.maximumPoolSize" value="1"/>
 
             <!-- Echo all executed SQL to stdout -->
             <property name="hibernate.show_sql" value="true"/>
