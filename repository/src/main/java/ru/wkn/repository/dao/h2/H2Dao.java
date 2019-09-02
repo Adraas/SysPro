@@ -12,7 +12,6 @@ import ru.wkn.repository.exceptions.PersistenceException;
 import javax.persistence.Query;
 import java.io.Serializable;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * The interface {@code H2Dao} represents the implementation layout data access object for the H2 Database.
@@ -44,15 +43,14 @@ public class H2Dao<V, I extends Serializable> implements IDao<V, I> {
      */
     @Override
     public boolean create(V newInstance) throws PersistenceException {
-        Transaction transaction = null;
+        Transaction transaction = session.beginTransaction();
         try {
-            transaction = session.beginTransaction();
             session.save(newInstance);
             transaction.commit();
-        } catch (HibernateException e) {
+        } catch (HibernateException | IllegalArgumentException e) {
             String message = "Element ".concat(newInstance.toString()).concat(" not created");
             log.warning(message);
-            Objects.requireNonNull(transaction).rollback();
+            transaction.rollback();
             throw new PersistenceException(message, e);
         }
         return true;
@@ -71,15 +69,14 @@ public class H2Dao<V, I extends Serializable> implements IDao<V, I> {
      */
     @Override
     public boolean update(V transientInstance) throws PersistenceException {
-        Transaction transaction = null;
+        Transaction transaction = session.beginTransaction();
         try {
-            transaction = session.beginTransaction();
             session.update(transientInstance);
             transaction.commit();
-        } catch (HibernateException e) {
+        } catch (HibernateException | IllegalArgumentException e) {
             String message = "Element ".concat(transientInstance.toString()).concat(" not updated");
             log.warning(message);
-            Objects.requireNonNull(transaction).rollback();
+            transaction.rollback();
             throw new PersistenceException(message, e);
         }
         return true;
@@ -90,15 +87,14 @@ public class H2Dao<V, I extends Serializable> implements IDao<V, I> {
      */
     @Override
     public boolean delete(V transientInstance) throws PersistenceException {
-        Transaction transaction = null;
+        Transaction transaction = session.beginTransaction();
         try {
-            transaction = session.beginTransaction();
             session.delete(transientInstance);
             transaction.commit();
-        } catch (HibernateException e) {
+        } catch (HibernateException | IllegalArgumentException e) {
             String message = "Element ".concat(transientInstance.toString()).concat(" not deleted");
             log.warning(message);
-            Objects.requireNonNull(transaction).rollback();
+            transaction.rollback();
             throw new PersistenceException(message, e);
         }
         return true;
