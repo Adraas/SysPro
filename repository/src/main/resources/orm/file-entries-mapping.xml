@@ -9,7 +9,7 @@
         <attributes>
             <id name="id">
                 <column name="id" insertable="false" unique="true" nullable="false" updatable="false"/>
-                <generated-value strategy="IDENTITY"/>
+                <generated-value strategy="AUTO"/>
             </id>
             <basic name="url">
                 <column name="url" nullable="false"/>
@@ -30,7 +30,7 @@
         <attributes>
             <id name="id">
                 <column name="id" insertable="false" unique="true" nullable="false" updatable="false"/>
-                <generated-value strategy="IDENTITY"/>
+                <generated-value strategy="AUTO"/>
             </id>
             <basic name="url">
                 <column name="url" nullable="false"/>
@@ -50,7 +50,7 @@
         <attributes>
             <id name="id">
                 <column name="id" insertable="false" unique="true" nullable="false" updatable="false"/>
-                <generated-value strategy="IDENTITY"/>
+                <generated-value strategy="AUTO"/>
             </id>
             <basic name="login">
                 <column name="login" nullable="false"/>
