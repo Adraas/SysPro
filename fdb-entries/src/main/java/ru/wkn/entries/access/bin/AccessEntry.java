@@ -3,6 +3,7 @@ package ru.wkn.entries.access.bin;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 import ru.wkn.entries.IEntry;
 import ru.wkn.entries.ParametersDelimiter;
@@ -17,6 +18,7 @@ import java.io.Serializable;
  */
 @NoArgsConstructor
 @Getter
+@Setter
 @ToString(exclude = "id")
 @EqualsAndHashCode(exclude = "id")
 public class AccessEntry implements IEntry, Serializable {

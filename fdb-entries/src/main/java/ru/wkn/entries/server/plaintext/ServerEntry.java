@@ -18,6 +18,7 @@ import java.io.Serializable;
  */
 @NoArgsConstructor
 @Getter
+@Setter
 @ToString(exclude = "id")
 @EqualsAndHashCode(exclude = "id")
 public class ServerEntry implements IEntry, Serializable {
@@ -30,19 +31,16 @@ public class ServerEntry implements IEntry, Serializable {
     /**
      * Network server URL.
      */
-    @Setter
     private String url;
 
     /**
      * Network server port.
      */
-    @Setter
     private int port;
 
     /**
      * Network server protocol type.
      */
-    @Setter
     private ProtocolType protocolType;
 
     /**

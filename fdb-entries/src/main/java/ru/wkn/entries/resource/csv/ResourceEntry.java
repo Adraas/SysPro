@@ -19,6 +19,7 @@ import java.util.Date;
  */
 @NoArgsConstructor
 @Getter
+@Setter
 @ToString(exclude = "id")
 @EqualsAndHashCode(exclude = "id")
 public class ResourceEntry implements IEntry, Serializable {
@@ -36,13 +37,11 @@ public class ResourceEntry implements IEntry, Serializable {
     /**
      * Network resource access mode.
      */
-    @Setter
     private AccessMode accessMode;
 
     /**
      * Network resource access date.
      */
-    @Setter
     private Date accessDate;
 
     /**
