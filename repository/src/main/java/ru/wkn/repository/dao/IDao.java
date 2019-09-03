@@ -1,8 +1,10 @@
 package ru.wkn.repository.dao;
 
+import ru.wkn.entries.exceptions.EntryException;
 import ru.wkn.repository.exceptions.PersistenceException;
 
 import java.io.Serializable;
+import java.text.ParseException;
 import java.util.List;
 
 /**
@@ -54,5 +56,5 @@ public interface IDao<V, I extends Serializable> {
      *
      * @return collection of the {@code List} type, contains all persistence objects from the repository
      */
-    List<V> getAll();
+    List<V> getAll() throws ParseException, EntryException;
 }

@@ -1,10 +1,12 @@
 package ru.wkn.repository.services;
 
 import lombok.AllArgsConstructor;
+import ru.wkn.entries.exceptions.EntryException;
 import ru.wkn.repository.dao.IDao;
 import ru.wkn.repository.exceptions.PersistenceException;
 
 import java.io.Serializable;
+import java.text.ParseException;
 import java.util.Collection;
 import java.util.List;
 
@@ -73,7 +75,7 @@ public class Service<V, I extends Serializable> implements IService<V, I> {
      * @see IService#deleteAll()
      */
     @Override
-    public boolean deleteAll() throws PersistenceException {
+    public boolean deleteAll() throws PersistenceException, ParseException, EntryException {
         List<V> persistenceObjects = getAll();
         for (V persistenceObject : persistenceObjects) {
             if (!delete(persistenceObject)) {
@@ -87,7 +89,7 @@ public class Service<V, I extends Serializable> implements IService<V, I> {
      * @see IService#getAll()
      */
     @Override
-    public List<V> getAll() {
+    public List<V> getAll() throws ParseException, EntryException {
         return dao.getAll();
     }
 }

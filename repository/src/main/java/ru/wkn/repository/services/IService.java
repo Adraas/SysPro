@@ -1,8 +1,10 @@
 package ru.wkn.repository.services;
 
+import ru.wkn.entries.exceptions.EntryException;
 import ru.wkn.repository.exceptions.PersistenceException;
 
 import java.io.Serializable;
+import java.text.ParseException;
 import java.util.Collection;
 import java.util.List;
 
@@ -67,12 +69,12 @@ public interface IService<V, I extends Serializable> {
      * @return {@code true} if objects was deleted success from the repository, else - {@code false}
      * @throws PersistenceException thrown if some problems with DAO layout
      */
-    boolean deleteAll() throws PersistenceException;
+    boolean deleteAll() throws PersistenceException, ParseException, EntryException;
 
     /**
      * The method for the full sample statement executing.
      *
      * @return collection of the {@code List} type, contains all persistence objects from the repository
      */
-    List<V> getAll();
+    List<V> getAll() throws ParseException, EntryException;
 }
