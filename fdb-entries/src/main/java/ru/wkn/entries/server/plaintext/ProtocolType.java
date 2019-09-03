@@ -21,7 +21,7 @@ public enum  ProtocolType {
     /**
      * The user datagram protocol.
      */
-    UPD("udp");
+    UDP("udp");
 
     /**
      * The protocol type as {@code String} value.
