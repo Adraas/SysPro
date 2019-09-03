@@ -54,8 +54,10 @@ public class FileFactory<T extends IEntry> implements IFileFactory<T> {
                     }
                 }
                 if (!parametersLine.trim().isEmpty()) {
-                    entries.add((T) entryFactory.createEntry(parametersLine
-                            .replaceAll(entriesDelimiter.getEntryDelimiter(), ""), parametersDelimiter));
+                    IEntry entry = entryFactory.createEntry(parametersLine
+                            .replaceAll(entriesDelimiter.getEntryDelimiter(), ""), parametersDelimiter);
+                    entry.setId((long) (entries.size() + 1));
+                    entries.add((T) entry);
                 }
             }
             bufferedReader.close();
