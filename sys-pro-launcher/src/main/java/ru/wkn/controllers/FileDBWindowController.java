@@ -44,6 +44,7 @@ import ru.wkn.views.WindowType;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
@@ -236,7 +237,7 @@ public class FileDBWindowController extends Controller implements Observer<IEntr
                         serverERepositoryFacade.getService().deleteAll();
                     }
                 }
-            } catch (PersistenceException e) {
+            } catch (PersistenceException | ParseException | EntryException e) {
                 e.printStackTrace();
                 showInformation(e.getClass().getSimpleName(), e.getMessage(), Alert.AlertType.ERROR);
             }
@@ -311,7 +312,7 @@ public class FileDBWindowController extends Controller implements Observer<IEntr
                         serverERepositoryFacade.getService().create(entries);
                     }
                 }
-            } catch (PersistenceException e) {
+            } catch (PersistenceException | ParseException | EntryException e) {
                 e.printStackTrace();
                 showInformation(e.getClass().getSimpleName(), e.getMessage(), Alert.AlertType.ERROR);
             }
@@ -598,12 +599,16 @@ public class FileDBWindowController extends Controller implements Observer<IEntr
                     break;
                 }
                 case DATABASE: {
-                    if (variant.equals(choiceBoxVariants.getItems().get(0))) {
-                        resourceEntryTableView.getItems().addAll(resourceERepositoryFacade.getService().getAll());
-                    } else {
-                        if (variant.equals(choiceBoxVariants.getItems().get(1))) {
-                            serverEntryTableView.getItems().addAll(serverERepositoryFacade.getService().getAll());
+                    try {
+                        if (variant.equals(choiceBoxVariants.getItems().get(0))) {
+                            resourceEntryTableView.getItems().addAll(resourceERepositoryFacade.getService().getAll());
+                        } else {
+                            if (variant.equals(choiceBoxVariants.getItems().get(1))) {
+                                serverEntryTableView.getItems().addAll(serverERepositoryFacade.getService().getAll());
+                            }
                         }
+                    } catch (ParseException | EntryException e) {
+                        e.printStackTrace();
                     }
                     break;
                 }
