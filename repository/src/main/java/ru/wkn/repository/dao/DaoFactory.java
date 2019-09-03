@@ -4,7 +4,9 @@ import org.hibernate.Session;
 import ru.wkn.entries.access.bin.AccessEntry;
 import ru.wkn.entries.resource.csv.ResourceEntry;
 import ru.wkn.entries.server.plaintext.ServerEntry;
-import ru.wkn.repository.dao.h2.H2Dao;
+import ru.wkn.repository.dao.h2.NetworkAccessH2Dao;
+import ru.wkn.repository.dao.h2.NetworkResourceH2Dao;
+import ru.wkn.repository.dao.h2.NetworkServerH2Dao;
 
 import java.io.Serializable;
 
@@ -20,14 +22,15 @@ public class DaoFactory<V, I extends Serializable> implements IDaoFactory<V, I> 
     /**
      * @see IDaoFactory#createDao(EntityInstance, Session)
      */
+    @SuppressWarnings(value = {"unchecked"})
     @Override
     public IDao<V, I> createDao(EntityInstance entityInstance, Session session) {
         return entityInstance.equals(EntityInstance.NETWORK_RESOURCE)
-                ? new H2Dao<>((Class<V>) ResourceEntry.class, session, entityInstance)
+                ? (IDao<V, I>) new NetworkResourceH2Dao(ResourceEntry.class, session, entityInstance)
                 : entityInstance.equals(EntityInstance.NETWORK_SERVER)
-                ? new H2Dao<>((Class<V>) ServerEntry.class, session, entityInstance)
+                ? (IDao<V, I>) new NetworkServerH2Dao(ServerEntry.class, session, entityInstance)
                 : entityInstance.equals(EntityInstance.NETWORK_ACCESS)
-                ? new H2Dao<>((Class<V>) AccessEntry.class, session, entityInstance)
+                ? (IDao<V, I>) new NetworkAccessH2Dao(AccessEntry.class, session, entityInstance)
                 : null;
     }
 }
