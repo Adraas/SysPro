@@ -9,7 +9,8 @@ import ru.wkn.entries.resource.csv.AccessMode;
 import ru.wkn.entries.resource.csv.ResourceEntry;
 import ru.wkn.views.WindowType;
 
-import java.util.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 public class CSVEntryWindowController extends Controller {
 
@@ -27,12 +28,12 @@ public class CSVEntryWindowController extends Controller {
             try {
                 resourceEntry = new ResourceEntry(urlTextField.getText(),
                         AccessMode.getInstance(accessModeTextField.getText().toLowerCase()),
-                        new Date(dateTextField.getText()));
+                        new SimpleDateFormat("dd-MM-yyyy").parse(dateTextField.getText()));
                 urlTextField.clear();
                 accessModeTextField.clear();
                 dateTextField.clear();
                 updateEntriesTable(WindowType.NETWORK_RESOURCE_WINDOW, resourceEntry);
-            } catch (EntryException e) {
+            } catch (EntryException | ParseException e) {
                 e.printStackTrace();
                 showInformation(e.getClass().getSimpleName(), e.getMessage(), Alert.AlertType.ERROR);
             }
