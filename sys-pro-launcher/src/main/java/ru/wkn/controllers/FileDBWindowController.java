@@ -44,7 +44,7 @@ import ru.wkn.views.WindowType;
 
 import java.io.File;
 import java.io.IOException;
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
 
 public class FileDBWindowController extends Controller implements Observer<IEntry> {
