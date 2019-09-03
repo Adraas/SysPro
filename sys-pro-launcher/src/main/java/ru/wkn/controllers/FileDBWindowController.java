@@ -61,6 +61,8 @@ public class FileDBWindowController extends Controller implements Observer<IEntr
     @FXML
     private TableView<ResourceEntry> resourceEntryTableView;
     @FXML
+    private TableColumn<ResourceEntry, Long> resourceEntryIdColumn;
+    @FXML
     private TableColumn<ResourceEntry, String> resourceEntryUrlColumn;
     @FXML
     private TableColumn<ResourceEntry, AccessMode> resourceEntryAccessModeColumn;
@@ -69,6 +71,8 @@ public class FileDBWindowController extends Controller implements Observer<IEntr
 
     @FXML
     private TableView<ServerEntry> serverEntryTableView;
+    @FXML
+    private TableColumn<ServerEntry, Long> serverEntryIdColumn;
     @FXML
     private TableColumn<ServerEntry, String> serverEntryUrlColumn;
     @FXML
@@ -117,10 +121,12 @@ public class FileDBWindowController extends Controller implements Observer<IEntr
     }
 
     private void initTablesCellValuesFactories() {
+        resourceEntryIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         resourceEntryUrlColumn.setCellValueFactory(new PropertyValueFactory<>("url"));
         resourceEntryAccessModeColumn.setCellValueFactory(new PropertyValueFactory<>("accessMode"));
         resourceEntryAccessDateColumn.setCellValueFactory(new PropertyValueFactory<>("accessDate"));
 
+        serverEntryIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         serverEntryUrlColumn.setCellValueFactory(new PropertyValueFactory<>("url"));
         serverEntryPortColumn.setCellValueFactory(new PropertyValueFactory<>("port"));
         serverEntryProtocolTypeColumn.setCellValueFactory(new PropertyValueFactory<>("protocolType"));

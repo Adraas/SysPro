@@ -51,6 +51,7 @@
                    maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="294.0" prefWidth="504.0"
                    tableMenuButtonVisible="true">
             <columns>
+                <TableColumn fx:id="resourceEntryIdColumn" prefWidth="40.0" text="ID"/>
                 <TableColumn fx:id="resourceEntryUrlColumn" prefWidth="110.0" text="URL"/>
                 <TableColumn fx:id="resourceEntryAccessModeColumn" prefWidth="110.0" text="Access mode"/>
                 <TableColumn fx:id="resourceEntryAccessDateColumn" prefWidth="110.0" text="Access date"/>
@@ -60,6 +61,7 @@
                    maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="294.0" prefWidth="504.0"
                    tableMenuButtonVisible="true" visible="false">
             <columns>
+                <TableColumn fx:id="serverEntryIdColumn" prefWidth="40.0" text="ID"/>
                 <TableColumn fx:id="serverEntryUrlColumn" prefWidth="110.0" text="URL"/>
                 <TableColumn fx:id="serverEntryPortColumn" prefWidth="110.0" text="Port"/>
                 <TableColumn fx:id="serverEntryProtocolTypeColumn" prefWidth="110.0" text="Protocol type"/>
