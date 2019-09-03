@@ -46,6 +46,7 @@ public class RepositoryFacade<V, I extends Serializable> {
      *
      * @param entityInstance the enum object represents datasource name
      */
+    @SuppressWarnings(value = {"unchecked"})
     public void serviceReinitialize(EntityInstance entityInstance) {
         IDaoFactory<V, I> daoFactory = new DaoFactory<>();
         IDao<V, I> dao = daoFactory.createDao(entityInstance,
