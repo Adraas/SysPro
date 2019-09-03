@@ -202,12 +202,10 @@ public class FileDBWindowController extends Controller implements Observer<IEntr
                     String fileExtensionWithoutFullName;
                     if (variant.equals(choiceBoxVariants.getItems().get(0))) {
                         fileExtensionWithoutFullName = ".csv";
-                        initEFileFactory(fileExtensionWithoutFullName);
                         initEntryFile(fileExtensionWithoutFullName);
                     } else {
                         if (variant.equals(choiceBoxVariants.getItems().get(1))) {
                             fileExtensionWithoutFullName = ".txt";
-                            initEFileFactory(fileExtensionWithoutFullName);
                             initEntryFile(fileExtensionWithoutFullName);
                         }
                     }
@@ -216,11 +214,11 @@ public class FileDBWindowController extends Controller implements Observer<IEntr
                     showInformation(e.getClass().getSimpleName(), e.getMessage(), Alert.AlertType.ERROR);
                 }
                 initFileRWFacade();
+                clearFileWithoutSaving(variant);
+                updateTableView();
+                updateButtons();
                 isCollectionActivated = true;
             }
-            clearFileWithoutSaving(variant);
-            updateTableView();
-            updateButtons();
         });
     }
 
@@ -380,16 +378,28 @@ public class FileDBWindowController extends Controller implements Observer<IEntr
                 String variant = choiceBoxVariants.getValue();
                 switch (datasourceType) {
                     case FILE: {
-                        if (variant.equals(choiceBoxVariants.getItems().get(0))) {
-                            resourceEFileRWFacade.getFileWriter().append((ResourceEntry) dataObject);
-                        } else {
-                            if (variant.equals(choiceBoxVariants.getItems().get(1))) {
-                                serverEFileRWFacade.getFileWriter().append((ServerEntry) dataObject);
+                        try {
+                            if (variant.equals(choiceBoxVariants.getItems().get(0))) {
+                                initEntryFile(".csv");
+                                initFileRWFacade();
+                                dataObject.setId(updateIdCell());
+                                resourceEFileRWFacade.getFileWriter().append((ResourceEntry) dataObject);
+                            } else {
+                                if (variant.equals(choiceBoxVariants.getItems().get(1))) {
+                                    initEntryFile(".txt");
+                                    initFileRWFacade();
+                                    dataObject.setId(updateIdCell());
+                                    serverEFileRWFacade.getFileWriter().append((ServerEntry) dataObject);
+                                }
                             }
+                        } catch (IOException | EntryException e) {
+                            e.printStackTrace();
+                            showInformation(e.getClass().getSimpleName(), e.getMessage(), Alert.AlertType.ERROR);
                         }
                         break;
                     }
                     case DATABASE: {
+                        initRepositoryFacade();
                         try {
                             if (variant.equals(choiceBoxVariants.getItems().get(0))) {
                                 resourceERepositoryFacade.getService().create((ResourceEntry) dataObject);
@@ -471,8 +481,6 @@ public class FileDBWindowController extends Controller implements Observer<IEntr
         datasourceType = DatasourceType.FILE;
         File file = fileChooser.showOpenDialog(null);
         if (file != null) {
-            String filename = file.getName();
-            initEFileFactory(filename);
             try {
                 initEntryFile(file.getAbsolutePath());
             } catch (IOException | EntryException e) {
@@ -483,14 +491,15 @@ public class FileDBWindowController extends Controller implements Observer<IEntr
         return file;
     }
 
-    private void initEFileFactory(String filename) {
-        if (filename.endsWith("csv")) {
+    private void initEFileFactory() {
+        String variant = choiceBoxVariants.getValue();
+        if (variant.equals(choiceBoxVariants.getItems().get(0))) {
             choiceBoxVariants.setValue(choiceBoxVariants.getItems().get(0));
             if (resourceEFileFactory == null) {
                 resourceEFileFactory = new FileFactory<>();
             }
         } else {
-            if (filename.endsWith("txt")) {
+            if (variant.equals(choiceBoxVariants.getItems().get(1))) {
                 choiceBoxVariants.setValue(choiceBoxVariants.getItems().get(1));
                 if (serverEFileFactory == null) {
                     serverEFileFactory = new FileFactory<>();
@@ -500,23 +509,21 @@ public class FileDBWindowController extends Controller implements Observer<IEntr
     }
 
     private void initEntryFile(String absolutePath) throws IOException, EntryException {
+        initEFileFactory();
         entryFactory = (entryFactory == null) ? new EntryFactory() : entryFactory;
         String variant = choiceBoxVariants.getValue();
         if (variant.equals(choiceBoxVariants.getItems().get(0))) {
             resourceEFile = (resourceEFile == null)
                     ? resourceEFileFactory.createEFile(absolutePath, charsetName,
                     EntriesDelimiter.CSV_DELIMITER, entryFactory, ParametersDelimiter.RESOURCE_CSV_DELIMITER)
-                    : resourceEFile.copyFrom(resourceEFileFactory.createEFile(absolutePath, charsetName,
-                    EntriesDelimiter.CSV_DELIMITER, entryFactory, ParametersDelimiter.RESOURCE_CSV_DELIMITER));
+                    : resourceEFile;
         } else {
             if (variant.equals(choiceBoxVariants.getItems().get(1))) {
                 serverEFile = (serverEFile == null)
                         ? serverEFileFactory.createEFile(absolutePath, charsetName,
                         EntriesDelimiter.PLAIN_TEXT_DELIMITER, entryFactory,
                         ParametersDelimiter.SERVER_PLAIN_TEXT_DELIMITER)
-                        : serverEFile.copyFrom(serverEFileFactory.createEFile(absolutePath, charsetName,
-                        EntriesDelimiter.PLAIN_TEXT_DELIMITER, entryFactory,
-                        ParametersDelimiter.SERVER_PLAIN_TEXT_DELIMITER));
+                        : serverEFile;
             }
         }
     }
@@ -545,9 +552,7 @@ public class FileDBWindowController extends Controller implements Observer<IEntr
 
     private void openDatabase() {
         datasourceType = DatasourceType.DATABASE;
-        if (!isConnectedToDatabaseSuccess) {
-            initRepositoryFacade();
-        }
+        initRepositoryFacade();
         isCollectionActivated = isConnectedToDatabaseSuccess;
     }
 
