@@ -376,19 +376,18 @@ public class FileDBWindowController extends Controller implements Observer<IEntr
         Platform.runLater(() -> {
             if (dataObject != null) {
                 String variant = choiceBoxVariants.getValue();
+                dataObject.setId(updateIdCell());
                 switch (datasourceType) {
                     case FILE: {
                         try {
                             if (variant.equals(choiceBoxVariants.getItems().get(0))) {
                                 initEntryFile(".csv");
                                 initFileRWFacade();
-                                dataObject.setId(updateIdCell());
                                 resourceEFileRWFacade.getFileWriter().append((ResourceEntry) dataObject);
                             } else {
                                 if (variant.equals(choiceBoxVariants.getItems().get(1))) {
                                     initEntryFile(".txt");
                                     initFileRWFacade();
-                                    dataObject.setId(updateIdCell());
                                     serverEFileRWFacade.getFileWriter().append((ServerEntry) dataObject);
                                 }
                             }
