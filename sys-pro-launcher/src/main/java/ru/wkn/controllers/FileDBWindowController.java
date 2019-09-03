@@ -414,6 +414,36 @@ public class FileDBWindowController extends Controller implements Observer<IEntr
         });
     }
 
+    private long updateIdCell() {
+        String variant = choiceBoxVariants.getValue();
+        if (variant.equals(choiceBoxVariants.getItems().get(0))) {
+            int previousEntryID = 0;
+            for (ResourceEntry resourceEntry : resourceEntryTableView.getItems()) {
+                long currentEntityID = resourceEntry.getId();
+                if (currentEntityID - previousEntryID > 1) {
+                    return previousEntryID + 1;
+                } else {
+                    previousEntryID++;
+                }
+            }
+            return resourceEntryTableView.getItems().size() + 1;
+        } else {
+            if (variant.equals(choiceBoxVariants.getItems().get(1))) {
+                int previousEntryID = 0;
+                for (ServerEntry serverEntry : serverEntryTableView.getItems()) {
+                    long currentEntityID = serverEntry.getId();
+                    if (currentEntityID - previousEntryID > 1) {
+                        return previousEntryID + 1;
+                    } else {
+                        previousEntryID++;
+                    }
+                }
+                return serverEntryTableView.getItems().size() + 1;
+            }
+        }
+        return -1;
+    }
+
     private void clearFileWithoutSaving(String variant) {
         if (variant.equals(choiceBoxVariants.getItems().get(0))) {
             resourceEFileRWFacade.getFileWriter().deleteSome(0, resourceEFileRWFacade.getFileReader()
