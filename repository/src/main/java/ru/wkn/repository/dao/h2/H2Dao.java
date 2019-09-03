@@ -103,6 +103,7 @@ public class H2Dao<V, I extends Serializable> implements IDao<V, I> {
     /**
      * @see IDao#getAll()
      */
+    @SuppressWarnings(value = {"unchecked"})
     @Override
     public List<V> getAll() {
         List<V> vList;
