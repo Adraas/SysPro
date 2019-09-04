@@ -9,7 +9,7 @@
 extern "C" __declspec(dllexport) JNIEXPORT jdouble JNICALL Java_ru_wkn_jni_functions_AssemblerFunctions_dividingFunction
   (JNIEnv * jenv, jobject jobj, jdouble dividend, jdouble divisor)
 {
-    double result;
+    jdouble result;
     asm(
         "movss %[dd], %%xmm0\n\t"
         "movss %[dr], %%xmm1\n\t"
