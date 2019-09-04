@@ -24,8 +24,8 @@ public class NetworkResourceH2Dao extends H2Dao<ResourceEntry, Long> {
         List allElements = super.getAll();
         for (Object allElement : allElements) {
             Object[] elements = (Object[]) allElement;
-            ResourceEntry resourceEntry = new ResourceEntry(String.valueOf(elements[1]),
-                    AccessMode.getInstance(String.valueOf(elements[2])), (Date) elements[3]);
+            ResourceEntry resourceEntry = new ResourceEntry(String.valueOf(elements[3]),
+                    AccessMode.getInstance(String.valueOf(elements[2])), (Date) elements[1]);
             resourceEntry.setId(((BigInteger) elements[0]).longValue());
             resourceEntries.add(resourceEntry);
         }

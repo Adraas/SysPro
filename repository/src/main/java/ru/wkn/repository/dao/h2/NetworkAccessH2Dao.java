@@ -22,8 +22,8 @@ public class NetworkAccessH2Dao extends H2Dao<AccessEntry, Long> {
         List allElements = super.getAll();
         for (Object allElement : allElements) {
             Object[] elements = (Object[]) allElement;
-            AccessEntry accessEntry = new AccessEntry(String.valueOf(elements[1]), String.valueOf(elements[2]),
-                    String.valueOf(elements[3]));
+            AccessEntry accessEntry = new AccessEntry(String.valueOf(elements[2]), String.valueOf(elements[3]),
+                    String.valueOf(elements[1]));
             accessEntry.setId(((BigInteger) elements[0]).longValue());
             accessEntries.add(accessEntry);
         }
