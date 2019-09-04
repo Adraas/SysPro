@@ -11,9 +11,10 @@ extern "C" __declspec(dllexport) JNIEXPORT jdouble JNICALL Java_ru_wkn_jni_funct
 {
     double result;
     asm(
-        "fld %[dd]\n\t"
-        "fdiv %[dr]\n\t"
-        "fstp %[res]\n\t"
+        "movss %[dd], %%xmm0\n\t"
+        "movss %[dr], %%xmm1\n\t"
+        "divss %%xmm1, %%xmm0\n\t"
+        "movss %%xmm0, %[res]\n\t"
         : [res] "=m" (result)
         : [dr] "m" (divisor), [dd] "m" (dividend)
         : "cc");
