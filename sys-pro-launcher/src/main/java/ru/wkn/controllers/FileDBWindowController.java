@@ -214,37 +214,33 @@ public class FileDBWindowController extends Controller implements Observer<IEntr
         Platform.runLater(() -> {
             datasourceType = DatasourceType.FILE;
             String variant = choiceBoxVariants.getValue();
-            if (!isCollectionActivated) {
-                try {
-                    String fileExtensionWithoutFullName;
-                    if (variant.equals(choiceBoxVariants.getItems().get(0))) {
-                        fileExtensionWithoutFullName = ".csv";
-                        initEntryFile(fileExtensionWithoutFullName);
-                    } else {
-                        if (variant.equals(choiceBoxVariants.getItems().get(1))) {
-                            fileExtensionWithoutFullName = ".txt";
-                            initEntryFile(fileExtensionWithoutFullName);
-                        }
+            try {
+                String fileExtensionWithoutFullName;
+                if (variant.equals(choiceBoxVariants.getItems().get(0))) {
+                    fileExtensionWithoutFullName = ".csv";
+                    initFileRWFacade(fileExtensionWithoutFullName);
+                } else {
+                    if (variant.equals(choiceBoxVariants.getItems().get(1))) {
+                        fileExtensionWithoutFullName = ".txt";
+                        initFileRWFacade(fileExtensionWithoutFullName);
                     }
-                } catch (IOException | EntryException e) {
-                    e.printStackTrace();
-                    showInformation(e.getClass().getSimpleName(), e.getMessage(), Alert.AlertType.ERROR);
                 }
-                initFileRWFacade();
-                clearFileWithoutSaving(variant);
-                updateTableView();
-                updateButtons();
-                isCollectionActivated = true;
+            } catch (IOException | EntryException e) {
+                e.printStackTrace();
+                showInformation(e.getClass().getSimpleName(), e.getMessage(), Alert.AlertType.ERROR);
             }
+            clearFileWithoutSaving();
+            updateTableView();
+            updateButtons();
+            isCollectionActivated = true;
         });
     }
 
     @FXML
     private void clickOnNewDatabaseTable() {
         Platform.runLater(() -> {
-            datasourceType = DatasourceType.DATABASE;
-            String variant = choiceBoxVariants.getValue();
             openDatabase();
+            String variant = choiceBoxVariants.getValue();
             try {
                 if (variant.equals(choiceBoxVariants.getItems().get(0))) {
                     resourceERepositoryFacade.getService().deleteAll();
@@ -271,7 +267,6 @@ public class FileDBWindowController extends Controller implements Observer<IEntr
             datasourceType = DatasourceType.FILE;
             File file = openFile();
             if (file != null) {
-                initFileRWFacade();
                 updateTableView();
                 updateButtons();
             }
@@ -292,18 +287,15 @@ public class FileDBWindowController extends Controller implements Observer<IEntr
     @FXML
     private void clickOnSaveToFile() {
         Platform.runLater(() -> {
-            initEFileFactory();
             File file = fileChooser.showSaveDialog(null);
             if (file != null) {
                 String variant = choiceBoxVariants.getValue();
                 try {
+                    initFileRWFacade(file.getAbsolutePath());
+                    updateEFiles();
                     if (variant.equals(choiceBoxVariants.getItems().get(0))) {
-                        initEntryFile(".csv");
-                        initFileRWFacade();
                         resourceEFileRWFacade.getFileWriter().saveFile(file.getAbsolutePath());
                     } else {
-                        initEntryFile(".txt");
-                        initFileRWFacade();
                         if (variant.equals(choiceBoxVariants.getItems().get(1))) {
                             serverEFileRWFacade.getFileWriter().saveFile(file.getAbsolutePath());
                         }
@@ -338,7 +330,7 @@ public class FileDBWindowController extends Controller implements Observer<IEntr
                 e.printStackTrace();
                 showInformation(e.getClass().getSimpleName(), e.getMessage(), Alert.AlertType.ERROR);
             }
-            datasourceType = DatasourceType.FILE;
+            datasourceType = DatasourceType.DATABASE;
         });
     }
 
@@ -404,13 +396,11 @@ public class FileDBWindowController extends Controller implements Observer<IEntr
                     case FILE: {
                         try {
                             if (variant.equals(choiceBoxVariants.getItems().get(0))) {
-                                initEntryFile(".csv");
-                                initFileRWFacade();
+                                initFileRWFacade(".csv");
                                 resourceEFileRWFacade.getFileWriter().append((ResourceEntry) dataObject);
                             } else {
                                 if (variant.equals(choiceBoxVariants.getItems().get(1))) {
-                                    initEntryFile(".txt");
-                                    initFileRWFacade();
+                                    initFileRWFacade(".txt");
                                     serverEFileRWFacade.getFileWriter().append((ServerEntry) dataObject);
                                 }
                             }
@@ -476,7 +466,8 @@ public class FileDBWindowController extends Controller implements Observer<IEntr
         return -1;
     }
 
-    private void clearFileWithoutSaving(String variant) {
+    private void clearFileWithoutSaving() {
+        String variant = choiceBoxVariants.getValue();
         if (variant.equals(choiceBoxVariants.getItems().get(0))) {
             resourceEFileRWFacade.getFileWriter().deleteSome(0, resourceEFileRWFacade.getFileReader()
                     .getEFile().getEntries().size() - 1);
@@ -504,7 +495,7 @@ public class FileDBWindowController extends Controller implements Observer<IEntr
         File file = fileChooser.showOpenDialog(null);
         if (file != null) {
             try {
-                initEntryFile(file.getAbsolutePath());
+                initFileRWFacade(file.getAbsolutePath());
             } catch (IOException | EntryException e) {
                 e.printStackTrace();
                 showInformation(e.getClass().getSimpleName(), e.getMessage(), Alert.AlertType.ERROR);
@@ -551,7 +542,8 @@ public class FileDBWindowController extends Controller implements Observer<IEntr
     }
 
     // TODO: simplify method, delete duplicates
-    private void initFileRWFacade() {
+    private void initFileRWFacade(String absolutePath) throws IOException, EntryException {
+        initEntryFile(absolutePath);
         String variant = choiceBoxVariants.getValue();
         if (variant.equals(choiceBoxVariants.getItems().get(0))) {
             resourceEFileReader = (resourceEFileReader == null) ? new FileReader<>(resourceEFile)
@@ -663,6 +655,21 @@ public class FileDBWindowController extends Controller implements Observer<IEntr
         addButton.setDisable(addButtonDisable);
         deleteButton.setDisable(deleteButtonDisable);
         saveMenuButton.setDisable(saveMenuButtonDisable);
+    }
+
+    private void updateEFiles() {
+        String variant = choiceBoxVariants.getValue();
+        if (variant.equals(choiceBoxVariants.getItems().get(0))) {
+            resourceEFileRWFacade.getFileWriter().deleteSome(0, resourceEFileRWFacade.getFileReader()
+                    .getEFile().getEntries().size() - 1);
+            resourceEFileRWFacade.getFileWriter().append(resourceEntryTableView.getItems());
+        } else {
+            if (variant.equals(choiceBoxVariants.getItems().get(1))) {
+                serverEFileRWFacade.getFileWriter().deleteSome(0, serverEFileRWFacade.getFileReader()
+                        .getEFile().getEntries().size() - 1);
+                serverEFileRWFacade.getFileWriter().append(serverEntryTableView.getItems());
+            }
+        }
     }
 
     @AllArgsConstructor
