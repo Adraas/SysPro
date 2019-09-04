@@ -41,7 +41,7 @@ public class Service<V extends IEntry, I extends Serializable> implements IServi
     @Override
     public boolean create(Collection<V> newInstances) throws PersistenceException {
         for (V instance : newInstances) {
-            if (create(instance)) {
+            if (!create(instance)) {
                 return false;
             }
         }
