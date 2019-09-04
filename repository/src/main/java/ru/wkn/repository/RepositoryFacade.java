@@ -2,6 +2,7 @@ package ru.wkn.repository;
 
 import lombok.Getter;
 import org.hibernate.Session;
+import ru.wkn.entries.IEntry;
 import ru.wkn.repository.dao.DaoFactory;
 import ru.wkn.repository.dao.EntityInstance;
 import ru.wkn.repository.dao.IDao;
@@ -19,7 +20,7 @@ import java.io.Serializable;
  * @author Artem Pikalov
  */
 @Getter
-public class RepositoryFacade<V, I extends Serializable> {
+public class RepositoryFacade<V extends IEntry, I extends Serializable> {
 
     /**
      * The service for the working with the repository.

@@ -1,6 +1,7 @@
 package ru.wkn.repository.services;
 
 import lombok.AllArgsConstructor;
+import ru.wkn.entries.IEntry;
 import ru.wkn.entries.exceptions.EntryException;
 import ru.wkn.repository.dao.IDao;
 import ru.wkn.repository.exceptions.PersistenceException;
@@ -19,7 +20,7 @@ import java.util.List;
  * @author Artem Pikalov
  */
 @AllArgsConstructor
-public class Service<V, I extends Serializable> implements IService<V, I> {
+public class Service<V extends IEntry, I extends Serializable> implements IService<V, I> {
 
     /**
      * The DAO for the connection service and repository

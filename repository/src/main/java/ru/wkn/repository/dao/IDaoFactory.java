@@ -1,6 +1,7 @@
 package ru.wkn.repository.dao;
 
 import org.hibernate.Session;
+import ru.wkn.entries.IEntry;
 
 import java.io.Serializable;
 
@@ -10,7 +11,7 @@ import java.io.Serializable;
  *
  * @author Artem Pikalov
  */
-public interface IDaoFactory<V, I extends Serializable> {
+public interface IDaoFactory<V extends IEntry, I extends Serializable> {
 
     /**
      * The abstract factory method for the {@code IDao} object creating.

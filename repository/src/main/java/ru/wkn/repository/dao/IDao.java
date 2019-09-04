@@ -1,5 +1,6 @@
 package ru.wkn.repository.dao;
 
+import ru.wkn.entries.IEntry;
 import ru.wkn.entries.exceptions.EntryException;
 import ru.wkn.repository.exceptions.PersistenceException;
 
@@ -14,7 +15,7 @@ import java.util.List;
  * @param <I> type of the key (index) for working with the persistence object
  * @author Artem Pikalov
  */
-public interface IDao<V, I extends Serializable> {
+public interface IDao<V extends IEntry, I extends Serializable> {
 
     /**
      * The method for the creating new persistence object in the repository.

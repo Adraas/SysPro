@@ -1,6 +1,7 @@
 package ru.wkn.repository.dao;
 
 import org.hibernate.Session;
+import ru.wkn.entries.IEntry;
 import ru.wkn.entries.access.bin.AccessEntry;
 import ru.wkn.entries.resource.csv.ResourceEntry;
 import ru.wkn.entries.server.plaintext.ServerEntry;
@@ -17,7 +18,7 @@ import java.io.Serializable;
  * @see IDao
  * @author Artem Pikalov
  */
-public class DaoFactory<V, I extends Serializable> implements IDaoFactory<V, I> {
+public class DaoFactory<V extends IEntry, I extends Serializable> implements IDaoFactory<V, I> {
 
     /**
      * @see IDaoFactory#createDao(EntityInstance, Session)

@@ -1,5 +1,6 @@
 package ru.wkn.repository.services;
 
+import ru.wkn.entries.IEntry;
 import ru.wkn.repository.dao.IDao;
 
 import java.io.Serializable;
@@ -11,7 +12,7 @@ import java.io.Serializable;
  * @see IServiceFactory
  * @author Artem Pikalov
  */
-public class ServiceFactory<V, I extends Serializable> implements IServiceFactory<V, I> {
+public class ServiceFactory<V extends IEntry, I extends Serializable> implements IServiceFactory<V, I> {
 
     /**
      * @see IServiceFactory#createService(IDao)

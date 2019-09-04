@@ -1,5 +1,6 @@
 package ru.wkn.repository.services;
 
+import ru.wkn.entries.IEntry;
 import ru.wkn.repository.dao.IDao;
 
 import java.io.Serializable;
@@ -12,7 +13,7 @@ import java.io.Serializable;
  * @param <I> type of the key (index) for working with the persistence object
  * @author Artem Pikalov
  */
-public interface IServiceFactory<V, I extends Serializable> {
+public interface IServiceFactory<V extends IEntry, I extends Serializable> {
 
     /**
      * The abstract factory method for the {@code IService} object creating.
