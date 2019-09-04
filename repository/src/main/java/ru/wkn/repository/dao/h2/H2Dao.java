@@ -5,12 +5,14 @@ import lombok.extern.java.Log;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import ru.wkn.entries.exceptions.EntryException;
 import ru.wkn.repository.dao.EntityInstance;
 import ru.wkn.repository.dao.IDao;
 import ru.wkn.repository.exceptions.PersistenceException;
 
 import javax.persistence.Query;
 import java.io.Serializable;
+import java.text.ParseException;
 import java.util.List;
 
 /**
@@ -21,7 +23,7 @@ import java.util.List;
  */
 @AllArgsConstructor
 @Log
-public class H2Dao<V, I extends Serializable> implements IDao<V, I> {
+public abstract class H2Dao<V, I extends Serializable> implements IDao<V, I> {
 
     /**
      * The meta-data about entity object.
@@ -105,10 +107,10 @@ public class H2Dao<V, I extends Serializable> implements IDao<V, I> {
      */
     @SuppressWarnings(value = {"unchecked"})
     @Override
-    public List<V> getAll() {
-        List<V> vList;
+    public List getAll() throws ParseException, EntryException {
+        List vList;
         Query query = session.createNativeQuery("SELECT * FROM ".concat(entityInstance.getEntityInstance()));
-        vList = (List<V>) query.getResultList();
+        vList = query.getResultList();
         return vList;
     }
 }
