@@ -292,18 +292,23 @@ public class FileDBWindowController extends Controller implements Observer<IEntr
     @FXML
     private void clickOnSaveToFile() {
         Platform.runLater(() -> {
+            initEFileFactory();
             File file = fileChooser.showSaveDialog(null);
             if (file != null) {
                 String variant = choiceBoxVariants.getValue();
                 try {
                     if (variant.equals(choiceBoxVariants.getItems().get(0))) {
+                        initEntryFile(".csv");
+                        initFileRWFacade();
                         resourceEFileRWFacade.getFileWriter().saveFile(file.getAbsolutePath());
                     } else {
+                        initEntryFile(".txt");
+                        initFileRWFacade();
                         if (variant.equals(choiceBoxVariants.getItems().get(1))) {
                             serverEFileRWFacade.getFileWriter().saveFile(file.getAbsolutePath());
                         }
                     }
-                } catch (IOException e) {
+                } catch (IOException | EntryException e) {
                     e.printStackTrace();
                     showInformation(e.getClass().getSimpleName(), e.getMessage(), Alert.AlertType.ERROR);
                 }
@@ -315,6 +320,7 @@ public class FileDBWindowController extends Controller implements Observer<IEntr
     @FXML
     private void clickOnSaveToDatabase() {
         Platform.runLater(() -> {
+            initRepositoryFacade();
             String variant = choiceBoxVariants.getValue();
             try {
                 if (variant.equals(choiceBoxVariants.getItems().get(0))) {
