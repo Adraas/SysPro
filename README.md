@@ -14,4 +14,5 @@ For the installation need to run any command line with the administrator privile
 command.
 
 **System requirements (for the using process):**
-- Java 8.
+- Java 8;
+- H2 Database.
