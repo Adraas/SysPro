@@ -268,7 +268,7 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
                 log.warning(expressionException.getMessage());
                 throw expressionException;
             }
-            currentBodyLine += moveToLine(currentLine, cycleSingleBodyLineRegex);
+            currentBodyLine += moveToLine(currentLine.concat(";"), "\\s*".concat(cycleSingleBodyLineRegex));
         }
         return true;
     }
@@ -337,10 +337,8 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
         Matcher matcher = pattern.matcher(cycleBodyLine);
         if (matcher.find()) {
             String variableName = matcher.group();
-            pattern = Pattern.compile("\\s*[A-z]+");
-            matcher = pattern.matcher(variableName);
-            if (matcher.find()) {
-                variableName = matcher.group().trim();
+            if (variableName.contains(" ")) {
+                variableName = variableName.split("\\s")[1].trim();
                 if (getISemanticsAnalyzer().isVariableNameCorrect(variableName)) {
                     return true;
                 } else {
