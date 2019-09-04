@@ -70,12 +70,11 @@ public abstract class H2Dao<V extends IEntry, I extends Serializable> implements
     /**
      * @see IDao#update(V)
      */
-    @SuppressWarnings(value = {"unchecked"})
     @Override
     public boolean update(V transientInstance) throws PersistenceException {
         Transaction transaction = session.beginTransaction();
         try {
-            session.update(read((I) transientInstance.getId()));
+            session.update(transientInstance);
             transaction.commit();
         } catch (HibernateException | IllegalArgumentException e) {
             String message = "Element ".concat(transientInstance.toString()).concat(" not updated");
