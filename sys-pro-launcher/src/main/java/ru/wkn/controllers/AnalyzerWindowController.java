@@ -93,7 +93,11 @@ public class AnalyzerWindowController extends Controller {
                     expressionAnalyzerMessageLogArea.setText(expressionAnalyzerMessageLogArea.getText()
                             .concat("\nExpression is correct: ")
                             .concat(String.valueOf(expressionAnalyzerFacade
-                                    .getExpressionAnalyzer().isSyntaxCorrect(inputExpressionField.getText()))));
+                                    .getExpressionAnalyzer().isSyntaxCorrect(inputExpressionField.getText())))
+                            .concat("\nExpression feasibility: ")
+                            .concat(String.valueOf(expressionAnalyzerFacade
+                                    .getExpressionAnalyzer().expressionIsSolved(inputExpressionField.getText())))
+                            .concat("\n"));
                 } catch (ExpressionException | SemanticsException e) {
                     informAboutExceptionCause(e);
                 }
