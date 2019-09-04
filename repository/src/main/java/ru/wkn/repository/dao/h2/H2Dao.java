@@ -5,6 +5,7 @@ import lombok.extern.java.Log;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import ru.wkn.entries.IEntry;
 import ru.wkn.entries.exceptions.EntryException;
 import ru.wkn.repository.dao.EntityInstance;
 import ru.wkn.repository.dao.IDao;
@@ -23,7 +24,7 @@ import java.util.List;
  */
 @AllArgsConstructor
 @Log
-public abstract class H2Dao<V, I extends Serializable> implements IDao<V, I> {
+public abstract class H2Dao<V extends IEntry, I extends Serializable> implements IDao<V, I> {
 
     /**
      * The meta-data about entity object.
@@ -69,11 +70,12 @@ public abstract class H2Dao<V, I extends Serializable> implements IDao<V, I> {
     /**
      * @see IDao#update(V)
      */
+    @SuppressWarnings(value = {"unchecked"})
     @Override
     public boolean update(V transientInstance) throws PersistenceException {
         Transaction transaction = session.beginTransaction();
         try {
-            session.update(transientInstance);
+            session.update(read((I) transientInstance.getId()));
             transaction.commit();
         } catch (HibernateException | IllegalArgumentException e) {
             String message = "Element ".concat(transientInstance.toString()).concat(" not updated");
@@ -87,11 +89,12 @@ public abstract class H2Dao<V, I extends Serializable> implements IDao<V, I> {
     /**
      * @see IDao#delete(V)
      */
+    @SuppressWarnings(value = {"unchecked"})
     @Override
     public boolean delete(V transientInstance) throws PersistenceException {
         Transaction transaction = session.beginTransaction();
         try {
-            session.delete(transientInstance);
+            session.delete(read((I) transientInstance.getId()));
             transaction.commit();
         } catch (HibernateException | IllegalArgumentException e) {
             String message = "Element ".concat(transientInstance.toString()).concat(" not deleted");
