@@ -140,6 +140,7 @@ public class FileDBWindowController extends Controller implements Observer<IEntr
             int row = event.getTablePosition().getRow();
             ResourceEntry resourceEntry = event.getTableView().getItems().get(row);
             resourceEntry.setUrl(url);
+            updateEntryInDatabase(resourceEntry, resourceERepositoryFacade);
         });
 
         ObservableList<AccessMode> accessModes = FXCollections.observableArrayList(AccessMode.values());
@@ -149,6 +150,7 @@ public class FileDBWindowController extends Controller implements Observer<IEntr
             int row = event.getTablePosition().getRow();
             ResourceEntry resourceEntry = event.getTableView().getItems().get(row);
             resourceEntry.setAccessMode(newAccessMode);
+            updateEntryInDatabase(resourceEntry, resourceERepositoryFacade);
         });
 
         serverEntryUrlColumn.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -157,6 +159,7 @@ public class FileDBWindowController extends Controller implements Observer<IEntr
             int row = event.getTablePosition().getRow();
             ServerEntry serverEntry = event.getTableView().getItems().get(row);
             serverEntry.setUrl(url);
+            updateEntryInDatabase(serverEntry, serverERepositoryFacade);
         });
 
         ObservableList<ProtocolType> protocolTypes = FXCollections.observableArrayList(ProtocolType.values());
@@ -166,7 +169,20 @@ public class FileDBWindowController extends Controller implements Observer<IEntr
             int row = event.getTablePosition().getRow();
             ServerEntry serverEntry = event.getTableView().getItems().get(row);
             serverEntry.setProtocolType(newProtocolType);
+            updateEntryInDatabase(serverEntry, serverERepositoryFacade);
         });
+    }
+
+    @SuppressWarnings(value = {"unchecked"})
+    private void updateEntryInDatabase(IEntry entry, RepositoryFacade repositoryFacade) {
+        if (datasourceType.equals(DatasourceType.DATABASE)) {
+            try {
+                repositoryFacade.getService().update(entry);
+            } catch (PersistenceException e) {
+                e.printStackTrace();
+                showInformation(e.getClass().getSimpleName(), e.getMessage(), Alert.AlertType.ERROR);
+            }
+        }
     }
 
     private void initChoiceBox() {
