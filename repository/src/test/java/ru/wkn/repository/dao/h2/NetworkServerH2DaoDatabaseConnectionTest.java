@@ -13,14 +13,14 @@ import javax.persistence.Persistence;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class H2DaoDatabaseConnectionTest {
+class NetworkServerH2DaoDatabaseConnectionTest {
 
     private static H2Dao<ServerEntry, Long> serverEntryLongH2Dao;
     private static ServerEntry serverEntry;
 
     @BeforeAll
     static void initDao() {
-        serverEntryLongH2Dao = new H2Dao<>(ServerEntry.class,
+        serverEntryLongH2Dao = new NetworkServerH2Dao(ServerEntry.class,
                 (Session) Persistence.createEntityManagerFactory("h2_entity_manager")
                         .createEntityManager().getDelegate(),
                 EntityInstance.NETWORK_ACCESS);
