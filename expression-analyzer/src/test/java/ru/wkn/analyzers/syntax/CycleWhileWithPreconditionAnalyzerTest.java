@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
+import ru.wkn.analyzers.exceptions.CompilationException;
 import ru.wkn.analyzers.exceptions.ExpressionException;
 import ru.wkn.analyzers.exceptions.SemanticsException;
 import ru.wkn.analyzers.syntax.semantics.CSharpeSemanticsAnalyzer;
@@ -158,12 +159,12 @@ class CycleWhileWithPreconditionAnalyzerTest {
     }
 
     @Test
-    void checkExpressionToSolvabilityTest() throws ExpressionException {
+    void checkExpressionToSolvabilityTest() throws CompilationException {
         assertTrue(cycleWhileWithPreconditionAnalyzer.expressionIsSolved(correctExpressionWithTrueConditionForAnalyzer));
     }
 
     @Test
-    void checkExpressionToUnsolvabilityTest() throws ExpressionException {
+    void checkExpressionToUnsolvabilityTest() throws CompilationException {
         assertFalse(cycleWhileWithPreconditionAnalyzer.expressionIsSolved(correctExpressionWithFalseConditionForAnalyzer));
     }
 
