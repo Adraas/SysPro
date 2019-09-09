@@ -14,6 +14,7 @@ import ru.wkn.analyzers.ExpressionAnalyzerFactory;
 import ru.wkn.analyzers.ExpressionAnalyzerType;
 import ru.wkn.analyzers.IExpressionAnalyzerFactory;
 import ru.wkn.analyzers.exceptions.AnalyzerException;
+import ru.wkn.analyzers.exceptions.CompilationException;
 import ru.wkn.analyzers.exceptions.ExpressionException;
 import ru.wkn.analyzers.exceptions.LanguageException;
 import ru.wkn.analyzers.exceptions.SemanticsException;
@@ -93,12 +94,13 @@ public class AnalyzerWindowController extends Controller {
                     expressionAnalyzerMessageLogArea.setText(expressionAnalyzerMessageLogArea.getText()
                             .concat("\nExpression is correct: ")
                             .concat(String.valueOf(expressionAnalyzerFacade
-                                    .getExpressionAnalyzer().isSyntaxCorrect(inputExpressionField.getText())))
+                                    .getExpressionAnalyzer().isSyntaxCorrect(inputExpressionField.getText()))));
+                    expressionAnalyzerMessageLogArea.setText(expressionAnalyzerMessageLogArea.getText()
                             .concat("\nExpression feasibility: ")
                             .concat(String.valueOf(expressionAnalyzerFacade
                                     .getExpressionAnalyzer().expressionIsSolved(inputExpressionField.getText())))
                             .concat("\n"));
-                } catch (ExpressionException | SemanticsException e) {
+                } catch (ExpressionException | SemanticsException | CompilationException e) {
                     informAboutExceptionCause(e);
                 }
             }

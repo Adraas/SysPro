@@ -1,5 +1,6 @@
 package ru.wkn.analyzers.syntax;
 
+import ru.wkn.analyzers.exceptions.CompilationException;
 import ru.wkn.analyzers.exceptions.ExpressionException;
 import ru.wkn.analyzers.syntax.semantics.ISemanticsAnalyzer;
 
@@ -23,7 +24,7 @@ public class IfElseBlocksAnalyzer extends ExpressionAnalyzer {
     }
 
     @Override
-    public boolean expressionIsSolved(String expression) throws ExpressionException {
+    public boolean expressionIsSolved(String expression) throws CompilationException {
         return false;
     }
 

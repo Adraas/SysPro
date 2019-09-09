@@ -2,6 +2,7 @@ package ru.wkn.analyzers.syntax;
 
 import lombok.Getter;
 import lombok.Setter;
+import ru.wkn.analyzers.exceptions.CompilationException;
 import ru.wkn.analyzers.exceptions.ExpressionException;
 import ru.wkn.analyzers.exceptions.SemanticsException;
 import ru.wkn.analyzers.syntax.semantics.ISemanticsAnalyzer;
@@ -42,9 +43,9 @@ public abstract class ExpressionAnalyzer {
      *
      * @param expression the source expression one of the programming languages
      * @return {@code true} if expression is solvability, else - {@code false}
-     * @throws ExpressionException thrown if some problems with specific expression part
+     * @throws CompilationException thrown if some problems with specific expression part
      */
-    public abstract boolean expressionIsSolved(String expression) throws ExpressionException;
+    public abstract boolean expressionIsSolved(String expression) throws CompilationException;
 
     /**
      * The method for the syntax checking to correct.

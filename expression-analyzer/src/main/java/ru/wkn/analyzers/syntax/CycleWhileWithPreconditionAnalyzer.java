@@ -2,6 +2,7 @@ package ru.wkn.analyzers.syntax;
 
 import lombok.Getter;
 import lombok.extern.java.Log;
+import ru.wkn.analyzers.exceptions.CompilationException;
 import ru.wkn.analyzers.exceptions.ExpressionException;
 import ru.wkn.analyzers.exceptions.SemanticsException;
 import ru.wkn.analyzers.exceptions.messages.SemanticsErrorMessages;
@@ -146,7 +147,7 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
      * @see ExpressionAnalyzer#expressionIsSolved(String)
      */
     @Override
-    public boolean expressionIsSolved(String expression) throws ExpressionException {
+    public boolean expressionIsSolved(String expression) throws CompilationException {
         String regex = "\\(\\s*"
                 .concat(cycleConditionRegex)
                 .concat("\\s*\\)");
@@ -163,9 +164,9 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
                 return false;
             }
             default: {
-                ExpressionException expressionException = new ExpressionException("need compilation for checking");
-                log.warning(expressionException.getMessage());
-                throw expressionException;
+                CompilationException compilationException = new CompilationException("need compilation for checking");
+                log.warning(compilationException.getMessage());
+                throw compilationException;
             }
         }
     }
