@@ -170,7 +170,7 @@ class CycleWhileWithPreconditionAnalyzerTest {
 
     @Test
     void checkExpressionToUncertaintyTest() {
-        assertThrows(ExpressionException.class, () -> cycleWhileWithPreconditionAnalyzer
+        assertThrows(CompilationException.class, () -> cycleWhileWithPreconditionAnalyzer
                 .expressionIsSolved(correctExpressionForAnalysis));
     }
 
