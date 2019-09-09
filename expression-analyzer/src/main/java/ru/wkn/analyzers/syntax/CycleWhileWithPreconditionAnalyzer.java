@@ -295,6 +295,9 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
                 }
                 return true;
             }
+            case INCREMENT_OR_DECREMENT: {
+                return true;
+            }
             case DECLARATION_WITH_INITIALIZATION: {
                 if (isSemanticsAnalyzerActivated()) {
                     return isDeclarationWithInitializationCorrect(cycleBodyLine, currentBodyLine);
@@ -318,6 +321,10 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
 
         pattern = Pattern.compile("\\s*".concat(variableAssignmentRegex).concat("\\s*"));
         if (pattern.matcher(cycleBodyLine).matches()) {
+            pattern = Pattern.compile("((\\+\\+)|(--))");
+            if (pattern.matcher(cycleBodyLine).find()) {
+                return ActionType.INCREMENT_OR_DECREMENT;
+            }
             return ActionType.INITIALIZATION;
         }
 
@@ -325,6 +332,7 @@ public class CycleWhileWithPreconditionAnalyzer extends ExpressionAnalyzer {
         if (pattern.matcher(cycleBodyLine).matches()) {
             return ActionType.DECLARATION_WITH_INITIALIZATION;
         }
+
         ExpressionException expressionException =
                 new ExpressionException(SyntaxErrorMessages.ACTION_TYPE_ERROR.getErrorMessage()
                         .concat(String.valueOf(currentBodyLine)));
