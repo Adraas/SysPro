@@ -18,6 +18,11 @@ public enum ActionType {
     INITIALIZATION,
 
     /**
+     * Variable incrementation or decrementation.
+     */
+    INCREMENT_OR_DECREMENT,
+
+    /**
      * Method or variable invocation.
      */
     INVOCATION,
